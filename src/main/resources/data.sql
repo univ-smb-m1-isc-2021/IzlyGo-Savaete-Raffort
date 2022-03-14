@@ -16,9 +16,44 @@ CREATE TABLE etudiant (
    FOREIGN KEY (FORMATION_ID) REFERENCES formation(ID)
 );
 
+CREATE TABLE gemme {
+    ID INT PRIMARY KEY,
+    NOM VARCHAR (50) NOT NULL,
+    COULEUR VARCHAR (30) NOT NULL,
+    PROBA FLOAT NOT NULL,
+    PERSONNE_MAX NOT NULL,
+    VALEUR INT NOT NULL,
+    VALEUR_EURO FLOAT NOT NULL
+};
+
+CREATE TABLE etudiantGemme {
+    ID_ETUDIANT INT PRIMARY KEY,
+    ID_GEMME INT PRIMARY KEY,
+    QUANTITE INT NOT NULL DEFAULT 0
+};
+
 INSERT INTO formation (ID, LIBELLE, CHEMIN) VALUES
   (1, 'M1 INFO Groupe 1', 'M1/INFO/1'),
   (2, 'M1 INFO Groupe 2', 'M1/INFO/2');
 
 INSERT INTO etudiant (NUMERO, NOM, PRENOM, MAIL, FORMATION_ID) VALUES
  (513145161, 'RAFFORT', 'Adrien', 'adrien73400@icloud.com', 2);
+
+
+INSERT INTO gemme(id, nom, couleur, proba, personne_max, valeur) VALUES
+(1, 'Rubis', 'E86967', 0.05, 10, 100),
+(2, 'Saphir', '80C6F1', 0.1, 20, 80),
+(1, 'Emeraude', '61D6B9', 0.15, 50, 50),
+(2, 'Améthyste', 'B58CE7', 0.18, 5000, 10),
+(1, 'Tourmaline', '363F4A', 0.3, 5000, 5),
+(2, 'Ambre', 'EBAE7', 0.2, 5000, 1);
+
+
+INSERT INTO etudiantGemme(id_etudiant, id_gemme, quantite) VALUES
+(513145161, 1, 1),
+(513145161, 2, 2),
+(513145161, 3, 5),
+(513145161, 4, 6),
+(513145161, 5, 6),
+(513145161, 6, 20);
+
