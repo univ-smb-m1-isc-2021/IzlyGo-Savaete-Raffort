@@ -29,3 +29,7 @@ Adrien Raffort & Romain Savaete
 - L'apparition des gemme dépendra de leur rareté (Plus le nombre de points est important plus sa probabilité d'apparaître sera faible et inversement).
  - Toutes les 30 minutes, 5 gemmes seront ajoutées sur le carte (au bout de 30min, des anciens partiront, les nouveaux arriveront) en fonction de leur probabilité.
 - En termes de conversion points-euros de notre crypto, nous partirons sur 100 points équivaut à 0,25 € soit 400 points pour 1 €.
+
+
+
+JE PEUX TE MODIFIER CHACAL
