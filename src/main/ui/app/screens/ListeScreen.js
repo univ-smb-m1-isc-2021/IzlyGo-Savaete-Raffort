@@ -22,7 +22,7 @@ export default function ListeScreen() {
 
                         <View style={styles.item}>
                             <View style={[styles.titleView, styles.red]}>
-                                <Text style={styles.titleItem}>Rubi</Text>
+                                <Text style={styles.titleItem}>Rubis</Text>
                             </View>
                             <View style={[styles.row, styles.secondPart]}>
                                 <View>
