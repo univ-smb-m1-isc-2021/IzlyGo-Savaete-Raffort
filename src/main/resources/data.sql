@@ -1,5 +1,7 @@
 DROP TABLE IF EXISTS formation;
 DROP TABLE IF EXISTS etudiant;
+DROP TABLE IF EXISTS gemme;
+DROP TABLE IF EXISTS etudiantGemme;
 
 CREATE TABLE formation (
   ID INT PRIMARY KEY,
