@@ -24,4 +24,5 @@ public class Formation {
     @NotNull(message="{NotNull.Formation.chemin}")
     private String chemin;
 
+
 }

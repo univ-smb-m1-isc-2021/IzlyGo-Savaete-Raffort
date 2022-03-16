@@ -1,217 +1,196 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 'react-native';
+import {useEffect, useState} from "react";
 
 
 export default function ListeScreen() {
-    return (
-        <View style={styles.main}>
-            <View style={styles.points}>
-                <Text>Total de vos points IzlyGo :</Text>
-                <Text style={styles.points2}>10 points</Text>
-                <Text style={styles.points3}>Soit 0 €</Text>
+
+    const [gemmes, setGemmes] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [vue, setVue] = useState();
+
+
+    const donneGemmes = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/inventaire/123');
+            const json = await response.json();
+
+            setGemmes(json);
+            setIsLoading(false);
+            setScreen()
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const getImage = name => {
+        switch (name) {
+            case "rubis": return require("./images/rubis.png")
+            case "saphir": return require("./images/saphir.png")
+            case "emeraude": return require("./images/emeraude.png")
+            case "amethyste": return require("./images/amethyste.png")
+            case "tourmaline": return require("./images/tourmaline.png")
+            case "ambre": return require("./images/ambre.png")
+            default: return require("./images/ambre.png")
+        }
+    }
+
+
+
+
+    useEffect(() => {
+        donneGemmes();
+    }, [isLoading, gemmes]);
+
+    const setScreen = () => {
+        setVue(
+            <View style={styles.main}>
+                <View style={styles.points}>
+                    <Text>Total de vos points IzlyGo :</Text>
+                    <Text style={styles.points2}> {gemmes.etudiant.nombre_points} points </Text>
+                    <Text style={styles.points3}>Soit {gemmes.etudiant.nombre_euros} €</Text>
+                </View>
+
+                <ScrollView>
+
+                    <View>
+                        <Text style={styles.titleGemme}>Mes gemmes</Text>
+                    </View>
+
+                    <View style={styles.container}>
+
+
+
+
+                        {
+                            gemmes.gemmes.map((twice, i) => {
+
+                                    var o = require("./images/tourmaline.png");
+                                    return (
+                                        <View style={styles.row} key={i}>
+
+                                            {
+                                                twice.map((app, o) => {
+
+
+                                                        return (
+                                                            <View style={styles.item} key={o}>
+                                                                <View style={[styles.titleView, styles.color(app.couleur)]}>
+                                                                    <Text style={styles.titleItem}>{app.nom}</Text>
+                                                                </View>
+                                                                <View style={[styles.row, styles.secondPart]}>
+                                                                    <View>
+
+                                                                        <Image
+                                                                            style={styles.tinyLogo}
+                                                                            source={getImage(app.chemin_image)}
+                                                                        />
+                                                                    </View>
+                                                                    <View style={styles.number}>
+                                                                        <Text style={styles.numberText}>{app.quantite}</Text>
+                                                                    </View>
+                                                                </View>
+                                                                <View style={styles.conversion}>
+                                                                    <Text style={styles.conversionText}>{
+                                                                        app.quantite == 0 ? "Aucun" : app.valeur_points + " points (Soit "+ app.valeur_euro + "€)"
+                                                                    }</Text>
+                                                                </View>
+                                                            </View>
+                                                        )
+                                                    }
+                                                )}
+
+                                        </View>
+                                    )
+                                }
+                            )}
+
+
+
+
+
+
+
+
+                    </View>
+
+                    <View>
+                        <Text style={styles.titleGemme}>Mes objets</Text>
+                    </View>
+
+                    <View style={styles.row}>
+
+                        <View style={styles.item}>
+                            <View style={[styles.titleView, styles.gray]}>
+                                <Text style={styles.titleItem}>"La panière"</Text>
+                            </View>
+                            <View style={[styles.row, styles.secondPart]}>
+                                <View>
+                                    <Image
+                                        style={styles.tinyLogo}
+                                        source={require('./images/croissant.png')}
+                                    />
+                                </View>
+                                <View style={styles.number}>
+                                    <Text style={styles.numberText}>0</Text>
+                                </View>
+                            </View>
+                            <View style={styles.conversion}><Text style={styles.conversionText}>Voir modalités d'utilisation</Text></View>
+                        </View>
+
+
+                        <View style={styles.item}>
+                            <View style={[styles.titleView, styles.gray]}>
+                                <Text style={styles.titleItem}>"Le super"</Text>
+                            </View>
+                            <View style={[styles.row, styles.secondPart]}>
+                                <View>
+                                    <Image
+                                        style={styles.tinyLogo}
+                                        source={require('./images/biere.png')}
+                                    />
+                                </View>
+                                <View style={styles.number}>
+                                    <Text style={styles.numberText}>0</Text>
+                                </View>
+                            </View>
+                            <View style={styles.conversion}><Text style={styles.conversionText}>Voir modalités d'utilisation</Text></View>
+                        </View>
+
+
+
+
+
+                    </View>
+
+                    <Text>dd</Text>
+                    <Text>dd</Text>
+                    <Text>dd</Text>
+                    <Text>dd</Text>
+                    <Text>dd</Text>
+                    <Text>dd</Text>
+                    <Text>dd</Text>
+
+                </ScrollView>
+
+
             </View>
+        );
 
-            <ScrollView>
-
-                <View>
-                    <Text style={styles.titleGemme}>Mes gemmes</Text>
-                </View>
-
-                <View style={styles.container}>
-                    <View style={styles.row}>
-
-                        <View style={styles.item}>
-                            <View style={[styles.titleView, styles.red]}>
-                                <Text style={styles.titleItem}>Rubis</Text>
-                            </View>
-                            <View style={[styles.row, styles.secondPart]}>
-                                <View>
-                                    <Image
-                                        style={styles.tinyLogo}
-                                        source={require('./images/rubi.png')}
-                                    />
-                                </View>
-                                <View style={styles.number}>
-                                    <Text style={styles.numberText}>0</Text>
-                                </View>
-                            </View>
-                            <View style={styles.conversion}><Text style={styles.conversionText}>Aucun</Text></View>
-                        </View>
+    }
 
 
-                        <View style={styles.item}>
-                            <View style={[styles.titleView, styles.blue]}>
-                                <Text style={styles.titleItem}>Saphir</Text>
-                            </View>
-                            <View style={[styles.row, styles.secondPart]}>
-                                <View>
-                                    <Image
-                                        style={styles.tinyLogo}
-                                        source={require('./images/saphir.png')}
-                                    />
-                                </View>
-                                <View style={styles.number}>
-                                    <Text style={styles.numberText}>0</Text>
-                                </View>
-                            </View>
-                            <View style={styles.conversion}><Text style={styles.conversionText}>Aucun</Text></View>
-                        </View>
-
-
-
-                    </View>
-
-                    <View style={styles.row}>
-
-                        <View style={styles.item}>
-                            <View style={[styles.titleView, styles.green]}>
-                                <Text style={styles.titleItem}>Émeraude</Text>
-                            </View>
-                            <View style={[styles.row, styles.secondPart]}>
-                                <View>
-                                    <Image
-                                        style={styles.tinyLogo}
-                                        source={require('./images/emeraude.png')}
-                                    />
-                                </View>
-                                <View style={styles.number}>
-                                    <Text style={styles.numberText}>0</Text>
-                                </View>
-                            </View>
-                            <View style={styles.conversion}><Text style={styles.conversionText}>Aucun</Text></View>
-                        </View>
-
-
-                        <View style={styles.item}>
-                            <View style={[styles.titleView, styles.purple]}>
-                                <Text style={styles.titleItem}>Améthyste</Text>
-                            </View>
-                            <View style={[styles.row, styles.secondPart]}>
-                                <View>
-                                    <Image
-                                        style={styles.tinyLogo}
-                                        source={require('./images/amethyste.png')}
-                                    />
-                                </View>
-                                <View style={styles.number}>
-                                    <Text style={styles.numberText}>0</Text>
-                                </View>
-                            </View>
-                            <View style={styles.conversion}><Text style={styles.conversionText}>Aucun</Text></View>
-                        </View>
-
-
-
-                    </View>
-
-
-                    <View style={styles.row}>
-
-                        <View style={styles.item}>
-                            <View style={[styles.titleView, styles.black]}>
-                                <Text style={styles.titleItem}>Tourmaline</Text>
-                            </View>
-                            <View style={[styles.row, styles.secondPart]}>
-                                <View>
-                                    <Image
-                                        style={styles.tinyLogo}
-                                        source={require('./images/tourmaline.png')}
-                                    />
-                                </View>
-                                <View style={styles.number}>
-                                    <Text style={styles.numberText}>0</Text>
-                                </View>
-                            </View>
-                            <View style={styles.conversion}><Text style={styles.conversionText}>Aucun</Text></View>
-                        </View>
-
-
-                        <View style={styles.item}>
-                            <View style={[styles.titleView, styles.yellow]}>
-                                <Text style={styles.titleItem}>Ambre</Text>
-                            </View>
-                            <View style={[styles.row, styles.secondPart]}>
-                                <View>
-                                    <Image
-                                        style={styles.tinyLogo}
-                                        source={require('./images/ambre.png')}
-                                    />
-                                </View>
-                                <View style={styles.number}>
-                                    <Text style={styles.numberText}>0</Text>
-                                </View>
-                            </View>
-                            <View style={styles.conversion}><Text style={styles.conversionText}>Aucun</Text></View>
-                        </View>
-
-
-
-                    </View>
-                </View>
-
-                <View>
-                    <Text style={styles.titleGemme}>Mes objets</Text>
-                </View>
-
-                <View style={styles.row}>
-
-                    <View style={styles.item}>
-                        <View style={[styles.titleView, styles.gray]}>
-                            <Text style={styles.titleItem}>"La panière"</Text>
-                        </View>
-                        <View style={[styles.row, styles.secondPart]}>
-                            <View>
-                                <Image
-                                    style={styles.tinyLogo}
-                                    source={require('./images/croissant.png')}
-                                />
-                            </View>
-                            <View style={styles.number}>
-                                <Text style={styles.numberText}>0</Text>
-                            </View>
-                        </View>
-                        <View style={styles.conversion}><Text style={styles.conversionText}>Voir modalités d'utilisation</Text></View>
-                    </View>
-
-
-                    <View style={styles.item}>
-                        <View style={[styles.titleView, styles.gray]}>
-                            <Text style={styles.titleItem}>"Le super"</Text>
-                        </View>
-                        <View style={[styles.row, styles.secondPart]}>
-                            <View>
-                                <Image
-                                    style={styles.tinyLogo}
-                                    source={require('./images/biere.png')}
-                                />
-                            </View>
-                            <View style={styles.number}>
-                                <Text style={styles.numberText}>0</Text>
-                            </View>
-                        </View>
-                        <View style={styles.conversion}><Text style={styles.conversionText}>Voir modalités d'utilisation</Text></View>
-                    </View>
-
-
-
-
-
-                </View>
-
-                <Text>dd</Text>
-                <Text>dd</Text>
-                <Text>dd</Text>
-                <Text>dd</Text>
-                <Text>dd</Text>
-                <Text>dd</Text>
-                <Text>dd</Text>
-
-            </ScrollView>
-
-
+    return(
+        <View>
+            {vue}
         </View>
-    );
+    )
+
+
 }
+
+
 
 
 const styles = StyleSheet.create({
@@ -270,6 +249,12 @@ const styles = StyleSheet.create({
     },
     gray : {
         backgroundColor: "#989FAA",
+    },
+
+    color : function(hexa) {
+        return {
+            backgroundColor: "#" + hexa,
+        }
     },
 
 

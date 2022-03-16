@@ -7,16 +7,16 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.jpa.repository.Query;
 
-import com.example.demo.entity.Etudiant;
 
 import java.util.List;
 
 @RepositoryRestResource()
-public interface EtudiantRepository extends JpaRepository<Etudiant, Integer>, JpaSpecificationExecutor<Etudiant>, QuerydslPredicateExecutor<Etudiant> {
+public interface InventaireRepository extends JpaRepository<Inventaire, Integer>, JpaSpecificationExecutor<Inventaire>, QuerydslPredicateExecutor<Inventaire> {
 
-    @Query(value = "SELECT * FROM ETUDIANT where numero = ?1 ",
+
+    @Query(value = "SELECT * FROM INVENTAIRE i WHERE i.id_etudiant = ?1 ",
             nativeQuery = true)
-    Etudiant etud(int numero);
+    List<Inventaire> maListe(int numero);
 
 }
 

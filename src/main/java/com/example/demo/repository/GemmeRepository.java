@@ -7,16 +7,16 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.jpa.repository.Query;
 
-import com.example.demo.entity.Etudiant;
+import com.example.demo.entity.Gemme;
 
 import java.util.List;
 
 @RepositoryRestResource()
-public interface EtudiantRepository extends JpaRepository<Etudiant, Integer>, JpaSpecificationExecutor<Etudiant>, QuerydslPredicateExecutor<Etudiant> {
+public interface GemmeRepository extends JpaRepository<Gemme, Integer>, JpaSpecificationExecutor<Gemme>, QuerydslPredicateExecutor<Gemme> {
 
-    @Query(value = "SELECT * FROM ETUDIANT where numero = ?1 ",
+    @Query(value = "SELECT * FROM GEMME where proba_min <= ?1 AND proba_max >= ?1 LIMIT 1",
             nativeQuery = true)
-    Etudiant etud(int numero);
+    Gemme trouveGemme(int proba);
 
 }
 

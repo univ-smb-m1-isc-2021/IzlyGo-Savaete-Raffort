@@ -1,7 +1,9 @@
 DROP TABLE IF EXISTS formation;
+DROP TABLE IF EXISTS inventaire;
 DROP TABLE IF EXISTS etudiant;
+DROP TABLE IF EXISTS tirage;
 DROP TABLE IF EXISTS gemme;
-DROP TABLE IF EXISTS etudiantGemme;
+
 
 CREATE TABLE formation (
   ID INT PRIMARY KEY,
@@ -15,7 +17,8 @@ CREATE TABLE etudiant (
    PRENOM VARCHAR(250) NOT NULL,
    MAIL VARCHAR(250) NOT NULL,
    FORMATION_ID INT NOT NULL,
-   FOREIGN KEY (FORMATION_ID) REFERENCES formation(ID)
+   FOREIGN KEY (FORMATION_ID) REFERENCES formation(ID),
+   NOMBRE_POINTS INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE gemme (
@@ -23,15 +26,39 @@ CREATE TABLE gemme (
     NOM VARCHAR (50) NOT NULL,
     COULEUR VARCHAR (30) NOT NULL,
     PROBA FLOAT NOT NULL,
+    PROBA_MIN FLOAT NOT NULL,
+    PROBA_MAX FLOAT NOT NULL,
     PERSONNE_MAX INT NOT NULL,
-    VALEUR INT NOT NULL
-                   );
+    VALEUR INT NOT NULL,
+    CHEMIN_IMAGE VARCHAR(100) NOT NULL
+);
 
-CREATE TABLE etudiantGemme
+CREATE TABLE inventaire
 (
+    ID INT PRIMARY KEY,
     ID_ETUDIANT INT NOT NULL,
     ID_GEMME    INT NOT NULL,
-    QUANTITE    INT NOT NULL DEFAULT 0
+    QUANTITE    INT NOT NULL DEFAULT 0,
+    VALEUR_POINT INT NOT NULL DEFAULT 0,
+    VALEUR_EURO INT NOT NULL DEFAULT 0,
+
+    FOREIGN KEY (ID_ETUDIANT) REFERENCES etudiant(NUMERO)
+);
+
+
+CREATE TABLE tirage
+(
+    ID INT PRIMARY KEY,
+    JOUR VARCHAR(30) NOT NULL,
+    HEURE INT NOT NULL,
+    MINUTE INT NOT NULL,
+    ID_GEMME INT NOT NULL,
+    NOMBRE_RECUPERE INT NOT NULL,
+    LATITUDE FLOAT NOT NULL,
+    LONGITUDE FLOAT NOT NULL,
+    CHAINE VARCHAR(100) NOT NULL,
+
+    FOREIGN KEY (ID_GEMME) REFERENCES gemme(ID)
 );
 
 INSERT INTO formation (ID, LIBELLE, CHEMIN) VALUES
@@ -39,23 +66,34 @@ INSERT INTO formation (ID, LIBELLE, CHEMIN) VALUES
   (2, 'M1 INFO Groupe 2', 'M1/INFO/2');
 
 INSERT INTO etudiant (NUMERO, NOM, PRENOM, MAIL, FORMATION_ID) VALUES
- (513145161, 'RAFFORT', 'Adrien', 'adrien73400@icloud.com', 2);
+    (123, 'RAFFORT', 'Adrien', 'adrien73400@icloud.com', 2),
+(456, 'RAFFORT', 'Adrien', 'adrien73400@icloud.com', 2);
 
 
-INSERT INTO gemme(id, nom, couleur, proba, personne_max, valeur) VALUES
-(1, 'Rubis', 'E86967', 0.05, 10, 100),
-(2, 'Saphir', '80C6F1', 0.1, 20, 80),
-(3, 'Emeraude', '61D6B9', 0.15, 50, 50),
-(4, 'Améthyste', 'B58CE7', 0.18, 5000, 10),
-(5, 'Tourmaline', '363F4A', 0.3, 5000, 5),
-(6, 'Ambre', 'EBAE7', 0.2, 5000, 1);
+INSERT INTO gemme(id, nom, couleur, proba, proba_min, proba_max, personne_max, valeur, CHEMIN_IMAGE) VALUES
+(1, 'Rubis', 'E86967', 0.07, 94, 100, 10, 100, 'rubis'), /*TODO 0.07 au lieu de 0.05 en attendant les objets*/
+(2, 'Saphir', '80C6F1', 0.1, 84, 93, 20, 80, 'saphir'),
+(3, 'Emeraude', '61D6B9', 0.15, 69, 83, 50, 50, 'emeraude'),
+(4, 'Améthyste', 'B58CE7', 0.18, 51, 68, 5000, 10, 'amethyste'),
+(5, 'Tourmaline', '363F4A', 0.3, 21, 50, 5000, 5, 'tourmaline'),
+(6, 'Ambre', 'EAAE7B', 0.2, 1, 20, 5000, 1, 'ambre');
 
 
-INSERT INTO etudiantGemme(id_etudiant, id_gemme, quantite) VALUES
-(513145161, 1, 1),
-(513145161, 2, 2),
-(513145161, 3, 5),
-(513145161, 4, 6),
-(513145161, 5, 6),
-(513145161, 6, 20);
+
+INSERT INTO inventaire(id, id_etudiant, id_gemme, quantite) VALUES
+(1, 123, 1, 1),
+(2, 123, 2, 2),
+(3, 123, 3, 5),
+(4, 123, 4, 6),
+(5, 123, 5, 6),
+(6, 123, 6, 20),
+
+(7,456, 1, 0),
+(8, 456, 2, 1),
+(9, 456, 3, 8),
+(10, 456, 4, 0),
+(11, 456, 5, 9),
+(12, 456, 6, 11);
+
+
 

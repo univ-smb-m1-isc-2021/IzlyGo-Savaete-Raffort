@@ -21,4 +21,10 @@ public class EtudiantService {
     }
 
 
+    public Etudiant getEtudiant(int numero) {
+        return etudiantRepository.etud(numero);
+    }
+
+
+
 }

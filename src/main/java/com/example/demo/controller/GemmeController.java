@@ -10,24 +10,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.entity.Formation;
-import com.example.demo.service.FormationService;
+import com.example.demo.entity.Gemme;
+import com.example.demo.service.GemmeService;
+
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/")
-public class FormationController {
+public class GemmeController {
 
-	@Autowired
-    FormationService formationService;
-
-	@GetMapping(path = "/formations")
-    public ResponseEntity<?> listFormations() {
-        //log.info("FormationController:  list formations");
-        List<Formation> resource = formationService.getFormations();
-        return ResponseEntity.ok(resource);
-    }
+    @Autowired
+    GemmeService gemmeService;
 
 }

@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 public class Etudiant{
@@ -32,4 +34,11 @@ public class Etudiant{
     @NotNull(message="{NotNull.Etudiant.formation_id}")
     private int formation_id;
 
+    @Column
+    @NotNull(message="{NotNull.Etudiant.nombre_points}")
+    private int nombre_points;
+
+
 }
+
+
