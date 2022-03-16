@@ -1,5 +1,3 @@
-import {StyleSheet, View} from "react-native";
-import MapView from "react-native-maps";
 import React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MapScreen from "./MapScreen";
@@ -11,7 +9,7 @@ import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 
 
 
-export default class MaTab extends React.Component {
+export default class TabEtudiant extends React.Component {
     render() {
         return(
             <NavigationContainer>

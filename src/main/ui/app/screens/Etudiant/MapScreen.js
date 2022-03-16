@@ -3,8 +3,6 @@ import MapView from "react-native-maps";
 import Marker from "react-native-maps";
 import React, {useEffect, useState} from "react";
 
-
-
 export default function MapScreen() {
 
     const [points, setPoints] = useState([]);
@@ -18,9 +16,6 @@ export default function MapScreen() {
 
             setPoints(json["liste"]);
 
-
-
-
         } catch (error) {
             console.error(error);
         }
@@ -28,13 +23,13 @@ export default function MapScreen() {
 
     const getImage = name => {
         switch (name) {
-            case "rubis": return require("./images/rubis.png")
-            case "saphir": return require("./images/saphir.png")
-            case "emeraude": return require("./images/emeraude.png")
-            case "amethyste": return require("./images/amethyste.png")
-            case "tourmaline": return require("./images/tourmaline.png")
-            case "ambre": return require("./images/ambre.png")
-            default: return require("./images/ambre.png")
+            case "rubis": return require("../images/rubis.png")
+            case "saphir": return require("../images/saphir.png")
+            case "emeraude": return require("../images/emeraude.png")
+            case "amethyste": return require("../images/amethyste.png")
+            case "tourmaline": return require("../images/tourmaline.png")
+            case "ambre": return require("../images/ambre.png")
+            default: return require("../images/ambre.png")
         }
     }
 
@@ -93,7 +88,7 @@ export default function MapScreen() {
 
 
 
-    useEffect(() => {
+    useEffect(() =>  {
         donneGemmes();
 
         /*const timer = window.setInterval(() => {

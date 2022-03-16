@@ -1,35 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ActivityIndicator, FlatList, StyleSheet, Text, View, TextInput, Button, Alert, Pressable, Picker, ScrollView } from 'react-native';
-import MapView from 'react-native-maps';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
 
-import {SocialIcon} from 'react-native-elements';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ListeScreen from "./app/screens/ListeScreen";
-import ReductionScreen from "./app/screens/ReductionScreen";
-import SettingScreen from "./app/screens/SettingScreen";
-import MapScreen from "./app/screens/MapScreen";
-import InscriptionScreen from "./app/screens/InscriptionScreen";
-
-import MaTab from "./app/screens/MaTab";
-
-const Stack = createNativeStackNavigator();
-
+import InscriptionScreen from "./app/screens/Etudiant/InscriptionScreen";
+import TabEtudiant from "./app/screens/Etudiant/TabEtudiant";
+import TabEntreprise from "./app/screens/Entreprise/TabEntreprise";
 
 export default class App extends React.Component{
 
     render() {
 
         let retour;
-        
-        if(false){
-            retour = <InscriptionScreen></InscriptionScreen>
-        }else {
-            retour = <MaTab></MaTab>
-        }
 
+        let nombre = 2
+        
+        if(nombre ==1){
+            retour = <InscriptionScreen></InscriptionScreen>
+        }else if (nombre == 2) {
+            retour = <TabEtudiant></TabEtudiant>
+        }else {
+            retour = <TabEntreprise></TabEntreprise>
+        }
 
         return (
             <View style={superStyle.view}>
@@ -37,8 +27,6 @@ export default class App extends React.Component{
             </View>
         );
     }
-
-
 }
 
 const superStyle = StyleSheet.create({
@@ -47,36 +35,3 @@ const superStyle = StyleSheet.create({
         height: '100%'
     }
 })
-
-
-/*export default function MyStack() {
-  return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-              name="Home"
-              component={HomeScreen}
-              options={{ title: 'Welcome' }}
-          />
-          <Stack.Screen name="Profile" component={ProfileScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-  );
-};
-
-
-const HomeScreen = ({ navigation }) => {
-  return (
-      <Button
-          title="Go to Jane's profile"
-          onPress={() =>
-              navigation.navigate('Profile', { name: 'Jane' })
-          }
-      />
-  );
-};
-const ProfileScreen = ({ navigation, route }) => {
-  return <Text>This is {route.params.name}'s profile</Text>;
-};
-*/
-

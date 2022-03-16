@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 'react-native';
 import {useEffect, useState} from "react";
 
@@ -26,13 +25,13 @@ export default function ListeScreen() {
 
     const getImage = name => {
         switch (name) {
-            case "rubis": return require("./images/rubis.png")
-            case "saphir": return require("./images/saphir.png")
-            case "emeraude": return require("./images/emeraude.png")
-            case "amethyste": return require("./images/amethyste.png")
-            case "tourmaline": return require("./images/tourmaline.png")
-            case "ambre": return require("./images/ambre.png")
-            default: return require("./images/ambre.png")
+            case "rubis": return require("../images/rubis.png")
+            case "saphir": return require("../images/saphir.png")
+            case "emeraude": return require("../images/emeraude.png")
+            case "amethyste": return require("../images/amethyste.png")
+            case "tourmaline": return require("../images/tourmaline.png")
+            case "ambre": return require("../images/ambre.png")
+            default: return require("../images/ambre.png")
         }
     }
 
@@ -66,7 +65,7 @@ export default function ListeScreen() {
                         {
                             gemmes.gemmes.map((twice, i) => {
 
-                                    var o = require("./images/tourmaline.png");
+                                    var o = require("../images/tourmaline.png");
                                     return (
                                         <View style={styles.row} key={i}>
 
@@ -129,7 +128,7 @@ export default function ListeScreen() {
                                 <View>
                                     <Image
                                         style={styles.tinyLogo}
-                                        source={require('./images/croissant.png')}
+                                        source={require('../images/croissant.png')}
                                     />
                                 </View>
                                 <View style={styles.number}>
@@ -148,7 +147,7 @@ export default function ListeScreen() {
                                 <View>
                                     <Image
                                         style={styles.tinyLogo}
-                                        source={require('./images/biere.png')}
+                                        source={require('../images/biere.png')}
                                     />
                                 </View>
                                 <View style={styles.number}>

@@ -1,9 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator, FlatList, StyleSheet, Text, View, TextInput, Button, Alert, Pressable, Picker, ScrollView } from 'react-native';
+import {StyleSheet, Text, View, TextInput, Button, Alert, Pressable, Picker, ScrollView } from 'react-native';
 import {SocialIcon} from 'react-native-elements';
-import MaTab from "./MaTab";
 
 export default function InscriptionScreen(){
 
