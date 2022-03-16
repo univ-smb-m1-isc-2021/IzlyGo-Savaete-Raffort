@@ -4,6 +4,9 @@ DROP TABLE IF EXISTS etudiant;
 DROP TABLE IF EXISTS tirage;
 DROP TABLE IF EXISTS gemme;
 
+DROP TABLE IF EXISTS reduction;
+DROP TABLE IF EXISTS entreprise;
+
 
 CREATE TABLE formation (
   ID INT PRIMARY KEY,
@@ -61,6 +64,23 @@ CREATE TABLE tirage
     FOREIGN KEY (ID_GEMME) REFERENCES gemme(ID)
 );
 
+CREATE TABLE entreprise
+(
+    ID INT PRIMARY KEY,
+    NUM_SIRET INT NOT NULL,
+    NOM VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE reduction
+(
+    ID INT PRIMARY KEY,
+    POINTS_REQUIS INT NOT NULL,
+    ID_ENTREPRISE INT NOT NULL,
+    LIBELLE VARCHAR(100) NOT NULL,
+
+    FOREIGN KEY (ID_ENTREPRISE) REFERENCES entreprise(ID)
+);
+
 INSERT INTO formation (ID, LIBELLE, CHEMIN) VALUES
   (1, 'M1 INFO Groupe 1', 'M1/INFO/1'),
   (2, 'M1 INFO Groupe 2', 'M1/INFO/2');
@@ -94,6 +114,16 @@ INSERT INTO inventaire(id, id_etudiant, id_gemme, quantite) VALUES
 (10, 456, 4, 0),
 (11, 456, 5, 9),
 (12, 456, 6, 11);
+
+
+INSERT INTO entreprise(id, num_siret, nom) VALUES
+(1, 156516, 'Boulangerie La Panière'),
+(2, 256272, 'Bar La Flouz');
+
+INSERT INTO reduction(id, points_requis, id_entreprise, libelle) VALUES
+(1, 1700, 1, '37% de remise sur les pains aux chocolats'),
+(2, 800, 1, 'Un panini offert pour 3 pains achetés'),
+(3, 400, 2, '15% sur un large produit de bière');
 
 
 
