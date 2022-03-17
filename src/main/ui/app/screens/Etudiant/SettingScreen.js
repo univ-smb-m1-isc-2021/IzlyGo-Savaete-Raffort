@@ -1,9 +1,12 @@
-import { StyleSheet, Text, View, TextInput, Button, Image } from 'react-native';
+import {StyleSheet, Text, View, TextInput, Button, Image, NativeModules} from 'react-native';
+import { Dosis_200ExtraLight, Dosis_300Light, Dosis_400Regular, Dosis_500Medium, Dosis_600SemiBold, Dosis_700Bold, Dosis_800ExtraBold } from '@expo-google-fonts/dosis'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SettingScreen() {
     return (
 
-            <View style={styles.view_globale}>
+            <SafeAreaView style={styles.view_globale}>
 
                 <View style={styles.view_image}>
                     <Image
@@ -31,13 +34,28 @@ export default function SettingScreen() {
                     </View>
                 </View>
 
+                <View style={styles.un_parametre}>
+                    <Button title={"Déconnexion"} onPress={removeItemValue}/>
+                </View>
+
                 <View style={maintain.view}>
                     <Text style={maintain.text}>D'autres paramètres seront bientôt disponible ...</Text>
                 </View>
 
-            </View>
+            </SafeAreaView>
     );
 }
+
+const removeItemValue = async () => {
+
+    try {
+        await AsyncStorage.removeItem('@numero_etudiant');
+        NativeModules.DevSettings.reload();
+    }
+    catch(exception) {
+    }
+}
+
 
 const styles = StyleSheet.create({
 
@@ -134,9 +152,10 @@ const maintain = StyleSheet.create({
 
     text: {
         fontStyle: "italic",
-        fontSize: 20,
+        fontSize: 25,
         color: "#65626F",
-        textAlign: "center"
+        textAlign: "center",
+        fontFamily: "Dosis_200ExtraLight"
     }
 
 })

@@ -15,11 +15,11 @@ export default class TabEtudiant extends React.Component {
             <NavigationContainer>
                 <Tab.Navigator
 
-                    activeColor="#ff0071"
+
+                    activeColor="#AAAAAA"
                     inactiveColor="#FFF"
                     barStyle={{backgroundColor: '#fff'}}
                     screenOptions={({route, navigation}) => ({
-                        tabBarLabel: navigation.isFocused() ? route.name : '',
                         tabBarIcon: ({focused, color, size}) => {
                             let iconName;
                             if (route.name === 'Carte') {
@@ -34,10 +34,10 @@ export default class TabEtudiant extends React.Component {
                             return <Ionicons name={iconName} size={size} color={color} />;
                         },
                     })}>
-                    <Tab.Screen name="Carte" component={MapScreen} />
-                    <Tab.Screen name="Ma liste" component={ListeScreen} />
-                    <Tab.Screen name="Bon plan" component={ReductionScreen} />
-                    <Tab.Screen name="Paramètres" component={SettingScreen} />
+                    <Tab.Screen name="Carte" component={MapScreen} options={{headerShown: false}} />
+                    <Tab.Screen name="Ma liste" component={ListeScreen} options={{headerShown: false}}/>
+                    <Tab.Screen name="Bon plan" component={ReductionScreen} options={{headerShown: false}}/>
+                    <Tab.Screen name="Paramètres" component={SettingScreen} options={{headerShown: false}}/>
                 </Tab.Navigator>
             </NavigationContainer>
         )

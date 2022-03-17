@@ -20,7 +20,6 @@ export default class TabEntreprise extends React.Component {
                     inactiveColor="#FFF"
                     barStyle={{backgroundColor: '#fff'}}
                     screenOptions={({route, navigation}) => ({
-                        tabBarLabel: navigation.isFocused() ? route.name : '',
                         tabBarIcon: ({focused, color, size}) => {
                             let iconName;
                             if (route.name === 'Profil') {

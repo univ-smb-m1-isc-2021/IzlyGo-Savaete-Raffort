@@ -2,6 +2,11 @@ import {StyleSheet, View, Image, Text, Alert} from "react-native";
 import MapView from "react-native-maps";
 import Marker from "react-native-maps";
 import React, {useEffect, useState} from "react";
+import { useFonts } from 'expo-font'
+
+import AppLoading from 'expo-app-loading'
+
+import { Dosis_200ExtraLight, Dosis_300Light, Dosis_400Regular, Dosis_500Medium, Dosis_600SemiBold, Dosis_700Bold, Dosis_800ExtraBold } from '@expo-google-fonts/dosis'
 
 export default function MapScreen() {
 
@@ -91,6 +96,7 @@ export default function MapScreen() {
     useEffect(() =>  {
         donneGemmes();
 
+
         /*const timer = window.setInterval(() => {
             temps()
 
@@ -105,30 +111,44 @@ export default function MapScreen() {
 
     return (
         <View style={styles.all}>
-            <Text>{currentDate}</Text>
             <View style={styles.container}>
-                <MapView style={styles.map}   region={{
-                    latitude: 45.64341,
-                    longitude: 5.86990,
-                    latitudeDelta: 0.012,
-                    longitudeDelta: 0.012,
-                }}>
+                {
+                    points.length != 0 ?  
+                        <MapView
+                            style={styles.map}
+                            region={{
+                                latitude: 45.64341,
+                                longitude: 5.86990,
+                                latitudeDelta: 0.012,
+                                longitudeDelta: 0.012,
+                            }}
+                        >
 
-                    {points.map((pt, i) => {
-                        return (
-                            <MapView.Marker
-                                key={pt.latitude}
-                                coordinate={{ latitude : pt.latitude , longitude :pt.longitude }}
-                                onPress={() => markerClick(pt.gemme)}
-                            >
+                        {
+                            points.map((pt, i) => {
+                                return (
+                                    <MapView.Marker
+                                        key={pt.latitude}
+                                        coordinate={{ latitude : pt.latitude , longitude :pt.longitude }}
+                                        onPress={() => markerClick(pt.gemme)}
+                                    >
 
-                                <Image source={getImage(pt.gemme.chemin_image)} style={{height: 35, width:35 }} />
-                            </MapView.Marker>
-                        )
-                    })}
+                                        <Image source={getImage(pt.gemme.chemin_image)} style={{height: 35, width:35 }} />
+                                    </MapView.Marker>
+                                )
+                            })
 
+                        }
 
-                </MapView>
+                        </MapView> :
+
+                        <View style={[styles.container, styles.view_vide]}>
+                            <Image style={styles.image_vide} source={require("../images/map_vide.png")}></Image>
+                            <Text style={styles.text_vide}>À cette heure-ci, il n'y a pas de carte.</Text>
+                            <Text style={styles.text_vide2}>Reviens demain à partir de 7h.</Text>
+                        </View>
+
+                }
             </View>
         </View>
 
@@ -140,15 +160,36 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'center',
     },
     map: {
         width: "100%",
-        height: "90%",
+        height: "100%"
     },
     
     all : {
         width: "100%",
         height: "100%"
+    },
+
+    image_vide: {
+        width: "30%",
+        height: "30%"
+    },
+    view_vide : {
+        width: "100%",
+        height: "100%",
+        marginTop: "40%"
+    },
+
+    text_vide: {
+        marginTop: 20,
+        fontFamily: "Dosis_200ExtraLight",
+        fontSize: 22
+    },
+
+    text_vide2: {
+        marginTop: 10,
+        fontFamily: "Dosis_200ExtraLight",
+        fontSize: 18
     }
 });

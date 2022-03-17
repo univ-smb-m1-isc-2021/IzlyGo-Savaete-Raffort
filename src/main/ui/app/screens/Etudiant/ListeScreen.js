@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 'react-native';
 import {useEffect, useState} from "react";
-
+import { Dosis_200ExtraLight, Dosis_300Light, Dosis_400Regular, Dosis_500Medium, Dosis_600SemiBold, Dosis_700Bold, Dosis_800ExtraBold } from '@expo-google-fonts/dosis'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ListeScreen() {
 
@@ -46,8 +47,8 @@ export default function ListeScreen() {
         setVue(
             <View style={styles.main}>
                 <View style={styles.points}>
-                    <Text>Total de vos points IzlyGo :</Text>
-                    <Text style={styles.points2}> {gemmes.etudiant.nombre_points} points </Text>
+                    <Text style={styles.points4}>Total de vos points IzlyGo :</Text>
+                    <Text style={styles.points2}> 540 points </Text>
                     <Text style={styles.points3}>Soit {gemmes.etudiant.nombre_euros} €</Text>
                 </View>
 
@@ -181,9 +182,9 @@ export default function ListeScreen() {
 
 
     return(
-        <View>
+        <SafeAreaView>
             {vue}
-        </View>
+        </SafeAreaView>
     )
 
 
@@ -207,7 +208,8 @@ const styles = StyleSheet.create({
     titleItem: {
         color: "white",
         fontWeight: "bold",
-        fontSize: 15
+        fontSize: 15,
+        fontFamily: "Dosis_700Bold"
     },
     titleView: {
         marginTop: 10,
@@ -268,8 +270,9 @@ const styles = StyleSheet.create({
         bottom: 10
     },
     conversionText: {
-      fontSize: 10,
-      color: "gray"
+      fontSize: 12,
+      color: "gray",
+        fontFamily: "Dosis_300Light"
     },
 
     number: {
@@ -278,7 +281,9 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
     },
     numberText: {
-        fontSize: 30
+        fontSize: 30,
+        fontFamily: "Dosis_400Regular"
+
     },
     secondPart: {
         marginTop: 20
@@ -292,16 +297,23 @@ const styles = StyleSheet.create({
     },
     points2: {
         fontSize: 20,
-        fontWeight: "bold",
-        padding: 5
+        padding: 5,
+        fontFamily: "Dosis_700Bold"
     },
 
     points3: {
-        fontSize: 10,
+        fontSize: 12,
+        fontFamily: "Dosis_300Light"
+    },
+
+    points4: {
+        fontFamily: "Dosis_500Medium",
+        fontSize: 20
     },
 
     titleGemme: {
         fontWeight: "100",
+        fontFamily: "Dosis_200ExtraLight",
         fontSize: 20,
         margin: 20
     }

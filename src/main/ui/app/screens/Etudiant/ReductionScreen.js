@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, TextInput, Button, ScrollView } from 'react-native';
 import {useEffect, useState} from "react";
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function ReductionScreen() {
@@ -24,7 +25,14 @@ export default function ReductionScreen() {
 
 
     return (
-        <View style={styles.view_globale}>
+        <SafeAreaView style={styles.view_globale}>
+
+            <View style={styles.points}>
+                <Text style={styles.points4}>Total de vos points IzlyGo :</Text>
+                <Text style={styles.points2}>540 points </Text>
+                <Text style={styles.points3}>Soit 4.3 €</Text>
+            </View>
+
             <Text style={styles.titre_page}>Les réductions</Text>
 
             <ScrollView>
@@ -54,7 +62,7 @@ export default function ReductionScreen() {
             </ScrollView>
 
 
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -101,7 +109,7 @@ const styles = StyleSheet.create({
     },
 
     view_nom_entreprise : {
-        backgroundColor: "orange",
+        backgroundColor: "#EAAE7B",
         width: "60%"
     },
 
@@ -132,5 +140,27 @@ const styles = StyleSheet.create({
     text_info: {
         color: "#B5B1AE",
         fontSize: 10
-    }
+    },
+
+    points : {
+        backgroundColor: "#F0F2F5",
+        padding: 10,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    points2: {
+        fontSize: 20,
+        padding: 5,
+        fontFamily: "Dosis_700Bold"
+    },
+
+    points3: {
+        fontSize: 12,
+        fontFamily: "Dosis_300Light"
+    },
+
+    points4: {
+        fontFamily: "Dosis_500Medium",
+        fontSize: 20
+    },
 });
