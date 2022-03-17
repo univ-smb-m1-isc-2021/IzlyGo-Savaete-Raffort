@@ -1,50 +1,131 @@
-import {StyleSheet, Text, View, TextInput, Button, Image, NativeModules} from 'react-native';
+import {StyleSheet, Text, View, TextInput, Button, Image, NativeModules, TouchableHighlight} from 'react-native';
 import { Dosis_200ExtraLight, Dosis_300Light, Dosis_400Regular, Dosis_500Medium, Dosis_600SemiBold, Dosis_700Bold, Dosis_800ExtraBold } from '@expo-google-fonts/dosis'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faUser, faBell, faCircleCheck, faRankingStar, faArrowRightFromBracket, faAngleRight } from '@fortawesome/free-solid-svg-icons'
+
+
+import SuccesScreen from "./Parametres/SuccesScreen";
+import ProfilScreen from "./Parametres/ProfilScreen";
+import NotificationScreen from "./Parametres/NotificationScreen";
+import ClassementScreen from "./Parametres/ClassementScreen";
+
+const Stack = createNativeStackNavigator();
 
 export default function SettingScreen() {
     return (
 
-            <SafeAreaView style={styles.view_globale}>
-
-                <View style={styles.view_image}>
-                    <Image
-                        style={styles.image_profil}
-                        source={{uri: 'https://media-exp1.licdn.com/dms/image/C4E03AQEOT59zyut71w/profile-displayphoto-shrink_200_200/0/1594911160362?e=1652918400&v=beta&t=-q3eVhslA4SEZ4LMaYtiKZPLX024YuhiLy-l90gbHrE'}}/>
-                    <Text style={styles.identite}>Adrien RAFFORT</Text>
-                    <Text style={styles.info_inscription}>Inscrit depuis le 12 février 2022</Text>
-
-                </View>
-
-
-                <View style={styles.un_parametre}>
-                    <Text style={styles.titre_parametre}>Être notifié si une gemme apparait </Text>
-
-                    <View style={styles.affichage}>
-                        <View style={[styles.une, couleur.red]}><Text style={styles.nom}>Rubis</Text></View>
-                        <View style={[styles.une, couleur.blue]}><Text style={styles.nom}>Saphir</Text></View>
-                        <View style={[styles.une, couleur.green]}><Text style={styles.nom}>Émeraude</Text></View>
-                    </View>
-
-                    <View style={styles.affichage}>
-                        <View style={[styles.une, couleur.purple]}><Text style={styles.nom}>Améthyste</Text></View>
-                        <View style={[styles.une, couleur.black]}><Text style={styles.nom}>Tourmaline</Text></View>
-                        <View style={[styles.une, couleur.yellow]}><Text style={styles.nom}>Ambre</Text></View>
-                    </View>
-                </View>
-
-                <View style={styles.un_parametre}>
-                    <Button title={"Déconnexion"} onPress={removeItemValue}/>
-                </View>
-
-                <View style={maintain.view}>
-                    <Text style={maintain.text}>D'autres paramètres seront bientôt disponible ...</Text>
-                </View>
-
-            </SafeAreaView>
+        <Stack.Navigator>
+            <Stack.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{ title: 'Paramètres', headerShown: false }}
+            />
+            <Stack.Screen name="Profil" component={ProfilScreen} />
+            <Stack.Screen name="Succès" component={SuccesScreen} />
+            <Stack.Screen name="Notification" component={NotificationScreen} />
+            <Stack.Screen name="Classement" component={ClassementScreen} />
+        </Stack.Navigator>
     );
 }
+
+const HomeScreen = ({ navigation }) => {
+    return (
+
+        <SafeAreaView style={styles.view_globale}>
+
+        <View style={styles.view_image}>
+            <Image
+                style={styles.image_profil}
+                source={{uri: 'https://media-exp1.licdn.com/dms/image/C4E03AQEOT59zyut71w/profile-displayphoto-shrink_200_200/0/1594911160362?e=1652918400&v=beta&t=-q3eVhslA4SEZ4LMaYtiKZPLX024YuhiLy-l90gbHrE'}}/>
+            <Text style={styles.identite}>Adrien RAFFORT</Text>
+            <Text style={styles.info_inscription}>Inscrit depuis le 12 février 2022</Text>
+
+        </View>
+
+        <View style={styles.un_parametre}>
+            <FontAwesomeIcon icon={faUser}  color={"black"} size={ 20 }/>
+
+            <TouchableHighlight  onPress={() => navigation.navigate('Profil')} underlayColor="white">
+                <View style={styles.button}>
+                    <Text style={styles.buttonText}>Profil</Text>
+                </View>
+            </TouchableHighlight>
+
+            <View style={styles.view_chevron}>
+                <FontAwesomeIcon icon={faAngleRight}  color={"black"} size={ 20 }/>
+            </View>
+        </View>
+
+        <View style={styles.un_parametre}>
+            <FontAwesomeIcon icon={faBell}  color={"black"} size={ 20 }/>
+
+            <TouchableHighlight  onPress={() => navigation.navigate('Notification', { name: 'Jane' })} underlayColor="white">
+                <View style={styles.button}>
+                    <Text style={styles.buttonText}>Notifications</Text>
+                </View>
+            </TouchableHighlight>
+
+            <View style={styles.view_chevron}>
+                <FontAwesomeIcon icon={faAngleRight}  color={"black"} size={ 20 }/>
+            </View>
+        </View>
+
+        <View style={styles.un_parametre}>
+            <FontAwesomeIcon icon={faCircleCheck}  color={"black"} size={ 20 }/>
+
+            <TouchableHighlight  onPress={() => navigation.navigate('Succès', { name: 'Jane' })} underlayColor="white">
+                <View style={styles.button}>
+                    <Text style={styles.buttonText}>Succès</Text>
+                </View>
+            </TouchableHighlight>
+
+            <View style={styles.view_chevron}>
+                <FontAwesomeIcon icon={faAngleRight}  color={"black"} size={ 20 }/>
+            </View>
+        </View>
+
+            <View style={styles.un_parametre}>
+                <FontAwesomeIcon icon={faRankingStar}  color={"black"} size={ 20 }/>
+
+                <TouchableHighlight  onPress={() => navigation.navigate('Classement', { name: 'Jane' })} underlayColor="white">
+                    <View style={styles.button}>
+                        <Text style={styles.buttonText}>Classement</Text>
+                    </View>
+                </TouchableHighlight>
+
+                <View style={styles.view_chevron}>
+                    <FontAwesomeIcon icon={faAngleRight}  color={"black"} size={ 20 }/>
+                </View>
+            </View>
+
+
+            <View style={styles.un_parametre}>
+                <FontAwesomeIcon icon={faArrowRightFromBracket}  color={"black"} size={ 20 }/>
+
+                <TouchableHighlight onPress={removeItemValue} underlayColor="white">
+                    <View style={styles.button}>
+                        <Text style={styles.buttonText}>Déconnexion</Text>
+                    </View>
+                </TouchableHighlight>
+
+                <View style={styles.view_chevron}>
+                    <FontAwesomeIcon icon={faAngleRight}  color={"black"} size={ 20 }/>
+                </View>
+
+            </View>
+
+
+
+    </SafeAreaView>
+    );
+};
+
+
 
 const removeItemValue = async () => {
 
@@ -61,7 +142,8 @@ const styles = StyleSheet.create({
 
     view_globale : {
         backgroundColor: "white",
-        height: "100%"
+        height: "100%",
+        width: "100%"
     },
 
     image_profil: {
@@ -74,7 +156,8 @@ const styles = StyleSheet.create({
     view_image: {
         marginTop: 10,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        marginBottom: 50
     },
 
     identite: {
@@ -94,12 +177,12 @@ const styles = StyleSheet.create({
     },
 
     un_parametre: {
-        marginTop: 50,
-        marginLeft: 20,
-        marginRight: 20,
-        backgroundColor: "#F0F1F3",
-        padding: 10,
-        borderRadius: 10
+        marginLeft: 50,
+        marginRight: 50,
+        padding: 20,
+        borderBottomWidth: 2,
+        borderBottomColor: "#EEEEEE",
+        flexDirection: "row",
 
     },
 
@@ -107,6 +190,20 @@ const styles = StyleSheet.create({
         textAlign: "center",
         paddingBottom: 10,
         fontWeight: "bold"
+    },
+
+    buttonText : {
+        marginLeft: 20,
+        fontSize: 20,
+        color: "#5D5C5D",
+    },
+
+
+    view_chevron: {
+        width: "10%",
+        position: "absolute",
+        top: 25,
+        right: 0
     },
 
     une : {
@@ -143,22 +240,3 @@ const couleur = StyleSheet.create({
         backgroundColor: "#EAAE7B",
     }
 })
-
-
-const maintain = StyleSheet.create({
-    view : {
-        margin: 70,
-    },
-
-    text: {
-        fontStyle: "italic",
-        fontSize: 25,
-        color: "#65626F",
-        textAlign: "center",
-        fontFamily: "Dosis_200ExtraLight"
-    }
-
-})
-
-
-

@@ -1,11 +1,18 @@
 DROP TABLE IF EXISTS formation;
 DROP TABLE IF EXISTS inventaire;
-DROP TABLE IF EXISTS etudiant;
 DROP TABLE IF EXISTS tirage;
-DROP TABLE IF EXISTS gemme;
+
+DROP TABLE IF EXISTS succes;
 
 DROP TABLE IF EXISTS reduction;
 DROP TABLE IF EXISTS entreprise;
+
+DROP TABLE IF EXISTS etudiant;
+DROP TABLE IF EXISTS challenge;
+DROP TABLE IF EXISTS gemme;
+
+
+
 
 
 CREATE TABLE formation (
@@ -81,12 +88,42 @@ CREATE TABLE reduction
     FOREIGN KEY (ID_ENTREPRISE) REFERENCES entreprise(ID)
 );
 
+CREATE TABLE challenge
+(
+    ID INT PRIMARY KEY,
+    LIBELLE VARCHAR(200) NOT NULL,
+    ID_CHALLENGE_PRECEDENT INT NULL,
+    ID_GEMME INT NOT NULL,
+    QUANTITE INT NOT NULL,
+    TEMPS INT NOT NULL,
+    ID_GEMME_RECOMPENSE INT NOT NULL,
+    QUANTITE_RECOMPENSE INT NOT NULL,
+
+    FOREIGN KEY (ID_CHALLENGE_PRECEDENT) REFERENCES challenge(ID),
+    FOREIGN KEY (ID_GEMME) REFERENCES gemme(ID),
+    FOREIGN KEY (ID_GEMME_RECOMPENSE) REFERENCES gemme(ID)
+);
+
+CREATE TABLE succes
+(
+    ID INT PRIMARY KEY,
+    ID_ETUDIANT INT NOT NULL,
+    ID_CHALLENGE INT NOT NULL,
+    ETAT VARCHAR(30) NOT NULL,
+    AVANCEMENT INT NOT NULL DEFAULT 0,
+
+    FOREIGN KEY (ID_ETUDIANT) REFERENCES etudiant(NUMERO),
+    FOREIGN KEY (ID_CHALLENGE) REFERENCES challenge(ID)
+);
+
+
+
 INSERT INTO formation (ID, LIBELLE, CHEMIN) VALUES
   (1, 'M1 INFO Groupe 1', 'M1/INFO/1'),
   (2, 'M1 INFO Groupe 2', 'M1/INFO/2');
 
 INSERT INTO etudiant (NUMERO, NOM, PRENOM, MAIL, FORMATION_ID) VALUES
-    (123, 'RAFFORT', 'Adrien', 'adrien73400@icloud.com', 2),
+(123, 'RAFFORT', 'Adrien', 'adrien73400@icloud.com', 2),
 (456, 'RAFFORT', 'Adrien', 'adrien73400@icloud.com', 2);
 
 
@@ -126,4 +163,36 @@ INSERT INTO reduction(id, points_requis, id_entreprise, libelle) VALUES
 (3, 400, 2, '15% sur un large produit de bière');
 
 
+INSERT INTO challenge(ID, LIBELLE, ID_CHALLENGE_PRECEDENT, ID_GEMME, QUANTITE, TEMPS, ID_GEMME_RECOMPENSE, QUANTITE_RECOMPENSE) VALUES
+(1, 'Récupérer 1 rubis', NULL, 1, 1, 10000, 4, 1),
+(2, 'Récupérer 10 rubis', 1, 1, 10, 10000, 3, 3),
+(3, 'Récupérer 30 rubis', 2, 1, 30, 10000, 2, 3),
 
+(4, 'Récupérer 5 saphirs', NULL, 2, 5, 10000, 3, 1),
+(5, 'Récupérer 25 saphirs', 4, 2, 25, 10000, 1, 1),
+(6, 'Récupérer 50 saphirs', 5, 2, 50, 10000, 1, 2),
+
+(7, 'Récupérer 10 émeraudes', NULL, 3, 10, 10000, 3, 1),
+(8, 'Récupérer 30 émeraudes', 7, 3, 30, 10000, 1, 1),
+(9, 'Récupérer 50 émeraudes', 8, 3, 50, 10000, 1, 2),
+
+(10, 'Récupérer 15 améthystes', NULL, 4, 15, 10000, 3, 1),
+(11, 'Récupérer 40 améthystes', 10, 4, 40, 10000, 1, 1),
+(12, 'Récupérer 75 améthystes', 11, 4, 75, 10000, 1, 2);
+
+INSERT INTO succes(ID, ID_ETUDIANT, ID_CHALLENGE, ETAT, AVANCEMENT) VALUES
+(1, 123, 1, 'EN_COURS',0),
+(2, 123, 2, 'BLOQUE', 0),
+(3, 123, 3, 'BLOQUE', 0),
+
+(4, 123, 4, 'FINI', 5),
+(5, 123, 5, 'EN_COURS', 8),
+(6, 123, 6, 'BLOQUE', 0),
+
+(7, 123, 7, 'FINI', 10),
+(8, 123, 8, 'FINI', 30),
+(9, 123, 9, 'EN_COURS', 9),
+
+(10, 123, 10, 'FINI', 15),
+(11, 123, 11, 'FINI', 40),
+(12, 123, 12, 'TERMINE', 75);
