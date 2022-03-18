@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS formation;
 DROP TABLE IF EXISTS inventaire;
 DROP TABLE IF EXISTS tirage;
 
@@ -7,13 +6,12 @@ DROP TABLE IF EXISTS succes;
 DROP TABLE IF EXISTS reduction;
 DROP TABLE IF EXISTS entreprise;
 
+DROP TABLE IF EXISTS notification;
+
 DROP TABLE IF EXISTS etudiant;
 DROP TABLE IF EXISTS challenge;
 DROP TABLE IF EXISTS gemme;
-
-
-
-
+DROP TABLE IF EXISTS formation;
 
 CREATE TABLE formation (
   ID INT PRIMARY KEY,
@@ -117,14 +115,26 @@ CREATE TABLE succes
 );
 
 
+CREATE TABLE notification
+(
+    ID INT PRIMARY KEY,
+    ID_ETUDIANT INT NOT NULL,
+    ID_GEMME INT NOT NULL,
+    ETAT BIT(1) NOT NULL DEFAULT 0,
+
+    FOREIGN KEY (ID_ETUDIANT) REFERENCES etudiant(NUMERO),
+    FOREIGN KEY (ID_GEMME) REFERENCES gemme(ID)
+);
+
 
 INSERT INTO formation (ID, LIBELLE, CHEMIN) VALUES
   (1, 'M1 INFO Groupe 1', 'M1/INFO/1'),
   (2, 'M1 INFO Groupe 2', 'M1/INFO/2');
 
-INSERT INTO etudiant (NUMERO, NOM, PRENOM, MAIL, FORMATION_ID) VALUES
-(123, 'RAFFORT', 'Adrien', 'adrien73400@icloud.com', 2),
-(456, 'RAFFORT', 'Adrien', 'adrien73400@icloud.com', 2);
+INSERT INTO etudiant (NUMERO, NOM, PRENOM, MAIL, FORMATION_ID, NOMBRE_POINTS) VALUES
+(123, 'RAFFORT', 'Adrien', 'adrien73400@icloud.com', 2, 110),
+(456, 'SAVAETE', 'Romain', 'romain.savaete@gmail.com', 2, 180),
+(789, 'MOREL', 'Zyan', 'zyan.morel@gmail.com', 2, 70);
 
 
 INSERT INTO gemme(id, nom, couleur, proba, proba_min, proba_max, personne_max, valeur, CHEMIN_IMAGE) VALUES
@@ -196,3 +206,12 @@ INSERT INTO succes(ID, ID_ETUDIANT, ID_CHALLENGE, ETAT, AVANCEMENT) VALUES
 (10, 123, 10, 'FINI', 15),
 (11, 123, 11, 'FINI', 40),
 (12, 123, 12, 'TERMINE', 75);
+
+
+INSERT INTO notification(ID, ID_ETUDIANT, ID_GEMME) VALUES
+(1, 123, 1),
+(2, 123, 2),
+(3, 123, 3),
+(4, 123, 4),
+(5, 123, 5),
+(6, 123, 6);

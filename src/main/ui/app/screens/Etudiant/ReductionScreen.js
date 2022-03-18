@@ -40,7 +40,7 @@ export default function ReductionScreen() {
                 {
                     reductions.map((reduction, i) => {
                         return (
-                            <View style={styles.view_reduction}>
+                            <View style={styles.view_reduction} key={i}>
                                 <View style={styles.row}>
                                     <View style={[styles.view_point, styles.view_tag]}>
                                         <Text style={styles.text_point}>{reduction.points_requis} points</Text>

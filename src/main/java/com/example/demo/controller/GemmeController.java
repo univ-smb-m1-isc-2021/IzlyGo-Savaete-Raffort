@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import com.example.demo.entity.Reduction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,5 +27,13 @@ public class GemmeController {
 
     @Autowired
     GemmeService gemmeService;
+
+
+    @GetMapping(path = "/gemmes")
+    public ResponseEntity<?> donneListeGemmes() {
+
+        List<Gemme> gemmes = gemmeService.donneListeGemmes();
+        return ResponseEntity.ok(gemmes);
+    }
 
 }

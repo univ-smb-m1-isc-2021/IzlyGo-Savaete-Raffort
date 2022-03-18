@@ -18,5 +18,10 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Integer>, Jp
             nativeQuery = true)
     Etudiant etud(int numero);
 
+    @Query(value = "SELECT * FROM ETUDIANT ORDER BY nombre_points DESC LIMIT ?1 ",
+            nativeQuery = true)
+    List<Etudiant> classementEtudiants(int nombre);
+
+
 }
 

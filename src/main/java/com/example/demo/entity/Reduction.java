@@ -27,14 +27,25 @@ public class Reduction{
     @NotNull(message="{NotNull.Reduction.points_requis}")
     private int points_requis;
 
+    public int getPoints_requis() {
+        return points_requis;
+    }
+
     @ManyToOne
     @JoinColumn(name = "id_entreprise")
     private Entreprise entreprise;
+
+    public Entreprise getEntreprise() {
+        return entreprise;
+    }
 
     @Column
     @NotNull(message="{NotNull.Reduction.libelle}")
     private String libelle;
 
+    public String getLibelle() {
+        return libelle;
+    }
 }
 
 

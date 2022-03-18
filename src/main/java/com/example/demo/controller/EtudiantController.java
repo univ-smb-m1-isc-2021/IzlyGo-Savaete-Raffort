@@ -106,6 +106,16 @@ public class EtudiantController {
 
         return ResponseEntity.ok(json.toMap());
     }
+
+
+
+    @GetMapping(path = "/classement/{nombre}")
+    public ResponseEntity<?> classement(@PathVariable int nombre) {
+        List<Etudiant> etudiants = etudiantService.donneTopEtudiants(nombre);
+        return ResponseEntity.ok(etudiants);
+
+    }
+
 }
 
 

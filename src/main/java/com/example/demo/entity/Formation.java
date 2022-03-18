@@ -20,9 +20,15 @@ public class Formation {
     @NotNull(message="{NotNull.Formation.libelle}")
     private String libelle;
 
+    public String getLibelle() {
+        return libelle;
+    }
+
     @Column
     @NotNull(message="{NotNull.Formation.chemin}")
     private String chemin;
 
-
+    public String getChemin() {
+        return chemin;
+    }
 }

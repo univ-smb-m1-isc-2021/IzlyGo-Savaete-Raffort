@@ -25,6 +25,10 @@ public class EtudiantService {
         return etudiantRepository.etud(numero);
     }
 
+    public List<Etudiant> donneTopEtudiants(int nombre){
+        return etudiantRepository.classementEtudiants(nombre);
+    }
+
 
 
 }

@@ -20,5 +20,6 @@ public class GemmeService {
         return gemmeRepository.trouveGemme(proba);
     }
 
+    public List<Gemme> donneListeGemmes(){ return gemmeRepository.findAll(); }
 
 }

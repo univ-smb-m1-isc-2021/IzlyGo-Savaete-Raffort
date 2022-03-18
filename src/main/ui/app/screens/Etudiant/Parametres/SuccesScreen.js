@@ -57,7 +57,7 @@ export default function SuccesScreen() {
             {
                 succes.map((suc, i) => {
                     return (
-                        <View style={[styles.view_succes, suc.etoile == 3 ? styles.jjj : ""]}>
+                        <View style={[styles.view_succes, suc.etoile == 3 ? styles.jjj : ""]} key={i}>
 
                             <Text style={styles.libelle_succes}>{suc.libelle}</Text>
 

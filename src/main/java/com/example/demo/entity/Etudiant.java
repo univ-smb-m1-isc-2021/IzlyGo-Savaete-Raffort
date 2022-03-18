@@ -1,8 +1,6 @@
 package com.example.demo.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 
@@ -18,27 +16,49 @@ public class Etudiant{
     @Column
     private long numero;
 
+    public long getNumero() {
+        return numero;
+    }
+
     @Column
     @NotNull(message="{NotNull.Etudiant.nom}")
     private String nom;
+
+    public String getNom() {
+        return nom;
+    }
 
     @Column
     @NotNull(message="{NotNull.Etudiant.prenom}")
     private String prenom;
 
+    public String getPrenom() {
+        return prenom;
+    }
+
     @Column
     @NotNull(message="{NotNull.Etudiant.mail}")
     private String mail;
 
-    @Column
-    @NotNull(message="{NotNull.Etudiant.formation_id}")
-    private int formation_id;
+    public String getMail() {
+        return mail;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "formation_id")
+    private Formation formation;
+
+    public Formation getFormation() {
+        return formation;
+    }
 
     @Column
     @NotNull(message="{NotNull.Etudiant.nombre_points}")
     private int nombre_points;
 
-
+    public int getNombre_points() {
+        return nombre_points;
+    }
 }
 
 
