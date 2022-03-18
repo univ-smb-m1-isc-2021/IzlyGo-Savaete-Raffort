@@ -7,6 +7,8 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.jpa.repository.Query;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +19,11 @@ public interface InventaireRepository extends JpaRepository<Inventaire, Integer>
     @Query(value = "SELECT * FROM INVENTAIRE i WHERE i.id_etudiant = ?1 ",
             nativeQuery = true)
     List<Inventaire> maListe(int numero);
+
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO INVENTAIRE(id_etudiant, id_gemme) VALUES (?1, ?2)", nativeQuery = true)
+    void ajouteLigne(long etudiant, long gemme);
 
 }
 

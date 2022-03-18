@@ -23,5 +23,14 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Integer>, Jp
     List<Etudiant> classementEtudiants(int nombre);
 
 
+    @Query(value = "SELECT count(*) FROM ETUDIANT WHERE mail = ?1 AND password = ?2 AND compte_actif = 1",
+            nativeQuery = true)
+    int connexionExiste(String mail, String password);
+
+    @Query(value = "SELECT numero FROM ETUDIANT WHERE mail = ?1 AND password = ?2 AND compte_actif = 1",
+            nativeQuery = true)
+    int connexion(String mail, String password);
+
+
 }
 

@@ -1,11 +1,12 @@
 package com.example.demo.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.entity.Etudiant;
-import com.example.demo.entity.Inventaire;
-import com.example.demo.service.InventaireService;
+import com.example.demo.entity.*;
+import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +19,10 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.example.demo.service.EtudiantService;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,14 +38,70 @@ public class EtudiantController {
     @Autowired
     InventaireService inventaireService;
 
+    @Autowired
+    GemmeService gemmeService;
+
+    @Autowired
+    ChallengeService challengeService;
+
+    @Autowired
+    SuccesService succesService;
+
+    @Autowired
+    NotificationService notificationService;
+
     @PostMapping(path = "/create/student")
     public ResponseEntity<?> ajouteEtudiant(@RequestBody Etudiant etudiant) {
 
+        // Code parrainage
+        String part1 = etudiant.getNom().toUpperCase();
+        String part2 = etudiant.getPrenom().substring(0,2).toUpperCase();
+        String part3 = String.valueOf(getRandomNumberInt(10,99));
+        etudiant.setCodeParrainage(part1 + part2 + part3);
+
+
+        // Date d'inscription
+        LocalDateTime now = LocalDateTime.now();
+        String mois = now.getMonth().getDisplayName(TextStyle.FULL, Locale.FRANCE);
+        etudiant.setDateInscription(now.getDayOfMonth() + " " + mois + " " + now.getYear());
+
         Etudiant etu = etudiantService.saveEtudiant(etudiant);
+
+        // Set la liste des gemmes dans l'inventaire
+        List<Gemme> gemmes = gemmeService.donneListeGemmes();
+        for(Gemme g : gemmes){
+            inventaireService.ajouteLigne(etu.getNumero(), g.getId());
+
+            notificationService.ajouteLigne(etu.getNumero(), g.getId());
+        }
+
+        // Set la liste de ses succès (challenge)
+        List<Challenge> challenges = challengeService.donneListeChallenge();
+        String etat = "";
+
+        for (Challenge challenge : challenges) {
+            if (challenge.getChallenge_precedent() == null){
+                etat = "EN_COURS";
+            }else {
+                etat = "BLOQUE";
+            }
+
+            succesService.ajouteLine(etu.getNumero(),challenge.getId(), etat);
+        }
+
+
+
+
         return ResponseEntity.ok("Salut les amis");
+
     }
 
 
+    @GetMapping(path = "/profil/{numero}")
+    public ResponseEntity<?> monProfil(@PathVariable int numero) {
+        Etudiant etu = etudiantService.getEtudiant(numero);
+        return ResponseEntity.ok(etu);
+    }
 
 
     @GetMapping(path = "/inventaire/{numero}")
@@ -115,6 +174,32 @@ public class EtudiantController {
         return ResponseEntity.ok(etudiants);
 
     }
+
+
+    @PostMapping(path = "/connexion")
+    public ResponseEntity<?> connexion(@RequestBody Connexion connexion) {
+
+        int quantite = etudiantService.connexionExiste(connexion.getMail(), connexion.getPassword());
+
+        int numero = 0;
+        if (quantite == 1){
+            numero = etudiantService.connexion(connexion.getMail(), connexion.getPassword());
+        }
+
+
+
+        JSONObject json = new JSONObject();
+        json.put("trouve", quantite == 0 ? false : true);
+        json.put("numero", numero);
+
+        return ResponseEntity.ok(json.toMap());
+    }
+
+    public int getRandomNumberInt(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
+    }
+
+
 
 }
 

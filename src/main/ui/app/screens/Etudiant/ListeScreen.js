@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 're
 import {useEffect, useState} from "react";
 import { Dosis_200ExtraLight, Dosis_300Light, Dosis_400Regular, Dosis_500Medium, Dosis_600SemiBold, Dosis_700Bold, Dosis_800ExtraBold } from '@expo-google-fonts/dosis'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ListeScreen() {
 
@@ -9,10 +10,17 @@ export default function ListeScreen() {
     const [isLoading, setIsLoading] = useState(true);
     const [vue, setVue] = useState();
 
+    const [numero, setNumero] = useState(null);
+
+
 
     const donneGemmes = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/inventaire/123');
+
+            const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+            setNumero(numero_etudiant)
+
+            const response = await fetch('http://localhost:8080/api/inventaire/' + numero_etudiant);
             const json = await response.json();
 
             setGemmes(json);
@@ -48,7 +56,7 @@ export default function ListeScreen() {
             <View style={styles.main}>
                 <View style={styles.points}>
                     <Text style={styles.points4}>Total de vos points IzlyGo :</Text>
-                    <Text style={styles.points2}> 540 points </Text>
+                    <Text style={styles.points2}> {gemmes.etudiant.nombre_points} points</Text>
                     <Text style={styles.points3}>Soit {gemmes.etudiant.nombre_euros} €</Text>
                 </View>
 

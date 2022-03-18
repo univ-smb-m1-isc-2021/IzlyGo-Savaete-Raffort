@@ -21,6 +21,10 @@ public class SuccesService {
         return succesRepository.donneMesSuccesSQL(numero, "EN_COURS", "TERMINE");
     }
 
+    public void ajouteLine(long etudiant, long challenge, String etat){
+        succesRepository.ajouteLine(etudiant, challenge, etat);
+    }
+
 
 
 }

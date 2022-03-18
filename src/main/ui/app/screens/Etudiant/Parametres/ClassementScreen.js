@@ -32,7 +32,11 @@ export default function ClassementScreen() {
                         <View style={styles.view_succes} key={i}>
                             { afficheMedaille(i) }
 
-                            <Text style={styles.etudiant}>{etudiant.prenom + " " + etudiant.nom}</Text>
+                            <View>
+                                <Text style={styles.etudiant}>{etudiant.prenom + " " + etudiant.nom}</Text>
+                                <Text>{etudiant.formation.libelle}</Text>
+                            </View>
+
                             <Text style={styles.les_points}>{etudiant.nombre_points} pts</Text>
                         </View>
                     )

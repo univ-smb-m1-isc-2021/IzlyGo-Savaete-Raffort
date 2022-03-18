@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS reduction;
 DROP TABLE IF EXISTS entreprise;
 
 DROP TABLE IF EXISTS notification;
+DROP TABLE IF EXISTS parrainage;
 
 DROP TABLE IF EXISTS etudiant;
 DROP TABLE IF EXISTS challenge;
@@ -24,9 +25,15 @@ CREATE TABLE etudiant (
    NOM VARCHAR(250) NOT NULL,
    PRENOM VARCHAR(250) NOT NULL,
    MAIL VARCHAR(250) NOT NULL,
+   PASSWORD VARCHAR(200) NULL,
    FORMATION_ID INT NOT NULL,
    FOREIGN KEY (FORMATION_ID) REFERENCES formation(ID),
-   NOMBRE_POINTS INT NOT NULL DEFAULT 0
+   NOMBRE_POINTS INT NOT NULL DEFAULT 0,
+   COMPTE_ACTIF BIT NOT NULL DEFAULT 0,
+   CODE_PARRAINAGE VARCHAR(50) NOT NULL,
+   DATE_INSCRIPTION VARCHAR(100) NOT NULL,
+
+   CONSTRAINT UC_Etudiant_Mail UNIQUE (MAIL)
 );
 
 CREATE TABLE gemme (
@@ -43,7 +50,7 @@ CREATE TABLE gemme (
 
 CREATE TABLE inventaire
 (
-    ID INT PRIMARY KEY,
+    ID INT PRIMARY KEY AUTO_INCREMENT,
     ID_ETUDIANT INT NOT NULL,
     ID_GEMME    INT NOT NULL,
     QUANTITE    INT NOT NULL DEFAULT 0,
@@ -104,7 +111,7 @@ CREATE TABLE challenge
 
 CREATE TABLE succes
 (
-    ID INT PRIMARY KEY,
+    ID INT PRIMARY KEY AUTO_INCREMENT,
     ID_ETUDIANT INT NOT NULL,
     ID_CHALLENGE INT NOT NULL,
     ETAT VARCHAR(30) NOT NULL,
@@ -117,7 +124,7 @@ CREATE TABLE succes
 
 CREATE TABLE notification
 (
-    ID INT PRIMARY KEY,
+    ID INT PRIMARY KEY AUTO_INCREMENT,
     ID_ETUDIANT INT NOT NULL,
     ID_GEMME INT NOT NULL,
     ETAT BIT(1) NOT NULL DEFAULT 0,
@@ -126,15 +133,25 @@ CREATE TABLE notification
     FOREIGN KEY (ID_GEMME) REFERENCES gemme(ID)
 );
 
+CREATE TABLE parrainage
+(
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    ID_FILLEUL INT NOT NULL,
+    ID_PARRAIN INT NOT NULL,
+
+    FOREIGN KEY (ID_FILLEUL) REFERENCES etudiant(NUMERO),
+    FOREIGN KEY (ID_PARRAIN) REFERENCES etudiant(NUMERO)
+);
+
 
 INSERT INTO formation (ID, LIBELLE, CHEMIN) VALUES
   (1, 'M1 INFO Groupe 1', 'M1/INFO/1'),
   (2, 'M1 INFO Groupe 2', 'M1/INFO/2');
 
-INSERT INTO etudiant (NUMERO, NOM, PRENOM, MAIL, FORMATION_ID, NOMBRE_POINTS) VALUES
-(123, 'RAFFORT', 'Adrien', 'adrien73400@icloud.com', 2, 110),
-(456, 'SAVAETE', 'Romain', 'romain.savaete@gmail.com', 2, 180),
-(789, 'MOREL', 'Zyan', 'zyan.morel@gmail.com', 2, 70);
+INSERT INTO etudiant (NUMERO, NOM, PRENOM, MAIL, PASSWORD, FORMATION_ID, NOMBRE_POINTS, COMPTE_ACTIF, CODE_PARRAINAGE, DATE_INSCRIPTION) VALUES
+(123, 'RAFFORT', 'Adrien', 'adrien73400@icloud.com', 'adrien', 2, 110, 1, 'RAFFORTAD87', '18 mars 2022'),
+(456, 'SAVAETE', 'Romain', 'romain.savaete@gmail.com', 'romain', 2, 180, 1, 'SAVAETERO12', '14 avril 2021'),
+(789, 'MOREL', 'Zyan', 'zyan.morel@gmail.com', null, 2, 70, 0, 'MORELZY71', '17 juin 2021');
 
 
 INSERT INTO gemme(id, nom, couleur, proba, proba_min, proba_max, personne_max, valeur, CHEMIN_IMAGE) VALUES
@@ -147,20 +164,20 @@ INSERT INTO gemme(id, nom, couleur, proba, proba_min, proba_max, personne_max, v
 
 
 
-INSERT INTO inventaire(id, id_etudiant, id_gemme, quantite) VALUES
-(1, 123, 1, 1),
-(2, 123, 2, 2),
-(3, 123, 3, 5),
-(4, 123, 4, 6),
-(5, 123, 5, 6),
-(6, 123, 6, 20),
+INSERT INTO inventaire(id_etudiant, id_gemme, quantite) VALUES
+(123, 1, 1),
+(123, 2, 2),
+(123, 3, 5),
+(123, 4, 6),
+(123, 5, 6),
+(123, 6, 20),
 
-(7,456, 1, 0),
-(8, 456, 2, 1),
-(9, 456, 3, 8),
-(10, 456, 4, 0),
-(11, 456, 5, 9),
-(12, 456, 6, 11);
+(456, 1, 0),
+(456, 2, 1),
+(456, 3, 8),
+(456, 4, 0),
+(456, 5, 9),
+(456, 6, 11);
 
 
 INSERT INTO entreprise(id, num_siret, nom) VALUES
@@ -190,28 +207,32 @@ INSERT INTO challenge(ID, LIBELLE, ID_CHALLENGE_PRECEDENT, ID_GEMME, QUANTITE, T
 (11, 'Récupérer 40 améthystes', 10, 4, 40, 10000, 1, 1),
 (12, 'Récupérer 75 améthystes', 11, 4, 75, 10000, 1, 2);
 
-INSERT INTO succes(ID, ID_ETUDIANT, ID_CHALLENGE, ETAT, AVANCEMENT) VALUES
-(1, 123, 1, 'EN_COURS',0),
-(2, 123, 2, 'BLOQUE', 0),
-(3, 123, 3, 'BLOQUE', 0),
+INSERT INTO succes (ID_ETUDIANT, ID_CHALLENGE, ETAT, AVANCEMENT) VALUES
+(123, 1, 'EN_COURS',0),
+(123, 2, 'BLOQUE', 0),
+(123, 3, 'BLOQUE', 0),
 
-(4, 123, 4, 'FINI', 5),
-(5, 123, 5, 'EN_COURS', 8),
-(6, 123, 6, 'BLOQUE', 0),
+(123, 4, 'FINI', 5),
+(123, 5, 'EN_COURS', 8),
+(123, 6, 'BLOQUE', 0),
 
-(7, 123, 7, 'FINI', 10),
-(8, 123, 8, 'FINI', 30),
-(9, 123, 9, 'EN_COURS', 9),
+(123, 7, 'FINI', 10),
+(123, 8, 'FINI', 30),
+(123, 9, 'EN_COURS', 9),
 
-(10, 123, 10, 'FINI', 15),
-(11, 123, 11, 'FINI', 40),
-(12, 123, 12, 'TERMINE', 75);
+(123, 10, 'FINI', 15),
+(123, 11, 'FINI', 40),
+(123, 12, 'TERMINE', 75);
 
 
-INSERT INTO notification(ID, ID_ETUDIANT, ID_GEMME) VALUES
-(1, 123, 1),
-(2, 123, 2),
-(3, 123, 3),
-(4, 123, 4),
-(5, 123, 5),
-(6, 123, 6);
+INSERT INTO notification(ID_ETUDIANT, ID_GEMME) VALUES
+(123, 1),
+(123, 2),
+(123, 3),
+(123, 4),
+(123, 5),
+(123, 6);
+
+INSERT INTO parrainage(ID_PARRAIN, ID_FILLEUL) VALUES
+(123, 456),
+(456, 789);

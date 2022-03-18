@@ -26,6 +26,10 @@ public class NotificationService {
         notificationRepository.changeEtat(id);
     }
 
+    public void ajouteLigne(long etudiant, long gemme){
+        notificationRepository.ajouteLigne(etudiant, gemme);
+    }
+
 
 
 }

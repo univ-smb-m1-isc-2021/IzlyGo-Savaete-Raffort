@@ -9,6 +9,7 @@ import { faStar as ETOILE_PLEINE } from '@fortawesome/free-solid-svg-icons'
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 import { faStar as ETOILE_VIDE } from '@fortawesome/free-regular-svg-icons'
 import {useEffect, useState} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SuccesScreen() {
 
@@ -17,7 +18,10 @@ export default function SuccesScreen() {
 
     const donnesLesSucces = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/succes/123');
+
+            const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+
+            const response = await fetch('http://localhost:8080/api/succes/' + numero_etudiant);
             const json = await response.json();
 
             setSucces(json.succes);

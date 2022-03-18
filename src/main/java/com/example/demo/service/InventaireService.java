@@ -22,4 +22,8 @@ public class InventaireService {
     }
 
 
+    public void ajouteLigne(long etudiant, long gemme){
+        inventaireRepository.ajouteLigne(etudiant,gemme);
+    }
+
 }

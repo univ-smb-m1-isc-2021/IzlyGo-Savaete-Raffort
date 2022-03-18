@@ -29,6 +29,13 @@ public class EtudiantService {
         return etudiantRepository.classementEtudiants(nombre);
     }
 
+    public int connexionExiste(String mail, String password) {
+        return etudiantRepository.connexionExiste(mail, password);
+    }
+
+    public int connexion(String mail, String password) {
+        return etudiantRepository.connexion(mail, password);
+    }
 
 
 }

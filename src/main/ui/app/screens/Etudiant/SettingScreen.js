@@ -3,16 +3,18 @@ import { Dosis_200ExtraLight, Dosis_300Light, Dosis_400Regular, Dosis_500Medium,
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
-
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faUser, faBell, faCircleCheck, faRankingStar, faArrowRightFromBracket, faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faBell, faCircleCheck, faRankingStar, faArrowRightFromBracket, faAngleRight, faHandshakeSimple } from '@fortawesome/free-solid-svg-icons'
 
 
 import SuccesScreen from "./Parametres/SuccesScreen";
 import ProfilScreen from "./Parametres/ProfilScreen";
 import NotificationScreen from "./Parametres/NotificationScreen";
 import ClassementScreen from "./Parametres/ClassementScreen";
+import ParrainageScreen from "./Parametres/ParrainageScreen";
+import React, {useEffect, useState} from "react";
+import ConnexionScreen from "./ConnexionScreen";
+import TabEtudiant from "./TabEtudiant";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,13 +29,54 @@ export default function SettingScreen() {
             />
             <Stack.Screen name="Profil" component={ProfilScreen} />
             <Stack.Screen name="Succès" component={SuccesScreen} />
-            <Stack.Screen name="Notification" component={NotificationScreen} />
+            <Stack.Screen name="Notifications" component={NotificationScreen} />
             <Stack.Screen name="Classement" component={ClassementScreen} />
+            <Stack.Screen name="Parrainage" component={ParrainageScreen} />
         </Stack.Navigator>
     );
 }
 
+
+
+
+
 const HomeScreen = ({ navigation }) => {
+
+
+    const [numero, setNumero] = useState(null);
+    const [etudiant, setEtudiant] = useState({});
+
+    const donneEtudiant = async () => {
+        try {
+            const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+            setNumero(numero_etudiant)
+
+            const response = await fetch('http://localhost:8080/api/profil/' + numero_etudiant);
+            const json = await response.json();
+
+            setEtudiant(json);
+            setNumero(value)
+
+        } catch(e) {
+            // error reading value
+        }
+    }
+
+
+    const liste_choix = [
+        {icon : faUser, nom : "Profil"},
+        {icon : faBell, nom : "Notifications"},
+        {icon : faCircleCheck, nom : "Succès"},
+        {icon : faRankingStar, nom : "Classement"},
+        {icon : faHandshakeSimple, nom : "Parrainage"}
+    ]
+
+
+    useEffect(() => {
+        donneEtudiant()
+
+    }, [numero])
+
     return (
 
         <SafeAreaView style={styles.view_globale}>
@@ -42,72 +85,37 @@ const HomeScreen = ({ navigation }) => {
             <Image
                 style={styles.image_profil}
                 source={{uri: 'https://media-exp1.licdn.com/dms/image/C4E03AQEOT59zyut71w/profile-displayphoto-shrink_200_200/0/1594911160362?e=1652918400&v=beta&t=-q3eVhslA4SEZ4LMaYtiKZPLX024YuhiLy-l90gbHrE'}}/>
-            <Text style={styles.identite}>Adrien RAFFORT</Text>
-            <Text style={styles.info_inscription}>Inscrit depuis le 12 février 2022</Text>
+            <Text style={styles.identite}>{ etudiant.prenom } { etudiant.nom }</Text>
+            <Text style={styles.info_inscription}>Inscrit depuis le { etudiant.date_inscription }</Text>
 
         </View>
 
-        <View style={styles.un_parametre}>
-            <FontAwesomeIcon icon={faUser}  color={"black"} size={ 20 }/>
+            {
+                liste_choix.map((choix) => {
+                    return(
+                        <View style={styles.un_parametre}>
+                            <FontAwesomeIcon icon={choix.icon}  color={"black"} size={ 20 }/>
 
-            <TouchableHighlight  onPress={() => navigation.navigate('Profil')} underlayColor="white">
-                <View style={styles.button}>
-                    <Text style={styles.buttonText}>Profil</Text>
-                </View>
-            </TouchableHighlight>
+                            <TouchableHighlight  onPress={() => navigation.navigate(choix.nom)} underlayColor="white">
+                                <View style={styles.button}>
+                                    <Text style={styles.buttonText}>{choix.nom}</Text>
+                                </View>
+                            </TouchableHighlight>
 
-            <View style={styles.view_chevron}>
-                <FontAwesomeIcon icon={faAngleRight}  color={"black"} size={ 20 }/>
-            </View>
-        </View>
+                            <View style={styles.view_chevron}>
+                                <FontAwesomeIcon icon={faAngleRight}  color={"black"} size={ 20 }/>
+                            </View>
+                        </View>
+                    )
+                })
+            }
 
-        <View style={styles.un_parametre}>
-            <FontAwesomeIcon icon={faBell}  color={"black"} size={ 20 }/>
-
-            <TouchableHighlight  onPress={() => navigation.navigate('Notification', { name: 'Jane' })} underlayColor="white">
-                <View style={styles.button}>
-                    <Text style={styles.buttonText}>Notifications</Text>
-                </View>
-            </TouchableHighlight>
-
-            <View style={styles.view_chevron}>
-                <FontAwesomeIcon icon={faAngleRight}  color={"black"} size={ 20 }/>
-            </View>
-        </View>
-
-        <View style={styles.un_parametre}>
-            <FontAwesomeIcon icon={faCircleCheck}  color={"black"} size={ 20 }/>
-
-            <TouchableHighlight  onPress={() => navigation.navigate('Succès', { name: 'Jane' })} underlayColor="white">
-                <View style={styles.button}>
-                    <Text style={styles.buttonText}>Succès</Text>
-                </View>
-            </TouchableHighlight>
-
-            <View style={styles.view_chevron}>
-                <FontAwesomeIcon icon={faAngleRight}  color={"black"} size={ 20 }/>
-            </View>
-        </View>
-
-            <View style={styles.un_parametre}>
-                <FontAwesomeIcon icon={faRankingStar}  color={"black"} size={ 20 }/>
-
-                <TouchableHighlight  onPress={() => navigation.navigate('Classement', { name: 'Jane' })} underlayColor="white">
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}>Classement</Text>
-                    </View>
-                </TouchableHighlight>
-
-                <View style={styles.view_chevron}>
-                    <FontAwesomeIcon icon={faAngleRight}  color={"black"} size={ 20 }/>
-                </View>
-            </View>
 
 
             <View style={styles.un_parametre}>
                 <FontAwesomeIcon icon={faArrowRightFromBracket}  color={"black"} size={ 20 }/>
 
-                <TouchableHighlight onPress={removeItemValue} underlayColor="white">
+                <TouchableHighlight onPress={() => removeItemValue} underlayColor="white">
                     <View style={styles.button}>
                         <Text style={styles.buttonText}>Déconnexion</Text>
                     </View>

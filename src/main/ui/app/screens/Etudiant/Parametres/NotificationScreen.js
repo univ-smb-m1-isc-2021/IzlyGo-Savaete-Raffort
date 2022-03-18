@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 
 
 import TitleText from "../../../components/TitleText"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function NotificationScreen() {
     const [change, setChange] = useState(false);
@@ -10,7 +11,10 @@ export default function NotificationScreen() {
 
     const donnesLesNotifications = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/notifications/123');
+
+            const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+
+            const response = await fetch('http://localhost:8080/api/notifications/' + numero_etudiant);
             const json = await response.json();
 
             setNotifications(json);

@@ -7,6 +7,8 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.jpa.repository.Query;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,5 +20,9 @@ public interface SuccesRepository extends JpaRepository<Succes, Integer>, JpaSpe
             nativeQuery = true)
     List<Succes> donneMesSuccesSQL(int numero, String etat1, String etat2);
 
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO SUCCES(id_etudiant, id_challenge, etat) VALUES (?1, ?2, ?3)", nativeQuery = true)
+    void ajouteLine(long etudiant, long challenge, String etat);
 }
 

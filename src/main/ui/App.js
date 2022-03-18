@@ -6,6 +6,7 @@ import ConnexionScreen from "./app/screens/Etudiant/ConnexionScreen";
 import TabEtudiant from "./app/screens/Etudiant/TabEtudiant";
 import TabEntreprise from "./app/screens/Entreprise/TabEntreprise";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AccueilScreen from "./app/screens/Etudiant/AccueilScreen";
 
 export default function App(){
 
@@ -21,7 +22,8 @@ export default function App(){
 
 
                 if(numero == null){
-                    setRetour(<ConnexionScreen></ConnexionScreen>)
+                   setRetour(<ConnexionScreen></ConnexionScreen>)
+                   // setRetour(<InscriptionScreen></InscriptionScreen>)
                 }else {
                     setRetour(<TabEtudiant></TabEtudiant>)
                 }

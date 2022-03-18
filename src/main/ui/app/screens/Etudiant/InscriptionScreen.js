@@ -6,13 +6,7 @@ import {SocialIcon} from 'react-native-elements';
 export default function InscriptionScreen(){
 
         const [formations, setFormations] = useState([]);
-        const etudiant = {
-            nom: null,
-            prenom: null,
-            mail: null,
-            numero: 0,
-            formation_id: 1
-        }
+
 
         const peutFinir = false;
 
@@ -25,6 +19,17 @@ export default function InscriptionScreen(){
                 console.error(error);
             }
         }
+
+    const etudiant = {
+        nom: 'Tafanel',
+        prenom: 'Gil',
+        mail: 'gilou',
+        formation: formations[1],
+        numero: 444,
+        password: 'gil',
+        nombre_points : 0,
+        compte_actif: true
+    }
 
         useEffect(() => {
             donneFormation();
@@ -129,7 +134,7 @@ const But = (props) => {
                 },
                 body: JSON.stringify(props.donnees)
             }).then(response => {
-                console.log(response)
+                //console.log(response)
             })
 
         }}>

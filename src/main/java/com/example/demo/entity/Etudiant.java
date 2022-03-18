@@ -37,6 +37,14 @@ public class Etudiant{
     }
 
     @Column
+    @NotNull(message="{NotNull.Etudiant.password}")
+    public String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    @Column
     @NotNull(message="{NotNull.Etudiant.mail}")
     private String mail;
 
@@ -58,6 +66,35 @@ public class Etudiant{
 
     public int getNombre_points() {
         return nombre_points;
+    }
+
+    @Column
+    @NotNull(message="{NotNull.Etudiant.password}")
+    public Boolean compte_actif;
+
+    public Boolean estActif() {
+        return compte_actif;
+    }
+
+
+    public String code_parrainage;
+
+    public String getCodeParrainage() {
+        return code_parrainage;
+    }
+
+    public void setCodeParrainage(String code_parrainage) {
+        this.code_parrainage = code_parrainage;
+    }
+
+    public String date_inscription;
+
+    public String getDateInscription() {
+        return date_inscription;
+    }
+
+    public void setDateInscription(String date_inscription) {
+        this.date_inscription = date_inscription;
     }
 }
 

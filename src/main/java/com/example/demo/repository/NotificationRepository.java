@@ -26,5 +26,12 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
             nativeQuery = true)
     void changeEtat(int id);
 
+
+
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO notification(id_etudiant, id_gemme) VALUES (?1, ?2)", nativeQuery = true)
+    void ajouteLigne(long etudiant, long gemme);
+
 }
 
