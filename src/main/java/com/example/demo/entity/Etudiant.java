@@ -96,6 +96,12 @@ public class Etudiant{
     public void setDateInscription(String date_inscription) {
         this.date_inscription = date_inscription;
     }
+
+    public String code_parrain;
+
+    public String getCodeParrain() {
+        return code_parrain;
+    }
 }
 
 

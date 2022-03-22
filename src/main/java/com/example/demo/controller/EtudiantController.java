@@ -50,6 +50,9 @@ public class EtudiantController {
     @Autowired
     NotificationService notificationService;
 
+    @Autowired
+    ParrainageService parrainageService;
+
     @PostMapping(path = "/create/student")
     public ResponseEntity<?> ajouteEtudiant(@RequestBody Etudiant etudiant) {
 
@@ -65,7 +68,13 @@ public class EtudiantController {
         String mois = now.getMonth().getDisplayName(TextStyle.FULL, Locale.FRANCE);
         etudiant.setDateInscription(now.getDayOfMonth() + " " + mois + " " + now.getYear());
 
+        Etudiant parrain = etudiantService.checkCodeParrainage(etudiant.getCodeParrain());
+
+        if (parrain == null) { etudiant.setCode_parrain(null); }
+
         Etudiant etu = etudiantService.saveEtudiant(etudiant);
+
+        if (parrain != null) { parrainageService.ajouteLigne(etu.getNumero(), parrain.getNumero()); }
 
         // Set la liste des gemmes dans l'inventaire
         List<Gemme> gemmes = gemmeService.donneListeGemmes();
@@ -90,9 +99,14 @@ public class EtudiantController {
         }
 
 
+        JSONObject json = new JSONObject();
+
+        json.put("etudiant", etudiant);
+        json.put("succes", etudiant.getNumero() != 0 ? true : false);
 
 
-        return ResponseEntity.ok("Salut les amis");
+
+        return ResponseEntity.ok(json.toMap());
 
     }
 

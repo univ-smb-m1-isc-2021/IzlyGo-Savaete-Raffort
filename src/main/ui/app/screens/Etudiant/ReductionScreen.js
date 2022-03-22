@@ -115,14 +115,16 @@ const styles = StyleSheet.create({
 
     text_point : {
         fontWeight: "bold",
-        textAlign: "center"
+        textAlign: "center",
+        fontFamily: "Dosis_800ExtraBold"
     },
 
     text_entreprise : {
         color: "white",
         fontSize: 12,
         fontWeight: "bold",
-        textAlign: "center"
+        textAlign: "center",
+        fontFamily: "Dosis_700Bold"
     },
 
     view_text_reduction: {
@@ -132,14 +134,15 @@ const styles = StyleSheet.create({
     },
 
     text_reduction: {
-        fontStyle: "italic",
+        fontFamily: "Dosis_500Medium",
         fontSize: 14,
         color: "#65626F"
     },
 
     text_info: {
         color: "#B5B1AE",
-        fontSize: 10
+        fontSize: 12,
+        fontFamily: "Dosis_300Light"
     },
 
     points : {

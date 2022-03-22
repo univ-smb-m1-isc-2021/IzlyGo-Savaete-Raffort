@@ -34,10 +34,10 @@ export default class TabEtudiant extends React.Component {
                             return <Ionicons name={iconName} size={size} color={color} />;
                         },
                     })}>
-                    <Tab.Screen name="Carte" component={MapScreen} options={{headerShown: false}} />
+                    <Tab.Screen  name="Carte" component={MapScreen} options={{headerShown: false}} />
                     <Tab.Screen name="Ma liste" component={ListeScreen} options={{headerShown: false}}/>
                     <Tab.Screen name="Bon plan" component={ReductionScreen} options={{headerShown: false}}/>
-                    <Tab.Screen name="Paramètres" component={SettingScreen} options={{headerShown: false}}/>
+                    <Tab.Screen name="Paramètres" component={SettingScreen} options={{headerShown: false, tabBarBadge: 2}}/>
                 </Tab.Navigator>
             </NavigationContainer>
         )

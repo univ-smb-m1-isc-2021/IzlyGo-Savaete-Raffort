@@ -38,4 +38,5 @@ public class EtudiantService {
     }
 
 
+    public Etudiant checkCodeParrainage(String code){ return etudiantRepository.checkCodeParrainage(code); }
 }

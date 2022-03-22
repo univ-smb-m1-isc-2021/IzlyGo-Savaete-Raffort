@@ -1,18 +1,19 @@
-import {StyleSheet, View, Image, Text, Alert} from "react-native";
+import {StyleSheet, View, Image, Text, Alert, ActivityIndicator, SafeAreaView } from "react-native";
 import MapView from "react-native-maps";
 import Marker from "react-native-maps";
 import React, {useEffect, useState} from "react";
 import { useFonts } from 'expo-font'
 
-import AppLoading from 'expo-app-loading'
 
-import { Dosis_200ExtraLight, Dosis_300Light, Dosis_400Regular, Dosis_500Medium, Dosis_600SemiBold, Dosis_700Bold, Dosis_800ExtraBold } from '@expo-google-fonts/dosis'
+import AppLoading from 'expo-app-loading'
 
 export default function MapScreen() {
 
     const [points, setPoints] = useState([]);
 
-    const [currentDate, setCurrentDate] = useState('');
+    const [currentDate, setCurrentDate] = useState('')
+
+    const [loading, setLoading] = useState(false)
 
     const donneGemmes = async () => {
         try {
@@ -20,9 +21,10 @@ export default function MapScreen() {
             const json = await response.json();
 
             setPoints(json["liste"]);
+            setLoading(true)
 
         } catch (error) {
-            console.error(error);
+            console.error(error)
         }
     }
 
@@ -37,8 +39,7 @@ export default function MapScreen() {
             default: return require("../images/ambre.png")
         }
     }
-
-
+    
     function markerClick(gemme){
         Alert.alert(
             "" + gemme.nom,
@@ -51,6 +52,7 @@ export default function MapScreen() {
 
                 }
             ]
+
         );
     }
 
@@ -95,25 +97,19 @@ export default function MapScreen() {
 
     useEffect(() =>  {
         donneGemmes();
-
-
-        /*const timer = window.setInterval(() => {
-            temps()
-
-        }, 1000);
-
-        return () => window.clearInterval(timer);*/
-
-
-
-
     }, []);
 
     return (
         <View style={styles.all}>
             <View style={styles.container}>
                 {
-                    points.length != 0 ?  
+                    !loading ?
+                        <SafeAreaView style={{ flexDirection: "row", justifyContent: "center", height: "100%"}}>
+                            <ActivityIndicator size="large" color="#2c3e50"/>
+
+                        </SafeAreaView> :
+
+                    loading &&points.length != 0 ?
                         <MapView
                             style={styles.map}
                             region={{

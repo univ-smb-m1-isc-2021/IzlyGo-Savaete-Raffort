@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TextInput, Button, Image, NativeModules, TouchableHighlight} from 'react-native';
+import {StyleSheet, Text, View, TextInput, Button, Image, NativeModules, TouchableHighlight, Alert} from 'react-native';
 import { Dosis_200ExtraLight, Dosis_300Light, Dosis_400Regular, Dosis_500Medium, Dosis_600SemiBold, Dosis_700Bold, Dosis_800ExtraBold } from '@expo-google-fonts/dosis'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -91,9 +91,9 @@ const HomeScreen = ({ navigation }) => {
         </View>
 
             {
-                liste_choix.map((choix) => {
+                liste_choix.map((choix,i) => {
                     return(
-                        <View style={styles.un_parametre}>
+                        <View style={styles.un_parametre} key={i} >
                             <FontAwesomeIcon icon={choix.icon}  color={"black"} size={ 20 }/>
 
                             <TouchableHighlight  onPress={() => navigation.navigate(choix.nom)} underlayColor="white">
@@ -115,7 +115,7 @@ const HomeScreen = ({ navigation }) => {
             <View style={styles.un_parametre}>
                 <FontAwesomeIcon icon={faArrowRightFromBracket}  color={"black"} size={ 20 }/>
 
-                <TouchableHighlight onPress={() => removeItemValue} underlayColor="white">
+                <TouchableHighlight onPress={AlertDeconnexion} underlayColor="white">
                     <View style={styles.button}>
                         <Text style={styles.buttonText}>Déconnexion</Text>
                     </View>
@@ -135,7 +135,26 @@ const HomeScreen = ({ navigation }) => {
 
 
 
+
+const AlertDeconnexion = () => {
+    Alert.alert(
+        "Déconnexion",
+        "Êtes-vous sûr de vouloir vous déconnecter ?",
+        [
+            {
+                text: "Annuler", style: "cancel"
+            },
+            {
+                text: "Déconnexion", style: "destructive", onPress: () => {
+                    removeItemValue()
+                }
+            }
+        ]
+    );
+}
+
 const removeItemValue = async () => {
+
 
     try {
         await AsyncStorage.removeItem('@numero_etudiant');
@@ -170,12 +189,12 @@ const styles = StyleSheet.create({
 
     identite: {
         margin: 10,
-        fontWeight: "bold",
+        fontFamily: "Dosis_800ExtraBold",
         fontSize: 20
     },
 
     info_inscription: {
-        fontStyle: "italic"
+        fontFamily: "Dosis_200ExtraLight"
     },
 
     affichage: {
@@ -204,6 +223,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         fontSize: 20,
         color: "#5D5C5D",
+        fontFamily: "Dosis_400Regular"
     },
 
 

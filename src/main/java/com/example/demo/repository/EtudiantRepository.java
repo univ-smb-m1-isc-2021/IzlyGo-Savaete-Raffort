@@ -31,6 +31,8 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Integer>, Jp
             nativeQuery = true)
     int connexion(String mail, String password);
 
-
+    @Query(value = "SELECT * FROM ETUDIANT WHERE code_parrainage = ?1 LIMIT 1",
+            nativeQuery = true)
+    Etudiant checkCodeParrainage(String code);
 }
 

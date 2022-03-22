@@ -1,10 +1,11 @@
 import {StyleSheet, Share, Text, View, TextInput, Button, Image, NativeModules, ScrollView, TouchableOpacity, Clipboard} from 'react-native';
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TitleText from "../../../components/TitleText"
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import {faGift, faMedal} from '@fortawesome/free-solid-svg-icons'
+import {Dosis_300Light} from "@expo-google-fonts/dosis";
 
 
 export default function ParrainageScreen() {
@@ -58,33 +59,67 @@ export default function ParrainageScreen() {
 
     return (
         <View style={styles.view_globale}>
-            <Text style={styles.title}> Parrainer des étudiants pour obtenir plus de récompenses</Text>
+            <View style={styles.view_title}>
 
-            <FontAwesomeIcon icon={faGift}  color={"#FEE101"} size={ 40 } />
+                <View style={styles.view_icon}>
+                    <FontAwesomeIcon icon={faGift}  color={"#E76967"} size={ 40 } />
+                </View>
 
-            <View style={styles.view_gray}>
-                <Text style={styles.info}>3 rubis pour vous</Text>
-                <Text style={styles.info}>3 rubis pour votre filleul</Text>
+                <Text style={styles.title}> Parrainer des étudiants pour obtenir encore plus de récompenses</Text>
+
+                <View style={styles.rewards}>
+                    <Text style={styles.title_rewards}>Pour vous</Text>
+
+                    <View style={styles.rewards_icon}>
+                        <Image style={styles.tinyLogo} source={require('../../images/saphir.png')}/>
+                        <Image style={styles.tinyLogo} source={require('../../images/saphir.png')}/>
+                    </View>
+                </View>
+
+                <View style={styles.rewards}>
+                    <Text style={styles.title_rewards}>Pour votre filleul </Text>
+
+                    <View style={styles.rewards_icon}>
+                        <Image style={styles.tinyLogo} source={require('../../images/emeraude.png')}/>
+                        <Image style={styles.tinyLogo} source={require('../../images/emeraude.png')}/>
+                        <Image style={styles.tinyLogo} source={require('../../images/emeraude.png')}/>
+                    </View>
+                </View>
+
             </View>
 
-            <Text>Mon code parrainage :
-                <TouchableOpacity onPress={() => copyToClipboard(code)}>
-                    <Text>{ code }</Text>
-                </TouchableOpacity>
-            </Text>
-            <Button title={"Partager"} onPress={onShare}/>
+
+            <View style={styles.view_title}>
+                <Text style={styles.title}>Mon code parrainage</Text>
+                    <TouchableOpacity onPress={() => copyToClipboard(code)}>
+                        <Text style={{textAlign: "center", fontFamily: "Dosis_400Regular", fontSize: 20, textDecorationLine: "underline"}}>{ code }</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => onShare()}>
+                        <Text style={{marginTop: 10, textAlign: "center", fontFamily: "Dosis_200ExtraLight", fontSize: 15}}>Cliquez ici pour partager mon code</Text>
+                    </TouchableOpacity>
+            </View>
 
 
-            <Text>Liste de vos filleuls</Text>
+
+
+
+            {
+                filleuls.length > 0 &&
+                <View>
+                    <Text style={styles.title_filleuls}>Liste de vos filleuls</Text>
+                </View>
+            }
+
 
             <ScrollView>
 
                 {
                     filleuls.map((filleul, i) => {
                         return(
-                            <View style={styles.view_gray}>
-                                <Text>{filleul.nom_complet}</Text>
-                                <Text>{filleul.nombre_points} points</Text>
+                            <View style={styles.view_title} key={i}>
+                                <Text style={styles.title}>{filleul.nom_complet}</Text>
+                                <Text style={{textAlign: 'center', fontFamily: "Dosis_200ExtraLight", fontSize: 15}}>{filleul.nombre_points} points</Text>
                             </View>
                         )
 
@@ -105,24 +140,56 @@ const styles = StyleSheet.create({
     },
 
     title: {
-        textAlign: "center"
+        textAlign: "center",
+        fontFamily: "Dosis_600SemiBold",
+        fontSize: 20
     },
 
-    view_gray: {
-        backgroundColor: "#F0F1F3",
+    view_title: {
+        backgroundColor: "#EFEFEF",
         marginTop: 20,
-        marginLeft: 20,
-        marginRight: 20,
+        marginHorizontal: 20,
         borderRadius: 10,
         padding: 15,
-        paddingLeft: 30,
-        paddingRight: 30,
+
+
+    },
+
+    view_icon: {
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "center"
     },
 
     info: {
         textAlign: "center"
+    },
+
+    tinyLogo: {
+        width: 20,
+        height: 20,
+    },
+
+    title_rewards: {
+        fontFamily: "Dosis_300Light",
+        fontSize: 15
+    },
+
+    rewards: {
+        marginTop: 10,
+        flexDirection: "row",
+        justifyContent: "space-evenly"
+    },
+
+    rewards_icon: {
+        flexDirection: "row",
+    },
+
+    title_filleuls: {
+        fontWeight: "100",
+        fontFamily: "Dosis_200ExtraLight",
+        fontSize: 20,
+        marginTop: 20,
+        marginLeft: 20
     }
 
 

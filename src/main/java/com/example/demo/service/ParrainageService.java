@@ -20,4 +20,5 @@ public class ParrainageService {
         return parrainageRepository.donneListeFilleuls(numero);
     }
 
+    public void ajouteLigne(long filleul, long parrain){ parrainageRepository.ajouteLigne(filleul, parrain); }
 }

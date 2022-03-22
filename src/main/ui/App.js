@@ -7,26 +7,22 @@ import TabEtudiant from "./app/screens/Etudiant/TabEtudiant";
 import TabEntreprise from "./app/screens/Entreprise/TabEntreprise";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AccueilScreen from "./app/screens/Etudiant/AccueilScreen";
+import { Dosis_200ExtraLight, Dosis_300Light, Dosis_400Regular, Dosis_500Medium, Dosis_600SemiBold, Dosis_700Bold, Dosis_800ExtraBold } from '@expo-google-fonts/dosis'
+import {useFonts} from "expo-font";
+import AppLoading from "expo-app-loading";
 
 export default function App(){
 
+        let [fontsLoaded] = useFonts({Dosis_200ExtraLight, Dosis_300Light, Dosis_400Regular, Dosis_500Medium, Dosis_600SemiBold, Dosis_700Bold, Dosis_800ExtraBold});
 
 
-        const [numero, setNumero] = useState(null);
+        const [numero, setNumero] = useState(0);
         const [retour, setRetour] = useState();
 
         const FiltreScreen = async () => {
             try {
                 const value = await AsyncStorage.getItem('@numero_etudiant')
-                setNumero(value)
-
-
-                if(numero == null){
-                   setRetour(<ConnexionScreen></ConnexionScreen>)
-                   // setRetour(<InscriptionScreen></InscriptionScreen>)
-                }else {
-                    setRetour(<TabEtudiant></TabEtudiant>)
-                }
+                await setNumero(value)
             } catch(e) {
                 // error reading value
             }
@@ -36,7 +32,19 @@ export default function App(){
         useEffect(() => {
             FiltreScreen()
 
+
+            if(numero == null){
+                setRetour(<AccueilScreen></AccueilScreen>)
+                //setRetour(<InscriptionScreen></InscriptionScreen>)
+            }else if (numero > 0){
+                setRetour(<TabEtudiant></TabEtudiant>)
+            }
+
         }, [numero])
+
+    if (!fontsLoaded) {
+        return <AppLoading />;
+    }
 
 
        /* if(nombre ==1){

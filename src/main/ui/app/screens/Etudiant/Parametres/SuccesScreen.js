@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TextInput, Button, Image, NativeModules, ScrollView} from 'react-native';
+import {Animated, StyleSheet, Text, View, TextInput, Button, Image, NativeModules, ScrollView} from 'react-native';
 import { Dosis_200ExtraLight, Dosis_300Light, Dosis_400Regular, Dosis_500Medium, Dosis_600SemiBold, Dosis_700Bold, Dosis_800ExtraBold } from '@expo-google-fonts/dosis'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { ProgressBar, Colors } from 'react-native-paper';
@@ -10,6 +10,7 @@ import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 import { faStar as ETOILE_VIDE } from '@fortawesome/free-regular-svg-icons'
 import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 export default function SuccesScreen() {
 
@@ -143,11 +144,12 @@ const styles = StyleSheet.create({
 
     libelle_succes: {
         fontSize: 18,
-        fontWeight: "bold",
+        fontFamily: "Dosis_600SemiBold",
         textAlign: "center"
     },
     quantite_succes: {
-        textAlign: "center"
+        textAlign: "center",
+        fontFamily: "Dosis_200ExtraLight"
     },
 
     tinyLogo: {
@@ -168,7 +170,8 @@ const styles = StyleSheet.create({
     },
 
     text_recompense: {
-        fontSize: 25
+        fontSize: 20,
+        fontFamily: "Dosis_300Light"
     },
 
     jjj : {

@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TextInput, Button, Image, NativeModules} from 'react-native';
+import {StyleSheet, Text, View, TextInput, Button, Image, NativeModules, TouchableHighlight} from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TabEtudiant from "./TabEtudiant";
 import React, {useEffect} from "react";
@@ -15,9 +15,10 @@ export default function ConnexionScreen() {
     const [mail, changeMail] = React.useState(null);
     const [password, changePassword] = React.useState(null);
 
-    const connexion = () => {
+    const [error, setError] = React.useState('');
 
-        console.log("JAI CLIQUE")
+
+    const connexion = () => {
 
         fetch('http://localhost:8080/api/connexion', {
             method: 'POST',
@@ -34,6 +35,8 @@ export default function ConnexionScreen() {
                 if(data.trouve == true){
                     console.log("ok")
                     connect(data.numero)
+                }else {
+                    setError("Les informations entrées sont incorrectes ou inexistantes.")
                 }
 
             });
@@ -52,29 +55,48 @@ export default function ConnexionScreen() {
     return (
         <View style={styles.o}>
 
-            <TextInput
-                style={styles.input}
-                placeholder={"Adresse mail"}
-                onChangeText={changeMail}
-                value={mail}
-                autoCapitalize='none'
-                autoComplete='off'
-                autoCorrect='false'
-            />
-
-            <TextInput
-                style={styles.input}
-                placeholder={"Mot de passe"}
-                onChangeText={changePassword}
-                value={password}
-                autoCapitalize='none'
-                autoComplete='off'
-                autoCorrect='false'
-
-            />
 
 
-            <Button title={"Connexion"} onPress={connexion}/>
+            <View style={styles.vue_uneLigne}>
+                <Text style={styles.nom_input}>Votre adresse mail</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder={"Ex: magalie.dupont@etu.univ-smb.fr"}
+                    onChangeText={changeMail}
+                    value={mail}
+                    autoCapitalize='none'
+                    autoComplete='off'
+                    autoCorrect='false'
+                />
+            </View>
+
+            <View style={styles.vue_uneLigne}>
+                <Text style={styles.nom_input}>Votre mot de passe</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder={"Mot de passe"}
+                    onChangeText={changePassword}
+                    value={password}
+                    autoCapitalize='none'
+                    autoComplete='off'
+                    autoCorrect='false'
+                />
+            </View>
+
+
+            <Text style={styles.text_requis}>{error}</Text>
+
+
+
+
+            <TouchableHighlight underlayColor="white" onPress={() => connexion()}>
+                <View style={styles.bouton_continuer}>
+                    <Text style={styles.text_bouton}>Connexion</Text>
+                </View>
+            </TouchableHighlight>
+
+
+            <Button title="Mot de passe oublié ?"/>
         </View>
     );
 
@@ -87,17 +109,52 @@ export default function ConnexionScreen() {
 
 const styles = StyleSheet.create({
     o : {
-        marginTop: 100
+        paddingTop: 100,
+        paddingHorizontal: "10%",
+        backgroundColor: "white",
+        height: "100%",
+        width: "100%"
+
+    },
+
+    vue_uneLigne: {
+        marginVertical: 10
+    },
+
+    nom_input: {
+        fontWeight: "bold",
+        fontSize: 15,
+        marginBottom: 10,
     },
 
     input: {
-        backgroundColor: "#DDDDDD",
+        backgroundColor: "#EEEEEE",
         padding: 10,
-        margin: 20,
-        color: "black",
         borderRadius: 10,
+        height: 50,
+    },
+
+    bouton_continuer: {
+        backgroundColor: "#EAAE7B",
+        //width: "30%",
+        borderRadius: 10,
+        padding: 10,
+        marginTop: 10,
+        //  position: "absolute",
+        right: 0
+    },
+
+    text_bouton: {
+        textAlign: "center",
+        justifyContent: "center"
+    },
+
+
+    text_requis: {
+        fontSize: 10,
+        color: "red",
         textAlign: "center"
-    }
+    },
 })
 
 

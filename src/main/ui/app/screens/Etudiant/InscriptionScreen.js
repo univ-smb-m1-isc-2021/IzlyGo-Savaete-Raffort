@@ -1,53 +1,135 @@
 
 import React, { useEffect, useState } from 'react';
-import {StyleSheet, Text, View, TextInput, Button, Alert, Pressable, Picker, ScrollView } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    Button,
+    Alert,
+    Pressable,
+    Picker,
+    ScrollView,
+    TouchableHighlight,
+    Vibration, NativeModules
+} from 'react-native';
 import {SocialIcon} from 'react-native-elements';
+
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import {faArrowRight} from '@fortawesome/free-solid-svg-icons'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
 
 export default function InscriptionScreen(){
 
-        const [formations, setFormations] = useState([]);
+    const [formations, setFormations] = useState([]);
+    const [section, setSection] = useState(1)
 
 
-        const peutFinir = false;
+    const [numero, setNumero] = useState(0)
+    const [nom, setNom] = useState('')
+    const [prenom, setPrenom] = useState('')
+    const [mail, setMail] = useState('')
+    const [password, setPassword] = useState('')
+    const [parrainage, setCode] = useState('')
 
-        const donneFormation = async () => {
-            try {
-                const response = await fetch('http://localhost:8080/api/formations');
-                const json = await response.json();
-                setFormations(json);
-            } catch (error) {
-                console.error(error);
-            }
+    const [numero_saisie, numeroB] = useState(false)
+    const [nom_saisie, nomB] = useState(false)
+    const [prenom_saisie, prenomB] = useState(false)
+    const [mail_saisie, mailB] = useState(false)
+
+    const [formation, setFormation] = useState(0)
+
+
+    const peutFinir = false;
+
+    const donneFormation = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/formations');
+            const json = await response.json();
+            setFormations(json);
+        } catch (error) {
+            console.error(error);
         }
-
-    const etudiant = {
-        nom: 'Tafanel',
-        prenom: 'Gil',
-        mail: 'gilou',
-        formation: formations[1],
-        numero: 444,
-        password: 'gil',
-        nombre_points : 0,
-        compte_actif: true
     }
 
         useEffect(() => {
             donneFormation();
-        }, []);
+        }, [])
 
         let serviceItems = formations.map((s, i) => {
-            console.log(s.chemin)
-            return <Picker.Item key={i} value={s.libelle} label={s.libelle}/>
+            return <Picker.Item key={s.id} value={i} label={s.libelle}/>
         });
 
-        return (
-            <ScrollView>
+
+        function continuer(){
+
+
+            numeroB(numero == 0 ? true : false)
+            nomB(nom == '' ? true : false)
+            prenomB(prenom == '' ? true : false)
+            mailB(mail == '' ? true : false)
+
+
+
+
+            if (numero_saisie == false && nom_saisie == false && prenom_saisie == false && mail_saisie == false){
+                setSection(section + 1)
+            }
+
+        }
+
+
+        function terminer(){
+            const etudiant = {
+                numero: numero,
+                nom: nom,
+                prenom: prenom,
+                mail: mail,
+                formation: formations[formation],
+                password: password,
+                nombre_points : 0,
+                compte_actif: true,
+                code_parrain: parrainage
+            }
+
+
+            fetch('http://localhost:8080/api/create/student', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(etudiant)
+            }).then(response => response.json())
+                .then(data => {
+                    if(data.succes){
+                        connect(data.etudiant.numero)
+                    }
+                });
+        }
+
+    const connect = async (numero) => {
+        try {
+            await AsyncStorage.setItem('@numero_etudiant', JSON.stringify(numero))
+            NativeModules.DevSettings.reload();
+        } catch (e) {
+            // error reading value
+        }
+    }
+
+    function retour(){
+        setSection(section - 1)
+    }
+
+    return (
+           /* <ScrollView>
                 <View style={styles.view}>
                     <View style={styles.viewTitle}>
                         <Text style={styles.bigTitle}>Créer un compte étudiant</Text>
                     </View>
-                    <View>
-                    </View>
+
 
                     <View style={styles.social}>
                         <SocialIcon
@@ -115,91 +197,256 @@ export default function InscriptionScreen(){
                         </Button>
                     </View>
                 </View>
+            </ScrollView>*/
+
+        <View style={{ height: '100%', backgroundColor: "white"}}>
+            <ScrollView >
+                <View style={s.vue_globale}>
+                    {
+                        section == 1 &&
+                        <View style={s.vue_element} >
+                            <Text style={s.titre_page}>Vos informations</Text>
+
+
+                            <View style={s.vue_uneLigne}>
+                                <Text style={s.nom_input}>Votre numéro étudiant</Text>
+                                <TextInput
+                                    style={[s.input, numero_saisie ? s.input_requis : '']}
+                                    placeholder="Ex: 571891820"
+                                    onChangeText={numero =>
+                                    {
+                                        setNumero(numero)
+                                        numero == '' ? numeroB( true ) : numeroB( false )
+                                    }}
+                                    keyboardType="numeric"
+                                    value={numero}
+                                />
+                                {
+                                    numero_saisie ? <Text style={s.text_requis}>Votre numéro étudiant est requis</Text> : <></>
+                                }
+                            </View>
+
+                            <View style={s.vue_uneLigne}>
+                                <Text style={s.nom_input}>Votre nom</Text>
+                                <TextInput
+                                    style={[s.input,  nom_saisie ? s.input_requis : '']}
+                                    placeholder="Ex: Dupont"
+                                    onChangeText={nom =>
+                                    {
+                                        setNom(nom)
+                                        nom == '' ? nomB( true ) : nomB( false )
+                                    }}
+                                    value={nom}
+                                />
+                                {
+                                    nom_saisie ? <Text style={s.text_requis}>Votre nom est requis</Text> : <></>
+                                }
+                            </View>
+
+                            <View style={s.vue_uneLigne}>
+                                <Text style={s.nom_input}>Votre prénom</Text>
+                                <TextInput
+                                    style={[s.input,  prenom_saisie ? s.input_requis : '']}
+                                    placeholder="Ex: Magalie"
+                                    onChangeText={prenom =>
+                                    {
+                                        setPrenom(prenom)
+                                        prenom == '' ? prenomB( true ) : prenomB( false )
+                                    }}
+                                    value={prenom}
+                                />
+                                {
+                                    prenom_saisie ? <Text style={s.text_requis}>Votre prénom est requis</Text> : <></>
+                                }
+                            </View>
+
+                            <View style={s.vue_uneLigne}>
+                                <Text style={s.nom_input}>Votre adresse mail</Text>
+                                <TextInput
+                                    style={[s.input,  mail_saisie ? s.input_requis : '']}
+                                    placeholder="Ex: magalie.dupont@etu.univ-smb.fr"
+                                    onChangeText={mail =>
+                                    {
+                                        setMail(mail)
+                                        mail == '' ? mailB( true ) : mailB( false )
+                                    }}
+                                    value={mail}
+                                />
+                                {
+                                    mail_saisie ? <Text style={s.text_requis}>Votre mail est requis</Text> : <></>
+                                }
+                            </View>
+
+
+                            <View style={s.vue_uneLigne}>
+                                <Text style={s.nom_input}>Un code parrain ?</Text>
+                                <TextInput
+                                    style={s.input}
+                                    placeholder="Saisissez le ici"
+                                    onChangeText={code =>
+                                    {
+                                        setCode(code)
+                                    }}
+                                    value={parrainage}
+                                />
+                            </View>
+
+
+                            <TouchableHighlight underlayColor="white" onPress={() => continuer()}>
+                                <View style={s.bouton_continuer}>
+                                    <Text style={s.text_bouton}>Continuer</Text>
+                                </View>
+                            </TouchableHighlight>
+                        </View>
+                    }
+
+                    {
+                        section == 2 &&
+                        <View style={s.vue_element}>
+                            <Text style={s.titre_page}>Votre formation</Text>
+                            <Picker selectedValue={formation} onValueChange={(v, k) => { setFormation(v) }}>
+                                {serviceItems}
+                            </Picker>
+
+                            <View style={s.vue_boutons}>
+                                <TouchableHighlight underlayColor="white" onPress={() => retour()}>
+                                    <View style={s.bouton_continuer}>
+                                        <Text style={s.text_bouton}>Retour</Text>
+                                    </View>
+                                </TouchableHighlight>
+
+                                <TouchableHighlight underlayColor="white" onPress={() => continuer()}>
+                                    <View style={s.bouton_continuer}>
+                                        <Text style={s.text_bouton}>Continuer</Text>
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
+
+                        </View>
+                    }
+
+                    {
+                        section == 3 &&
+                        <View style={s.vue_element}>
+
+                            <View style={s.vue_uneLigne}>
+
+                                <Text style={s.titre_page}>Votre mot de passe</Text>
+
+                                <Text style={s.nom_input}>Saisissez un mot de passe</Text>
+                                <TextInput
+                                    style={s.input}
+                                    onChangeText={password =>
+                                    {
+                                        setPassword(password)
+                                    }}
+                                    value={password}
+                                />
+                            </View>
+
+                            <View style={s.vue_uneLigne}>
+
+
+                                <Text style={s.nom_input}>Confirmer le mot de passe</Text>
+                                <TextInput
+                                    style={s.input}
+                                    //onChangeText={}
+                                />
+
+                            </View>
+
+
+                            <View style={s.vue_boutons}>
+                                <TouchableHighlight underlayColor="white" onPress={() => retour()}>
+                                    <View style={s.bouton_continuer}>
+                                        <Text style={s.text_bouton}>Retour</Text>
+                                    </View>
+                                </TouchableHighlight>
+
+                                <TouchableHighlight underlayColor="white" onPress={() => terminer()}>
+                                    <View style={s.bouton_continuer}>
+                                        <Text style={s.text_bouton}>Terminer</Text>
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
+
+                        </View>
+
+                    }
+
+
+
+                </View>
+
             </ScrollView>
+        </View>
+
 
         )
 
 }
 
-const But = (props) => {
-    return (
-        <Pressable style={styles.button} onPress={() => {
+const s = StyleSheet.create({
 
 
-            fetch('http://localhost:8080/api/create/student', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(props.donnees)
-            }).then(response => {
-                //console.log(response)
-            })
 
-        }}>
-            <Text style={styles.text}>S'inscrire</Text>
-
-        </Pressable>
-    );
-};
-
-const styles = StyleSheet.create({
-    input: {
-        height: 45,
-        marginTop: 30,
-        marginLeft: 20,
-        marginRight: 20,
-        borderRadius: 10,
-        backgroundColor: '#E7EAEE',
-        textAlign: "center",
-        padding: 10,
+    vue_element: {
+        marginTop: "5%",
+        marginHorizontal: "10%"
     },
-    button: {
-        backgroundColor: "#7389C1",
-        marginTop: 30,
-        marginLeft: 20,
-        marginRight: 20,
-        paddingTop: 15,
-        borderRadius: 10,
-        height: 50
-    },
-    text: {
-        textAlign: "center",
-        color: "white",
-        fontSize: 20,
-    },
-    bigTitle: {
-        color: "#7389C1",
+
+    titre_page: {
         fontWeight: "bold",
-        fontSize: 25,
-    },
-    view: {
-        marginTop: 50,
-    },
-    viewTitle: {
-        width: '100%',
-        height: 40,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    option: {
-        color: "#A7AAAF",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    social: {
-
-        marginTop: 20,
-        justifyContent: "center",
-        alignItems: "center",
-        display: "flex",
-        flexDirection: "row",
+        fontSize: 22,
         marginBottom: 30
     },
-    viewOption: {
-        justifyContent: "center",
-        alignItems: "center",
-        margin: 20
+
+
+    vue_uneLigne: {
+        marginVertical: 10
+    },
+
+    nom_input: {
+        fontWeight: "bold",
+        fontSize: 15,
+        marginBottom: 10,
+    },
+
+    input: {
+        backgroundColor: "#EEEEEE",
+        padding: 10,
+        borderRadius: 10,
+        height: 50,
+    },
+
+    input_requis: {
+        borderColor: "red",
+        borderWidth: 1
+    },
+
+    text_requis: {
+        fontSize: 10,
+        color: "red"
+    },
+
+
+    bouton_continuer: {
+        backgroundColor: "#EAAE7B",
+        //width: "30%",
+        borderRadius: 10,
+        padding: 10,
+        marginTop: 10,
+      //  position: "absolute",
+        right: 0
+    },
+
+    text_bouton: {
+        textAlign: "center",
+        justifyContent: "center"
+    },
+
+    vue_boutons: {
+        flexDirection: "row",
+        justifyContent: "space-between"
     }
-});
+})
