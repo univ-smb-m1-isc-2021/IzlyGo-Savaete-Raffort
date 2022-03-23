@@ -14,7 +14,7 @@ export default function NotificationScreen() {
 
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
 
-            const response = await fetch('http://localhost:8080/api/notifications/' + numero_etudiant);
+            const response = await fetch('https://izlygo.herokuapp.com/api/notifications/' + numero_etudiant);
             const json = await response.json();
 
             setNotifications(json);
@@ -41,7 +41,7 @@ export default function NotificationScreen() {
     }
 
     const changeSwitch = id =>{
-        fetch('http://localhost:8080/api/edit/notification/' + id, {
+        fetch('https://izlygo.herokuapp.com/api/edit/notification/' + id, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

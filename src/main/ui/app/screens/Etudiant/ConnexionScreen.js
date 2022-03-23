@@ -20,7 +20,7 @@ export default function ConnexionScreen() {
 
     const connexion = () => {
 
-        fetch('http://localhost:8080/api/connexion', {
+        fetch('https://izlygo.herokuapp.com/api/connexion', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

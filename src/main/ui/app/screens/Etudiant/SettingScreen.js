@@ -51,7 +51,7 @@ const HomeScreen = ({ navigation }) => {
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
             setNumero(numero_etudiant)
 
-            const response = await fetch('http://localhost:8080/api/profil/' + numero_etudiant);
+            const response = await fetch('https://izlygo.herokuapp.com/api/profil/' + numero_etudiant);
             const json = await response.json();
 
             setEtudiant(json);
@@ -82,9 +82,7 @@ const HomeScreen = ({ navigation }) => {
         <SafeAreaView style={styles.view_globale}>
 
         <View style={styles.view_image}>
-            <Image
-                style={styles.image_profil}
-                source={{uri: 'https://media-exp1.licdn.com/dms/image/C4E03AQEOT59zyut71w/profile-displayphoto-shrink_200_200/0/1594911160362?e=1652918400&v=beta&t=-q3eVhslA4SEZ4LMaYtiKZPLX024YuhiLy-l90gbHrE'}}/>
+
             <Text style={styles.identite}>{ etudiant.prenom } { etudiant.nom }</Text>
             <Text style={styles.info_inscription}>Inscrit depuis le { etudiant.date_inscription }</Text>
 

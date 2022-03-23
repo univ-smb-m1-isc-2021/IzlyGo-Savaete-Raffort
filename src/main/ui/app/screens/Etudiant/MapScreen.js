@@ -17,7 +17,7 @@ export default function MapScreen() {
 
     const donneGemmes = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/tirage');
+            const response = await fetch('https://izlygo.herokuapp.com/api/tirage');
             const json = await response.json();
 
             setPoints(json["liste"]);

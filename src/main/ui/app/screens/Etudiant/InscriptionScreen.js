@@ -46,7 +46,7 @@ export default function InscriptionScreen(){
 
     const donneFormation = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/formations');
+            const response = await fetch('https://izlygo.herokuapp.com/api/formations');
             const json = await response.json();
             setFormations(json);
         } catch (error) {
@@ -95,7 +95,7 @@ export default function InscriptionScreen(){
             }
 
 
-            fetch('http://localhost:8080/api/create/student', {
+            fetch('https://izlygo.herokuapp.com/api/create/student', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',

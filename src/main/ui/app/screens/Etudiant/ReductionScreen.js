@@ -9,7 +9,7 @@ export default function ReductionScreen() {
 
     const donnesLesReductions = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/reductions');
+            const response = await fetch('https://izlygo.herokuapp.com/api/reductions');
             const json = await response.json();
 
             setReductions(json);
