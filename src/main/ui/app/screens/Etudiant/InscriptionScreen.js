@@ -46,7 +46,7 @@ export default function InscriptionScreen(){
 
     const donneFormation = async () => {
         try {
-            const response = await fetch('https://izlygo.herokuapp.com/api/formations');
+            const response = await fetch('http://localhost:8080/api/formations');
             const json = await response.json();
             setFormations(json);
         } catch (error) {
@@ -95,7 +95,7 @@ export default function InscriptionScreen(){
             }
 
 
-            fetch('https://izlygo.herokuapp.com/api/create/student', {
+            fetch('http://localhost:8080/api/create/student', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -124,81 +124,6 @@ export default function InscriptionScreen(){
     }
 
     return (
-           /* <ScrollView>
-                <View style={styles.view}>
-                    <View style={styles.viewTitle}>
-                        <Text style={styles.bigTitle}>Créer un compte étudiant</Text>
-                    </View>
-
-
-                    <View style={styles.social}>
-                        <SocialIcon
-                            type="facebook"
-                            onPress={() => {
-                                alert('facebook');
-                            }}
-                        />
-
-                        <SocialIcon
-                            type="google"
-                            onPress={() => {
-                                alert('facebook');
-                            }}
-                        />
-                        <SocialIcon
-                            type="linkedin"
-                            onPress={() => {
-                                alert('facebook');
-                            }}
-                        />
-                    </View>
-
-                    <View style={styles.viewOption}>
-                        <Text style={styles.option}>Ou utiliser votre adresse mail pour vous inscrire</Text>
-                    </View>
-
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nom"
-                            onChangeText={newText => etudiant.nom = newText}
-                            onChangeText={newText => etudiant.nom = newText}
-                        />
-
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Prénom"
-                            onChangeText={newText => etudiant.prenom = newText}
-                        />
-
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Adresse mail"
-                            onChangeText={newText => etudiant.mail = newText}
-                        />
-
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Numéro étudiant"
-                            keyboardType="numeric"
-                            onChangeText={newText => etudiant.numero = newText}
-                        />
-
-                        <Picker>
-                            {serviceItems}
-                        </Picker>
-
-                        <But donnees={etudiant}/>
-
-                        <Button
-                            title="J'ai déjà un compte. Me connecter"
-
-                        >
-                        </Button>
-                    </View>
-                </View>
-            </ScrollView>*/
-
         <View style={{ height: '100%', backgroundColor: "white"}}>
             <ScrollView >
                 <View style={s.vue_globale}>

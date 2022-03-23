@@ -1,13 +1,14 @@
 import {StyleSheet, Text, View, TextInput, Button, Image, NativeModules, ScrollView} from 'react-native';
 import {useEffect, useState} from "react";
 
+
 export default function ClassementScreen() {
 
     const [classement, setClassement] = useState([]);
 
     const donnesLeClassement = async () => {
         try {
-            const response = await fetch('https://izlygo.herokuapp.com/api/classement/10');
+            const response = await fetch('http://localhost:8080/api/classement/10');
             const json = await response.json();
 
             setClassement(json);
@@ -31,7 +32,7 @@ export default function ClassementScreen() {
                                 <Text>{i+1}</Text>
 
                                 <View>
-                                    <Text style={styles.etudiant}>{etudiant.prenom + " " + etudiant.nom}</Text>
+                                    <Text style={styles.etudiant}>{}</Text>
                                     <Text>{etudiant.formation.libelle}</Text>
                                 </View>
 

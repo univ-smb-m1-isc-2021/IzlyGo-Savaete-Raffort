@@ -9,7 +9,7 @@ export default function ReductionScreen() {
 
     const donnesLesReductions = async () => {
         try {
-            const response = await fetch('https://izlygo.herokuapp.com/api/reductions');
+            const response = await fetch('http://localhost:8080/api/reductions');
             const json = await response.json();
 
             setReductions(json);
@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
     },
 
     view_nom_entreprise : {
-        backgroundColor: "#EAAE7B",
-        width: "60%"
+        backgroundColor: "#63D7B9",
+        width: "50%"
     },
 
     text_point : {

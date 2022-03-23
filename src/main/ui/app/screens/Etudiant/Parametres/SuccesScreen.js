@@ -22,7 +22,7 @@ export default function SuccesScreen() {
 
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
 
-            const response = await fetch('https://izlygo.herokuapp.com/api/succes/' + numero_etudiant);
+            const response = await fetch('http://localhost:8080/api/succes/' + numero_etudiant);
             const json = await response.json();
 
             setSucces(json.succes);

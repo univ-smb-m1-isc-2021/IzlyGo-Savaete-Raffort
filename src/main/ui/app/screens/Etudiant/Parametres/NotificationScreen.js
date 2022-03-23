@@ -41,7 +41,7 @@ export default function NotificationScreen() {
     }
 
     const changeSwitch = id =>{
-        fetch('https://izlygo.herokuapp.com/api/edit/notification/' + id, {
+        fetch('http://localhost:8080/api/edit/notification/' + id, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
