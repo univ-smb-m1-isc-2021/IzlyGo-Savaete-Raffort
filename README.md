@@ -8,7 +8,7 @@ En se baladant dans le campus, les étudiants pourront récupérer des points (=
 
 ## Participant :
     
-Adrien Raffort & Romain Savaete
+Adrien Raffort & Romain Savaetet
     
 ## Fonctionnalités :
         
