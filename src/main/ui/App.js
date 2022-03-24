@@ -47,16 +47,6 @@ export default function App(){
     }
 
 
-       /* if(nombre ==1){
-            retour = <InscriptionScreen></InscriptionScreen>
-        }else if (nombre == 2) {
-            retour = <TabEtudiant></TabEtudiant>
-        }else if (nombre == 3){
-            retour = <TabEntreprise></TabEntreprise>
-        }else if (nombre == 4){
-            retour = <ConnexionScreen></ConnexionScreen>
-        }*/
-
         return (
             <View style={superStyle.view}>
                 {retour}

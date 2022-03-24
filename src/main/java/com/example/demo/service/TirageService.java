@@ -29,5 +29,16 @@ public class TirageService {
     }
 
 
+    public Tirage donneTirageChaine(String chaine){
+        return tirageRepository.donneTirageChaine(chaine);
+    }
+
+    public void augmenteRecuperation(String chaine) {
+        tirageRepository.augmenteRecuperation(chaine);
+    }
+
+
+
+
 
 }

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -32,6 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/")
 public class EtudiantController {
 
+    private static final DecimalFormat df = new DecimalFormat("0.00");
+
+
     @Autowired
     EtudiantService etudiantService;
 
@@ -52,6 +56,13 @@ public class EtudiantController {
 
     @Autowired
     ParrainageService parrainageService;
+
+    @Autowired
+    ObtentionService obtentionService;
+
+    @Autowired
+    TirageService tirageService;
+
 
     @PostMapping(path = "/create/student")
     public ResponseEntity<?> ajouteEtudiant(@RequestBody Etudiant etudiant) {
@@ -148,7 +159,7 @@ public class EtudiantController {
 
             int valeur = inv.getGemme().getValeur() * inv.getQuantite();
             une_gemme.put("valeur_points", valeur);
-            une_gemme.put("valeur_euro", valeur * CONVERSION);
+            une_gemme.put("valeur_euro", df.format(valeur * CONVERSION));
 
             gemmesPar2.put(une_gemme);
 
@@ -172,10 +183,9 @@ public class EtudiantController {
         etudiant.put("numero", etu.getNumero());
         etudiant.put("nom", etu.getNom());
         etudiant.put("nombre_points", nombre_point);
-        etudiant.put("nombre_euros", nombre_euros);
+        etudiant.put("nombre_euros", df.format(nombre_euros));
 
         json.put("etudiant", etudiant);
-         Object ppp = "eee";
 
         return ResponseEntity.ok(json.toMap());
     }
@@ -214,7 +224,23 @@ public class EtudiantController {
     }
 
 
+    @PostMapping(path = "/recupere")
+    public ResponseEntity<?> recupereGemme(@RequestBody Obtention obtention){
 
+
+        obtentionService.ajouteLigne(obtention.getChaine(), obtention.getIdEtudiant());
+
+        Tirage tirage = tirageService.donneTirageChaine(obtention.getChaine());
+        inventaireService.ajouteQuantite(obtention.getIdEtudiant(), tirage.getGemme().getId());
+
+        tirageService.augmenteRecuperation(obtention.getChaine());
+
+
+        JSONObject json = new JSONObject();
+        json.put("alors", true);
+
+        return ResponseEntity.ok(json.toMap());
+    }
 }
 
 

@@ -1,18 +1,23 @@
 import { StyleSheet, Text, View, TextInput, Button, ScrollView } from 'react-native';
 import {useEffect, useState} from "react";
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export default function ReductionScreen() {
 
     const [reductions, setReductions] = useState([]);
+    const [etudiant, setEtudiant] = useState([]);
 
     const donnesLesReductions = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/reductions');
+            const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+
+            const response = await fetch('https://izlygo.herokuapp.com/reductions/' + numero_etudiant);
             const json = await response.json();
 
-            setReductions(json);
+            setReductions(json.reductions);
+            setEtudiant(json.etudiant)
 
         } catch (error) {
             console.error(error);
@@ -29,8 +34,8 @@ export default function ReductionScreen() {
 
             <View style={styles.points}>
                 <Text style={styles.points4}>Total de vos points IzlyGo :</Text>
-                <Text style={styles.points2}>540 points </Text>
-                <Text style={styles.points3}>Soit 4.3 €</Text>
+                <Text style={styles.points2}>{ etudiant.nombre_points } points </Text>
+                <Text style={styles.points3}>Soit {etudiant.nombre_euros } €</Text>
             </View>
 
             <Text style={styles.titre_page}>Les réductions</Text>

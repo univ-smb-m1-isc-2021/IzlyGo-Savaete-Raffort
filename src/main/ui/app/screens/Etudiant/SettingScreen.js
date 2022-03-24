@@ -4,7 +4,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faUser, faBell, faCircleCheck, faRankingStar, faArrowRightFromBracket, faAngleRight, faHandshakeSimple } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faBell, faCircleCheck, faRankingStar, faArrowRightFromBracket, faAngleRight, faHandshakeSimple, faFaceSmile } from '@fortawesome/free-solid-svg-icons'
 
 
 import SuccesScreen from "./Parametres/SuccesScreen";
@@ -82,6 +82,9 @@ const HomeScreen = ({ navigation }) => {
         <SafeAreaView style={styles.view_globale}>
 
         <View style={styles.view_image}>
+
+            <FontAwesomeIcon icon={faFaceSmile}  color="#f1c40f" size={ 100 } />
+
 
             <Text style={styles.identite}>{ etudiant.prenom } { etudiant.nom }</Text>
             <Text style={styles.info_inscription}>Inscrit depuis le { etudiant.date_inscription }</Text>

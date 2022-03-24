@@ -28,6 +28,15 @@ public interface TirageRepository extends JpaRepository<Tirage, Integer>, JpaSpe
     @Query(value = "SELECT * FROM tirage WHERE jour = ?1 AND heure = ?2 AND minute = ?3", nativeQuery = true)
     List<Tirage> donneListeActuelle(String jour, int heure, int minute);
 
+    @Query(value = "SELECT * FROM tirage WHERE chaine = ?1", nativeQuery = true)
+    Tirage donneTirageChaine(String chaine);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE tirage SET nombre_recupere = nombre_recupere + 1 WHERE chaine = ?1", nativeQuery = true)
+    void augmenteRecuperation(String chaine);
+
+
 
 }
 

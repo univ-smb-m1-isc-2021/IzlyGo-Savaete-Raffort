@@ -8,7 +8,7 @@ export default function ClassementScreen() {
 
     const donnesLeClassement = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/classement/10');
+            const response = await fetch('https://izlygo.herokuapp.com/api/classement/10');
             const json = await response.json();
 
             setClassement(json);

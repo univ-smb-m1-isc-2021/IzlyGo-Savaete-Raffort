@@ -3,21 +3,36 @@ import MapView from "react-native-maps";
 import Marker from "react-native-maps";
 import React, {useEffect, useState} from "react";
 import { useFonts } from 'expo-font'
+import moment from 'moment';
+
+import { Root, Popup, Toast } from 'popup-ui'
 
 
 import AppLoading from 'expo-app-loading'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function MapScreen() {
 
     const [points, setPoints] = useState([]);
 
     const [currentDate, setCurrentDate] = useState('')
-
     const [loading, setLoading] = useState(false)
+    const [numero, setNumero] = useState(0)
+
+    const [refresh, setRefresh] = useState(false)
+
+    const childToParent = () => {
+        setRefresh(!refresh)
+    }
+
+
 
     const donneGemmes = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/tirage');
+            const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+            setNumero(numero_etudiant)
+
+            const response = await fetch('https://izlygo.herokuapp.com/api/tirage/' + numero_etudiant);
             const json = await response.json();
 
             setPoints(json["liste"]);
@@ -25,7 +40,7 @@ export default function MapScreen() {
 
         } catch (error) {
             console.error(error)
-        } 
+        }
     }
 
     const getImage = name => {
@@ -40,15 +55,30 @@ export default function MapScreen() {
         }
     }
     
-    function markerClick(gemme){
+    function markerClick(tirage){
+
         Alert.alert(
-            "" + gemme.nom,
-            "",
+            "" + tirage.gemme.nom,
+            "" + tirage.recupere + "/" + tirage.gemme.personne_max,
             [
                 {
                     text: "Annuler", style: "cancel"
                 },
-                { text: "Oui",
+                { text: "Oui", onPress:() => {
+                        fetch('https://izlygo.herokuapp.com/api/recupere', {
+                            method: 'POST',
+                            headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({chaine: tirage.chaine, id_etudiant: numero})
+                        }).then(response => response.json())
+                            .then(data => {
+                               console.log(data)
+                                setRefresh(!refresh)
+
+                            });
+                    }
 
                 }
             ]
@@ -56,51 +86,16 @@ export default function MapScreen() {
         );
     }
 
-    function temps(){
-        var date = new Date().getDate(); //Current Date
-        var month = new Date().getMonth() + 1; //Current Month
-        var year = new Date().getFullYear(); //Current Year
-        var hours = new Date().getHours(); //Current Hours
-        var min = new Date().getMinutes(); //Current Minutes
-        var sec = new Date().getSeconds(); //Current Seconds
-
-        var t1 = new Date(year, month, date, hours, min, sec);
-        var t2
-        if (min < 30){
-            t2 = new Date(year, month, date, hours, 30, 0);
-        }else {
-            t2 = new Date(year, month, date, hours + 1, 0, 0);
-        }
-
-        var dif = Math.abs(t2.getTime() - t1.getTime()) / 1000
-        dif -= 1
-
-
-        if(dif > 0 && dif < 60) {
-            setCurrentDate("Il reste " + dif + " secondes");
-        }
-        else {
-            var min = Math.trunc(dif/60)
-            var sec = dif - (min*60)
-            setCurrentDate("Il reste " + min + " min et " + sec + " secondes.");
-        }
-
-
-        if (dif == 0){
-            donneGemmes();
-        }
-
-
-    }
-
-
 
     useEffect(() =>  {
         donneGemmes();
-    }, []);
+    }, [refresh]);
 
     return (
-        <View style={styles.all}>
+        <Root>
+
+        <SafeAreaView style={styles.all}>
+            <Clock childToParent={childToParent}></Clock>
             <View style={styles.container}>
                 {
                     !loading ?
@@ -126,7 +121,7 @@ export default function MapScreen() {
                                     <MapView.Marker
                                         key={pt.latitude}
                                         coordinate={{ latitude : pt.latitude , longitude :pt.longitude }}
-                                        onPress={() => markerClick(pt.gemme)}
+                                        onPress={() => markerClick(pt)}
                                     >
 
                                         <Image source={getImage(pt.gemme.chemin_image)} style={{height: 35, width:35 }} />
@@ -146,7 +141,8 @@ export default function MapScreen() {
 
                 }
             </View>
-        </View>
+        </SafeAreaView>
+        </Root>
 
     );
 }
@@ -189,3 +185,70 @@ const styles = StyleSheet.create({
         fontSize: 18
     }
 });
+
+
+
+function Clock ({childToParent}) {
+
+    const [letimer, setTimer] = useState('');
+    const [color, setColor] = useState('black');
+    const tick = () => {
+
+
+        var timer = ''
+
+        const a = moment()
+        var hours = a.hours(); //Current Hours
+        var min = a.minutes(); //Current Minutes
+        var sec = a.seconds(); //Current Seconds
+
+        var b = ''
+
+        if (min < 30) {
+            b = moment(hours + ':30:00', 'HH:mm:ss')
+        }else {
+            var h = hours + 1
+            b = moment(h + ':00:00', 'HH:mm:ss')
+        }
+
+        const dif = b.diff(a, 'second');
+
+        if(dif > 0 && dif < 60) {
+            timer = "Il reste " + dif + " secondes";
+        }
+        else {
+            var min = Math.trunc(dif/60)
+            var sec = dif - (min*60)
+            var timer = "Il reste " + min + " min et " + sec + " secondes";
+        }
+
+        if(dif == 0){
+            childToParent()
+        }
+
+
+        setTimer(timer)
+        setColor(dif < 60 ? "red" : "black")
+
+
+
+
+    }
+
+
+    useEffect(() =>  {
+        setInterval(() => tick(), 1000)
+
+    }, []);
+
+
+
+
+
+        return (
+            <Text className="App-clock" style={{margin: 10, textAlign: 'center', fontWeight: 'bold', color: color}}>
+                {letimer}
+            </Text>
+        );
+
+}

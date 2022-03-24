@@ -5,7 +5,6 @@ import TitleText from "../../../components/TitleText"
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import {faGift, faMedal} from '@fortawesome/free-solid-svg-icons'
-import {Dosis_300Light} from "@expo-google-fonts/dosis";
 
 
 export default function ParrainageScreen() {
@@ -18,7 +17,7 @@ export default function ParrainageScreen() {
 
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
 
-            const response = await fetch('http://localhost:8080/api/filleuls/' + numero_etudiant);
+            const response = await fetch('https://izlygo.herokuapp.com/' + numero_etudiant);
             const json = await response.json();
 
             setFilleuls(json.filleuls);
