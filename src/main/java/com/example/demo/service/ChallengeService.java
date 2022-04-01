@@ -21,7 +21,9 @@ public class ChallengeService {
         return challengeRepository.findAll();
     }
 
-
+    public Challenge donneProchainChallenge(long id){
+        return challengeRepository.donneProchainChallenge(id);
+    }
 
 }
 

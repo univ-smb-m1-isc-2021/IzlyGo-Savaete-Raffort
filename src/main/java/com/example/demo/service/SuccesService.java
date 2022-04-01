@@ -21,9 +21,27 @@ public class SuccesService {
         return succesRepository.donneMesSuccesSQL(numero, "EN_COURS", "TERMINE");
     }
 
+    public List<Succes> donneSuccesEnCours(int numero){
+        return succesRepository.donneSuccesEnCours(numero, "EN_COURS");
+    }
+
     public void ajouteLine(long etudiant, long challenge, String etat){
         succesRepository.ajouteLine(etudiant, challenge, etat);
     }
+
+    public void ajouteAvancement(long id){
+        succesRepository.ajouteAvancement(id);
+    }
+
+    public void definiSuccesFini(long id){
+        succesRepository.definiSuccesFini(id, "FINI");
+    }
+
+    public void debloqueSucces(long id){
+        succesRepository.debloqueSucces(id, "EN_COURS");
+    }
+
+
 
 
 

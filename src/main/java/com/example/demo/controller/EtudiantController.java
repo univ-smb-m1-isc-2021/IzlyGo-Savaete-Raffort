@@ -2,8 +2,6 @@ package com.example.demo.controller;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.example.demo.entity.*;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -27,6 +24,10 @@ import java.util.Locale;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 @Slf4j
 @RestController
@@ -79,13 +80,18 @@ public class EtudiantController {
         String mois = now.getMonth().getDisplayName(TextStyle.FULL, Locale.FRANCE);
         etudiant.setDateInscription(now.getDayOfMonth() + " " + mois + " " + now.getYear());
 
+
+        // Gestion du parrain s'il y en a un
         Etudiant parrain = etudiantService.checkCodeParrainage(etudiant.getCodeParrain());
-
         if (parrain == null) { etudiant.setCode_parrain(null); }
-
         Etudiant etu = etudiantService.saveEtudiant(etudiant);
 
-        if (parrain != null) { parrainageService.ajouteLigne(etu.getNumero(), parrain.getNumero()); }
+        if (parrain != null) {
+            parrainageService.ajouteLigne(etu.getNumero(), parrain.getNumero());
+            inventaireService.ajouteQuantite(parrain.getNumero(), 3 /* Émeraude */, 3);
+            inventaireService.ajouteQuantite(etudiant.getNumero(), 2 /* Saphir */, 2); // TODO
+
+        }
 
         // Set la liste des gemmes dans l'inventaire
         List<Gemme> gemmes = gemmeService.donneListeGemmes();
@@ -128,6 +134,11 @@ public class EtudiantController {
         return ResponseEntity.ok(etu);
     }
 
+    @GetMapping(path = "/sendmail")
+    public void send() throws UnirestException {
+        sendSimpleMessage();
+    }
+
 
     @GetMapping(path = "/inventaire/{numero}")
     public ResponseEntity<?> monInventaire(@PathVariable int numero) {
@@ -139,12 +150,9 @@ public class EtudiantController {
         JSONObject json = new JSONObject();
 
         JSONArray gemmesTotal = new JSONArray();
-        JSONArray gemmesPar2= new JSONArray();
+        JSONArray gemmesPar2= new JSONArray(); 
 
         List<Inventaire> mes_gemmes = inventaireService.getList(numero);
-
-        int nombre_point = 0;
-        double nombre_euros = 0;
 
         int pair = 0;
 
@@ -169,20 +177,19 @@ public class EtudiantController {
                 gemmesTotal.put(gemmesPar2);
                 gemmesPar2 = new JSONArray();
             }
-
-
-            nombre_point += valeur;
-            nombre_euros += valeur * CONVERSION;
         }
 
         json.put("gemmes", gemmesTotal);
 
         Etudiant etu = etudiantService.getEtudiant(numero);
 
+        int nombre_points = etu.getNombre_points();
+        double nombre_euros = nombre_points * CONVERSION;
+
         JSONObject etudiant = new JSONObject();
         etudiant.put("numero", etu.getNumero());
         etudiant.put("nom", etu.getNom());
-        etudiant.put("nombre_points", nombre_point);
+        etudiant.put("nombre_points", nombre_points);
         etudiant.put("nombre_euros", df.format(nombre_euros));
 
         json.put("etudiant", etudiant);
@@ -227,19 +234,66 @@ public class EtudiantController {
     @PostMapping(path = "/recupere")
     public ResponseEntity<?> recupereGemme(@RequestBody Obtention obtention){
 
+        int id_etudiant = obtention.getIdEtudiant();
 
-        obtentionService.ajouteLigne(obtention.getChaine(), obtention.getIdEtudiant());
+        // Ajoute une ligne dans la table d'obbtention pour ne pas récupérer plusieurs fois la même gemme pendant un tirage
+        obtentionService.ajouteLigne(obtention.getChaine(), id_etudiant);
 
+        // Ajoute la ligne dans l'inventaire du joueur
         Tirage tirage = tirageService.donneTirageChaine(obtention.getChaine());
-        inventaireService.ajouteQuantite(obtention.getIdEtudiant(), tirage.getGemme().getId());
+        inventaireService.ajouteQuantite(id_etudiant, tirage.getGemme().getId(), 1);
 
+        // Incrémente le nombre de récupération sur le tirage
         tirageService.augmenteRecuperation(obtention.getChaine());
+
+        // Incrémente le nombre de points du joueur
+        etudiantService.augmenteNombrePoints(id_etudiant, tirage.getGemme().getValeur());
+
+
+
+        // GESTION DES SUCCÈS
+        List<Succes> mesSucces = succesService.donneSuccesEnCours(id_etudiant);
+
+        for(Succes succes : mesSucces){
+            // SI le succès concerne la gemme que l'on vient de prendre
+            if (succes.getChallenge().getGemme().getId() == tirage.getGemme().getId()){
+
+                // On modifie son avancement
+                int avancement = succes.getAvancement() + 1;
+                succesService.ajouteAvancement(succes.getId());
+
+                // Si l'avancement = à la quantité souhaité pour le succès, on dit que ce succès est fini
+                if (avancement == succes.getChallenge().getQuantite()){
+                    succesService.definiSuccesFini(succes.getId());
+                    // On ajoute la récompense dans son inventaire
+                    inventaireService.ajouteQuantite(id_etudiant, succes.getChallenge().getGemme_recompense().getId(), succes.getChallenge().getQuantite_recompense());
+
+                    // S'il y a un succès après on le débloque sinon c'est fini
+                    Challenge prochain = challengeService.donneProchainChallenge(succes.getChallenge().getId());
+                    if (prochain != null){
+                        succesService.debloqueSucces(prochain.getId());
+                    }
+                }
+            }
+        }
 
 
         JSONObject json = new JSONObject();
         json.put("alors", true);
 
         return ResponseEntity.ok(json.toMap());
+    }
+
+
+    public static JsonNode sendSimpleMessage() throws UnirestException {
+        HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandbox144e0123fb3a4a2bac7195d7ca81d6dd.mailgun.org/messages")
+			.basicAuth("api", "44b661c1da1f4855f98f29ec03a396a1-0677517f-844d1d0c")
+                .queryString("from", "adrienraffort.pro@gmail.com")
+                .queryString("to", "adrien73400@icloud.com")
+                .queryString("subject", "hello")
+                .queryString("text", "testing")
+                .asJson();
+        return request.getBody();
     }
 }
 

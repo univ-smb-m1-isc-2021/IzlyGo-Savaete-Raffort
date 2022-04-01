@@ -24,5 +24,29 @@ public interface SuccesRepository extends JpaRepository<Succes, Integer>, JpaSpe
     @Modifying
     @Query(value = "INSERT INTO SUCCES(id_etudiant, id_challenge, etat) VALUES (?1, ?2, ?3)", nativeQuery = true)
     void ajouteLine(long etudiant, long challenge, String etat);
+
+
+    @Query(value = "SELECT * FROM SUCCES WHERE id_etudiant = ?1 AND etat = ?2",
+            nativeQuery = true)
+    List<Succes> donneSuccesEnCours(int numero, String etat1);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE SUCCES SET avancement = avancement + 1 WHERE id = ?1", nativeQuery = true)
+    void ajouteAvancement(long id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE SUCCES SET etat = ?2 WHERE id = ?1", nativeQuery = true)
+    void definiSuccesFini(long id, String etat);
+
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE SUCCES SET etat = ?2 WHERE id_challenge = ?1", nativeQuery = true)
+    void debloqueSucces(long id, String etat);
+
+
+
 }
 

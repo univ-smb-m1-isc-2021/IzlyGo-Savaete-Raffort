@@ -4,7 +4,15 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faUser, faBell, faCircleCheck, faRankingStar, faArrowRightFromBracket, faAngleRight, faHandshakeSimple, faFaceSmile } from '@fortawesome/free-solid-svg-icons'
+import {
+    faUser,
+    faBell,
+    faCircleCheck,
+    faRankingStar,
+    faArrowRightFromBracket,
+    faAngleRight,
+    faHandshakeSimple
+} from '@fortawesome/free-solid-svg-icons'
 
 
 import SuccesScreen from "./Parametres/SuccesScreen";
@@ -15,6 +23,7 @@ import ParrainageScreen from "./Parametres/ParrainageScreen";
 import React, {useEffect, useState} from "react";
 import ConnexionScreen from "./ConnexionScreen";
 import TabEtudiant from "./TabEtudiant";
+import ImagePersonnage from "../../components/ImagePersonnage";
 
 const Stack = createNativeStackNavigator();
 
@@ -72,6 +81,7 @@ const HomeScreen = ({ navigation }) => {
     ]
 
 
+
     useEffect(() => {
         donneEtudiant()
 
@@ -83,8 +93,7 @@ const HomeScreen = ({ navigation }) => {
 
         <View style={styles.view_image}>
 
-            <FontAwesomeIcon icon={faFaceSmile}  color="#f1c40f" size={ 100 } />
-
+            <ImagePersonnage image={etudiant.nom_personnage} size="normal"/>
 
             <Text style={styles.identite}>{ etudiant.prenom } { etudiant.nom }</Text>
             <Text style={styles.info_inscription}>Inscrit depuis le { etudiant.date_inscription }</Text>
@@ -178,7 +187,6 @@ const styles = StyleSheet.create({
         height: 100,
         width: 100,
         borderRadius: 50,
-
     },
 
     view_image: {

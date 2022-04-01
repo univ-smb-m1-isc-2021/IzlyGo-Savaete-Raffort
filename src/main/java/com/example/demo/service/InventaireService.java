@@ -27,7 +27,7 @@ public class InventaireService {
     }
 
 
-    public void ajouteQuantite(long etudiant, long gemme) {
-        inventaireRepository.ajouteQuantite(etudiant, gemme);
+    public void ajouteQuantite(long etudiant, long gemme, int quantite) {
+        inventaireRepository.ajouteQuantite(etudiant, gemme, quantite);
     }
 }

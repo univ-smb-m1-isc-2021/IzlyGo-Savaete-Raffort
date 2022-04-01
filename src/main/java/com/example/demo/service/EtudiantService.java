@@ -39,4 +39,8 @@ public class EtudiantService {
 
 
     public Etudiant checkCodeParrainage(String code){ return etudiantRepository.checkCodeParrainage(code); }
+
+    public void augmenteNombrePoints(int etudiant, int valeur){
+        etudiantRepository.augmenteNombrePoints(etudiant, valeur);
+    }
 }

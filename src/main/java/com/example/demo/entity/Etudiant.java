@@ -68,6 +68,12 @@ public class Etudiant{
         return nombre_points;
     }
 
+    private int nombre_points_semaine;
+
+    public int getNombrePointsSemaine() {
+        return nombre_points_semaine;
+    }
+
     @Column
     @NotNull(message="{NotNull.Etudiant.password}")
     public Boolean compte_actif;
@@ -102,6 +108,13 @@ public class Etudiant{
     public String getCodeParrain() {
         return code_parrain;
     }
+
+    public void setCode_parrain(String code_parrain) {
+        this.code_parrain = code_parrain;
+    }
+
+    public String nom_personnage;
+
 }
 
 

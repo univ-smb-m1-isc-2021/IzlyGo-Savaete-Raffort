@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.entity.Etudiant;
 
@@ -18,7 +20,7 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Integer>, Jp
             nativeQuery = true)
     Etudiant etud(int numero);
 
-    @Query(value = "SELECT * FROM ETUDIANT ORDER BY nombre_points DESC LIMIT ?1 ",
+    @Query(value = "SELECT * FROM ETUDIANT ORDER BY nombre_points_semaine DESC LIMIT ?1 ",
             nativeQuery = true)
     List<Etudiant> classementEtudiants(int nombre);
 
@@ -34,5 +36,11 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Integer>, Jp
     @Query(value = "SELECT * FROM ETUDIANT WHERE code_parrainage = ?1 LIMIT 1",
             nativeQuery = true)
     Etudiant checkCodeParrainage(String code);
+
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE etudiant SET nombre_points = nombre_points + ?2, nombre_points_semaine = nombre_points_semaine + ?2 WHERE numero = ?1", nativeQuery = true)
+    void augmenteNombrePoints(int etudiant, int valeur);
 }
 

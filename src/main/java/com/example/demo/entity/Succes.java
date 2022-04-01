@@ -20,6 +20,10 @@ public class Succes{
     @Column
     private long id;
 
+    public long getId() {
+        return id;
+    }
+
     @ManyToOne
     @JoinColumn(name = "id_etudiant")
     private Etudiant etudiant;

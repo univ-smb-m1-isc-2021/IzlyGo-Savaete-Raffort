@@ -20,7 +20,7 @@ export default function ConnexionScreen() {
 
     const connexion = () => {
 
-        fetch('https://izlygo.herokuapp.com/api/connexion', {
+        fetch('http://localhost:8080/api/connexion', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -66,7 +66,6 @@ export default function ConnexionScreen() {
                     value={mail}
                     autoCapitalize='none'
                     autoComplete='off'
-                    autoCorrect='false'
                 />
             </View>
 
@@ -79,7 +78,7 @@ export default function ConnexionScreen() {
                     value={password}
                     autoCapitalize='none'
                     autoComplete='off'
-                    autoCorrect='false'
+                    secureTextEntry={true}
                 />
             </View>
 

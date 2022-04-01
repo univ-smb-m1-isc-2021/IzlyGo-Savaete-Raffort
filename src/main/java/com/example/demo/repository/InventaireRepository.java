@@ -28,8 +28,8 @@ public interface InventaireRepository extends JpaRepository<Inventaire, Integer>
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE inventaire SET quantite = quantite + 1 WHERE id_etudiant = ?1 AND id_gemme = ?2", nativeQuery = true)
-    void ajouteQuantite(long etudiant, long gemme);
+    @Query(value = "UPDATE inventaire SET quantite = quantite + ?3 WHERE id_etudiant = ?1 AND id_gemme = ?2", nativeQuery = true)
+    void ajouteQuantite(long etudiant, long gemme, int quantite);
 
 
 }

@@ -32,10 +32,13 @@ CREATE TABLE etudiant (
    FORMATION_ID INT NOT NULL,
    FOREIGN KEY (FORMATION_ID) REFERENCES formation(ID),
    NOMBRE_POINTS INT NOT NULL DEFAULT 0,
+   NOMBRE_POINTS_SEMAINE INT NOT NULL DEFAULT 0,
    COMPTE_ACTIF BIT NOT NULL DEFAULT 0,
    CODE_PARRAINAGE VARCHAR(50) NOT NULL,
    DATE_INSCRIPTION VARCHAR(100) NOT NULL,
    CODE_PARRAIN VARCHAR(50) NULL DEFAULT NULL,
+
+   NOM_PERSONNAGE VARCHAR(50) NOT NULL DEFAULT 'personnage9',
 
    CONSTRAINT UC_Etudiant_Mail UNIQUE (MAIL)
 );
@@ -218,7 +221,7 @@ INSERT INTO reduction(id, points_requis, id_entreprise, libelle) VALUES
 
 
 INSERT INTO challenge(ID, LIBELLE, ID_CHALLENGE_PRECEDENT, ID_GEMME, QUANTITE, TEMPS, ID_GEMME_RECOMPENSE, QUANTITE_RECOMPENSE) VALUES
-(1, 'Récupérer 1 rubis', NULL, 1, 1, 10000, 4, 1),
+(1, 'Récupérer 1 rubis', NULL, 1, 1, 10000, 1, 1),
 (2, 'Récupérer 10 rubis', 1, 1, 10, 10000, 3, 3),
 (3, 'Récupérer 30 rubis', 2, 1, 30, 10000, 2, 3),
 
@@ -232,24 +235,40 @@ INSERT INTO challenge(ID, LIBELLE, ID_CHALLENGE_PRECEDENT, ID_GEMME, QUANTITE, T
 
 (10, 'Récupérer 15 améthystes', NULL, 4, 15, 10000, 3, 1),
 (11, 'Récupérer 40 améthystes', 10, 4, 40, 10000, 1, 1),
-(12, 'Récupérer 75 améthystes', 11, 4, 75, 10000, 1, 2);
+(12, 'Récupérer 75 améthystes', 11, 4, 75, 10000, 1, 2),
+
+(13, 'Récupérer 20 tourmalines', NULL, 5, 20, 10000, 3, 1),
+(14, 'Récupérer 50 tourmalines', 13, 5, 50, 10000, 1, 1),
+(15, 'Récupérer 100 tourmalines', 14, 5, 100, 10000, 1, 2),
+
+(16, 'Récupérer 25 ambres', NULL, 6, 25, 10000, 3, 1),
+(17, 'Récupérer 100 ambres', 16, 6, 100, 10000, 1, 1),
+(18, 'Récupérer 200 améthystes', 17, 6, 200, 10000, 1, 2);
 
 INSERT INTO succes (ID_ETUDIANT, ID_CHALLENGE, ETAT, AVANCEMENT) VALUES
 (123, 1, 'EN_COURS',0),
 (123, 2, 'BLOQUE', 0),
 (123, 3, 'BLOQUE', 0),
 
-(123, 4, 'FINI', 5),
-(123, 5, 'EN_COURS', 8),
+(123, 4, 'EN_COURS', 4),
+(123, 5, 'BLOQUE', 0),
 (123, 6, 'BLOQUE', 0),
 
-(123, 7, 'FINI', 10),
-(123, 8, 'FINI', 30),
-(123, 9, 'EN_COURS', 9),
+(123, 7, 'EN_COURS', 0),
+(123, 8, 'BLOQUE', 0),
+(123, 9, 'BLOQUE', 0),
 
-(123, 10, 'FINI', 15),
-(123, 11, 'FINI', 40),
-(123, 12, 'TERMINE', 75);
+(123, 10, 'EN_COURS', 0),
+(123, 11, 'BLOQUE', 0),
+(123, 12, 'BLOQUE', 0),
+
+(123, 13, 'FINI', 20),
+(123, 14, 'FINI', 50),
+(123, 15, 'TERMINE', 100),
+
+(123, 16, 'EN_COURS', 0),
+(123, 17, 'BLOQUE', 0),
+(123, 18, 'BLOQUE', 0);
 
 
 INSERT INTO notification(ID_ETUDIANT, ID_GEMME) VALUES

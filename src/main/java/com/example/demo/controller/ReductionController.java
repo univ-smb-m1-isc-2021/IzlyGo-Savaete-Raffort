@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import com.example.demo.entity.Etudiant;
@@ -27,6 +28,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/")
 public class ReductionController {
 
+
+    private static final DecimalFormat df = new DecimalFormat("0.00");
+
+
     @Autowired
     ReductionService reductionService;
 
@@ -37,6 +42,8 @@ public class ReductionController {
     @GetMapping(path = "/reductions/{numero}")
     public ResponseEntity<?> donneReductions(@PathVariable int numero) {
 
+        double CONVERSION = 0.0025;
+
         JSONObject json = new JSONObject();
 
 
@@ -45,11 +52,14 @@ public class ReductionController {
 
         Etudiant etu = etudiantService.getEtudiant(numero);
 
+        int nombre_points = etu.getNombre_points();
+        double nombre_euros = nombre_points * CONVERSION;
+
         JSONObject etudiant = new JSONObject();
         etudiant.put("numero", etu.getNumero());
         etudiant.put("nom", etu.getNom());
-        etudiant.put("nombre_points", etu.getNombre_points());
-        etudiant.put("nombre_euros", 0);
+        etudiant.put("nombre_points", nombre_points);
+        etudiant.put("nombre_euros", df.format(nombre_euros));
 
         json.put("etudiant", etudiant);
 

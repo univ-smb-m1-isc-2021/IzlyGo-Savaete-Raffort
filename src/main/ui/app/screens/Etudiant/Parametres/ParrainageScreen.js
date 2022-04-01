@@ -17,7 +17,7 @@ export default function ParrainageScreen() {
 
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
 
-            const response = await fetch('https://izlygo.herokuapp.com/' + numero_etudiant);
+            const response = await fetch('http://localhost:8080/api/filleuls/' + numero_etudiant);
             const json = await response.json();
 
             setFilleuls(json.filleuls);

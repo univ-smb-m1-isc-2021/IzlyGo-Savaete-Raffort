@@ -24,7 +24,6 @@ import com.example.demo.service.TirageService;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,8 +72,11 @@ public class TirageController {
 
                     Gemme gemme = gemmeService.trouveGemme(val);
 
-                    double lat = getRandomNumber(45.63997, 45.64702);
-                    double longg = getRandomNumber(5.86445, 5.87571);
+                    //double lat = getRandomNumber(45.63997, 45.64702);
+                    //double longg = getRandomNumber(5.86445, 5.87571);
+
+                    double lat = getRandomNumber(45.72854, 45.72915);
+                    double longg = getRandomNumber(6.41295, 6.41404);
 
                     int nombre_recup = 0;
 
@@ -158,6 +160,7 @@ public class TirageController {
         }
 
         json.put("liste", un_tirage);
+        json.put("existe", now.getHour() >= 7 && now.getHour() <= 18 ? true : false);
 
         return ResponseEntity.ok(json.toMap());
 

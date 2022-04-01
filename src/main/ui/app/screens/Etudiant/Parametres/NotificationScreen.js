@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 
 import TitleText from "../../../components/TitleText"
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ImageGemme from "../../../components/ImageGemme";
 
 export default function NotificationScreen() {
     const [change, setChange] = useState(false);
@@ -14,7 +15,7 @@ export default function NotificationScreen() {
 
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
 
-            const response = await fetch('https://izlygo.herokuapp.com/api/notifications/' + numero_etudiant);
+            const response = await fetch('http://localhost:8080/api/notifications/' + numero_etudiant);
             const json = await response.json();
 
             setNotifications(json);
@@ -28,17 +29,6 @@ export default function NotificationScreen() {
         donnesLesNotifications();
     }, [change]);
 
-    const getImage = name => {
-        switch (name) {
-            case "rubis": return require("../../images/rubis.png")
-            case "saphir": return require("../../images/saphir.png")
-            case "emeraude": return require("../../images/emeraude.png")
-            case "amethyste": return require("../../images/amethyste.png")
-            case "tourmaline": return require("../../images/tourmaline.png")
-            case "ambre": return require("../../images/ambre.png")
-            default: return require("../../images/ambre.png")
-        }
-    }
 
     const changeSwitch = id =>{
         fetch('http://localhost:8080/api/edit/notification/' + id, {
@@ -75,11 +65,9 @@ export default function NotificationScreen() {
                                     value={notif.etat}
                                 />
 
+                                    <ImageGemme image={notif.gemme.chemin_image} size="very-tiny"/>
 
-                                    <Image
-                                        style={styles.tinyLogo}
-                                        source={getImage(notif.gemme.chemin_image)}
-                                    />
+
                             </View>
 
                         )
@@ -122,14 +110,7 @@ const styles = StyleSheet.create({
 
     text : {
         fontSize: 15
-    },
-
-    tinyLogo: {
-        width: 30,
-        height: 30,
-    },
-
-
+    }
 })
 
 

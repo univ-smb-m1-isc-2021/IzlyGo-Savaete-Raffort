@@ -27,7 +27,7 @@ export default function InscriptionScreen(){
     const [section, setSection] = useState(1)
 
 
-    const [numero, setNumero] = useState(0)
+    const [numero, setNumero] = useState('0')
     const [nom, setNom] = useState('')
     const [prenom, setPrenom] = useState('')
     const [mail, setMail] = useState('')
@@ -46,7 +46,7 @@ export default function InscriptionScreen(){
 
     const donneFormation = async () => {
         try {
-            const response = await fetch('https://izlygo.herokuapp.com/api/formations');
+            const response = await fetch('http://localhost:8080/api/formations');
             const json = await response.json();
             setFormations(json);
         } catch (error) {
@@ -83,7 +83,7 @@ export default function InscriptionScreen(){
 
         function terminer(){
             const etudiant = {
-                numero: numero,
+                numero: 24000,
                 nom: nom,
                 prenom: prenom,
                 mail: mail,
@@ -91,11 +91,16 @@ export default function InscriptionScreen(){
                 password: password,
                 nombre_points : 0,
                 compte_actif: true,
-                code_parrain: parrainage
+                code_parrain: parrainage,
+                date_inscription: '',
+                nom_icone: 'faFaceSmile',
+                couleur_icone: '#E76967',
+                nom_personnage: "personnage6"
+
             }
 
 
-            fetch('https://izlygo.herokuapp.com/create/student', {
+            fetch('http://localhost:8080/api/create/student', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -104,6 +109,8 @@ export default function InscriptionScreen(){
                 body: JSON.stringify(etudiant)
             }).then(response => response.json())
                 .then(data => {
+                    console.log("datadata")
+                    console.log(data)
                     if(data.succes){
                         connect(data.etudiant.numero)
                     }
