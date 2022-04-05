@@ -80,7 +80,7 @@ export default function MapScreen({miam}) {
 
     function recupereGemme(tirage){
 
-        fetch('http://localhost:8080/api/recupere', {
+        fetch('https://izlygo.herokuapp.com/api/recupere', {
             method: 'POST',
             headers: {
                  Accept: 'application/json',

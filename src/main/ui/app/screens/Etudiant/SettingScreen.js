@@ -126,7 +126,7 @@ const HomeScreen = ({hasBadge, resetBadge}) => {
     const call = async () => {
         const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
 
-        fetch('http://localhost:8080/api/retire-badge/' + numero_etudiant, {
+        fetch('https://izlygo.herokuapp.com/api/retire-badge/' + numero_etudiant, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

@@ -31,7 +31,7 @@ export default function ReductionScreen() {
         try {
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
 
-            const response = await fetch('http://localhost:8080/api/reductions/' + numero_etudiant);
+            const response = await fetch('https://izlygo.herokuapp.com/api/reductions/' + numero_etudiant);
             const json = await response.json();
 
             setReductions(json.reductions);
@@ -49,7 +49,7 @@ export default function ReductionScreen() {
 
     function retirePoints(){
 
-        fetch('http://localhost:8080/api/utilise-reduction/' + etudiant.numero, {
+        fetch('https://izlygo.herokuapp.com/api/utilise-reduction/' + etudiant.numero, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

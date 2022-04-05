@@ -21,7 +21,7 @@ export default function App(){
 
         const FiltreScreen = async () => {
             try {
-                await AsyncStorage.setItem('@url', 'http://localhost:8080')
+                await AsyncStorage.setItem('@url', 'https://izlygo.herokuapp.com/')
 
                 const value = await AsyncStorage.getItem('@numero_etudiant')
                 await setNumero(value)

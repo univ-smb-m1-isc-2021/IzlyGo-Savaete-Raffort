@@ -53,7 +53,7 @@ export default function ModalNouveauMDP(props) {
             mdpConfirmation: '' + mdp_confirmation
         }
 
-        fetch('http://localhost:8080/api/change-mot-de-passe', {
+        fetch('https://izlygo.herokuapp.com/api/change-mot-de-passe', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
