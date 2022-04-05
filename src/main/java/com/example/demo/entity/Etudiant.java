@@ -115,6 +115,9 @@ public class Etudiant{
 
     public String nom_personnage;
 
+
+    public int nombre_badge;
+
 }
 
 

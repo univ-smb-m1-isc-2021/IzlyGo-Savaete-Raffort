@@ -42,5 +42,36 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Integer>, Jp
     @Modifying
     @Query(value = "UPDATE etudiant SET nombre_points = nombre_points + ?2, nombre_points_semaine = nombre_points_semaine + ?2 WHERE numero = ?1", nativeQuery = true)
     void augmenteNombrePoints(int etudiant, int valeur);
+
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE etudiant SET nombre_points = nombre_points - ?2 WHERE numero = ?1", nativeQuery = true)
+    void retirePoints(int etudiant, int nombre);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE etudiant SET nombre_badge = nombre_badge + 1 WHERE numero = ?1", nativeQuery = true)
+    void ajouteBadge(int etudiant);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE etudiant SET nombre_badge = 0 WHERE numero = ?1", nativeQuery = true)
+    void retirerBadge(int etudiant);
+
+
+
+    @Query(value = "SELECT * FROM ETUDIANT where numero = ?1 AND PASSWORD = ?2 LIMIT 1 ",
+            nativeQuery = true)
+    Etudiant checkMDP(int numero, String mdp);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE etudiant SET PASSWORD = ?2 WHERE numero = ?1", nativeQuery = true)
+    void changeMDP(int etudiant, String nouveau_mdp);
+
+
+
+
 }
 

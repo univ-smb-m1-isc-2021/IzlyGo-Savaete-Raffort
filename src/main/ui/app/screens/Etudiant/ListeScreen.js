@@ -19,9 +19,11 @@ export default function ListeScreen() {
         try {
 
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+            const url = await AsyncStorage.getItem('@url')
+
             setNumero(numero_etudiant)
 
-            const response = await fetch('http://localhost:8080/api/inventaire/' + numero_etudiant);
+            const response = await fetch(url + '/api/inventaire/' + numero_etudiant);
             const json = await response.json();
 
             setGemmes(json);

@@ -252,6 +252,7 @@ public class EtudiantController {
 
 
         // GESTION DES SUCCÈS
+        boolean existe_succes_fini = false;
         List<Succes> mesSucces = succesService.donneSuccesEnCours(id_etudiant);
 
         for(Succes succes : mesSucces){
@@ -268,6 +269,8 @@ public class EtudiantController {
                     // On ajoute la récompense dans son inventaire
                     inventaireService.ajouteQuantite(id_etudiant, succes.getChallenge().getGemme_recompense().getId(), succes.getChallenge().getQuantite_recompense());
 
+                    existe_succes_fini = true;
+                    etudiantService.ajouteBadge(id_etudiant);
                     // S'il y a un succès après on le débloque sinon c'est fini
                     Challenge prochain = challengeService.donneProchainChallenge(succes.getChallenge().getId());
                     if (prochain != null){
@@ -280,6 +283,7 @@ public class EtudiantController {
 
         JSONObject json = new JSONObject();
         json.put("alors", true);
+        json.put("existe_succes_fini", existe_succes_fini);
 
         return ResponseEntity.ok(json.toMap());
     }
@@ -295,6 +299,57 @@ public class EtudiantController {
                 .asJson();
         return request.getBody();
     }
+
+
+
+    @PostMapping(path = "/utilise-reduction/{numero}")
+    public ResponseEntity<?> retireLesPoints(@RequestBody Reduction reduction, @PathVariable int numero) {
+        etudiantService.retirePoints(numero, reduction.getPoints_requis());
+
+
+        JSONObject json = new JSONObject();
+        json.put("succes", true);
+        return ResponseEntity.ok(json.toMap());
+
+    }
+
+
+    @PostMapping(path = "/retire-badge/{numero}")
+    public ResponseEntity<?> retireLesPoints(@PathVariable int numero) {
+        etudiantService.retireBadge(numero);
+
+        JSONObject json = new JSONObject();
+        json.put("succes", true);
+        return ResponseEntity.ok(json.toMap());
+
+    }
+
+    @PostMapping(path = "/change-mot-de-passe")
+    public ResponseEntity<?> changeMDP(@RequestBody EditionMDP editionMDP) {
+
+        JSONObject json = new JSONObject();
+
+
+        Etudiant etudiant = etudiantService.checkMDP(editionMDP.getEtudiant(), editionMDP.getMdpActuel());
+
+
+        if (etudiant != null) {
+                etudiantService.changeMDP(editionMDP.getEtudiant(), editionMDP.getMdpNouveau());
+                json.put("response", true);
+
+        }else {
+            json.put("response", false);
+            json.put("other", editionMDP.getMdpActuel());
+            json.put("info_text", "Le mot de passe actuel est faux.");
+        }
+
+
+        return ResponseEntity.ok(json.toMap());
+
+    }
+
+
+
 }
 
 

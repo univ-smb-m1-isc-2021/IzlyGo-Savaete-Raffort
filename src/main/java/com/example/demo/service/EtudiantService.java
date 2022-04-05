@@ -43,4 +43,27 @@ public class EtudiantService {
     public void augmenteNombrePoints(int etudiant, int valeur){
         etudiantRepository.augmenteNombrePoints(etudiant, valeur);
     }
+
+
+    public void retirePoints(int etudiant, int nombre){
+        etudiantRepository.retirePoints(etudiant, nombre);
+    }
+
+
+    public void ajouteBadge(int etudiant){
+        etudiantRepository.ajouteBadge(etudiant);
+    }
+
+    public void retireBadge(int etudiant){
+        etudiantRepository.retirerBadge(etudiant);
+    }
+
+
+    public Etudiant checkMDP(int etudiant, String mdp){
+        return etudiantRepository.checkMDP(etudiant, mdp);
+    }
+
+    public void changeMDP(int etudiant, String nouveau_mdp){
+        etudiantRepository.changeMDP(etudiant, nouveau_mdp);
+    }
 }

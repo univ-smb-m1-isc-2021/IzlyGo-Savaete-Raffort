@@ -22,8 +22,9 @@ export default function SuccesScreen() {
         try {
 
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+            const url = await AsyncStorage.getItem('@url')
 
-            const response = await fetch('http://localhost:8080/api/succes/' + numero_etudiant);
+            const response = await fetch(url + '/api/succes/' + numero_etudiant);
             const json = await response.json();
 
             setSucces(json.succes);

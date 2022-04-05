@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import {StyleSheet, View} from 'react-native';
+import {NativeModules, StyleSheet, View} from 'react-native';
 
 import InscriptionScreen from "./app/screens/Etudiant/InscriptionScreen";
 import ConnexionScreen from "./app/screens/Etudiant/ConnexionScreen";
@@ -21,6 +21,8 @@ export default function App(){
 
         const FiltreScreen = async () => {
             try {
+                await AsyncStorage.setItem('@url', 'http://localhost:8080')
+
                 const value = await AsyncStorage.getItem('@numero_etudiant')
                 await setNumero(value)
             } catch(e) {

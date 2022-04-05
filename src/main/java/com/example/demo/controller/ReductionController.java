@@ -46,11 +46,27 @@ public class ReductionController {
 
         JSONObject json = new JSONObject();
 
+        JSONArray array_reduction = new JSONArray();
 
-        List<Reduction> reductions = reductionService.donneToutesLesReductions();
-        json.put("reductions", reductions);
 
+        List<Reduction> reductions = reductionService.donneToutesLesReductions(true);
         Etudiant etu = etudiantService.getEtudiant(numero);
+
+
+        for(Reduction reduction : reductions){
+            JSONObject info = new JSONObject();
+
+            info.put("entreprise", reduction.getEntreprise());
+            info.put("points_requis", reduction.getPoints_requis());
+            info.put("libelle", reduction.getLibelle());
+
+            info.put("accessible", etu.getNombre_points() >= reduction.getPoints_requis() ? true : false);
+
+            array_reduction.put(info);
+        }
+
+        json.put("reductions", array_reduction);
+
 
         int nombre_points = etu.getNombre_points();
         double nombre_euros = nombre_points * CONVERSION;

@@ -1,4 +1,15 @@
-import {StyleSheet, View, Image, Text, Alert, ActivityIndicator, SafeAreaView, Modal, Pressable} from "react-native";
+import {
+    StyleSheet,
+    View,
+    Image,
+    Text,
+    Alert,
+    ActivityIndicator,
+    SafeAreaView,
+    Modal,
+    Pressable,
+    Button
+} from "react-native";
 import MapView from "react-native-maps";
 import Marker from "react-native-maps";
 import React, {useEffect, useState} from "react";
@@ -16,12 +27,18 @@ import * as Location from 'expo-location';
 import AppLoading from 'expo-app-loading'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ImageGemme from "../../components/ImageGemme";
+import SuccesModal from "../../components/Modal/SuccesModal";
+import AjoutGemmeModal from "../../components/Modal/AjoutGemmeModal";
+
+import * as Haptics from 'expo-haptics';
+
+export default function MapScreen({miam}) {
 
 
-export default function MapScreen() {
-
-
-
+    function sleep(time){
+        return new Promise((resolve)=>setTimeout(resolve,time)
+        )
+    }
 
     const [points, setPoints] = useState([]);
 
@@ -31,6 +48,8 @@ export default function MapScreen() {
     const [refresh, setRefresh] = useState(false)
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalSucces, setModalSucces] = useState(false);
+    const [modalGemme, setModalGemme] = useState(false);
     const [tirageSelection, setTirageSelection] = useState(null);
 
     const [location, setLocation] = useState(null);
@@ -45,9 +64,10 @@ export default function MapScreen() {
     const donneGemmes = async () => {
         try {
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+            const url = await AsyncStorage.getItem('@url')
             setNumero(numero_etudiant)
 
-            const response = await fetch('http://localhost:8080/api/tirage/' + numero_etudiant);
+            const response = await fetch(url + '/api/tirage/' + numero_etudiant);
             const json = await response.json();
 
             setPoints(json);
@@ -69,9 +89,31 @@ export default function MapScreen() {
             body: JSON.stringify({chaine: tirage.chaine, id_etudiant: numero})
         }).then(response => response.json())
             .then(data => {
+                if (true){
+                    setModalGemme(true)
+                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+                    sleep(2000).then(()=>{
+                        setModalGemme(false)
+                        console.log("data.existe_succes_fini")
+                        console.log(data)
+
+
+                        if (data.existe_succes_fini == true){
+                            miam()
+
+                            setModalSucces(true)
+                            sleep(3000).then(()=>{
+                                setModalSucces(false)
+                            })
+                        }
+                    })
+                }
+
                 setRefresh(!refresh)
+
             });
     }
+
 
     useEffect(() =>  {
 
@@ -88,6 +130,10 @@ export default function MapScreen() {
         })();
 
 
+        console.log("dorefresh")
+        //miam()
+        //console.log(doRefresh)
+
         donneGemmes();
     }, [refresh, modalVisible]);
 
@@ -99,11 +145,19 @@ export default function MapScreen() {
 
         <SafeAreaView style={styles.all}>
 
+
+
+
             <Clock childToParent={childToParent}></Clock>
+
+            <SuccesModal visibility={modalSucces}></SuccesModal>
+            <AjoutGemmeModal visibility={modalGemme} gemme={tirageSelection != null ?tirageSelection.gemme : ''}></AjoutGemmeModal>
 
 
             {
                 tirageSelection != null &&
+
+
 
                 <Modal animationType="slide"
                        transparent={true}
@@ -113,7 +167,7 @@ export default function MapScreen() {
                     <View style={stylesModal.centeredView}>
                         <View style={stylesModal.modalView}>
 
-                            <Pressable style={{ position: 'absolute', right: 0, padding: 20 }}  onPress={() => { setModalVisible(!modalVisible) }}>
+                            <Pressable style={{ position: 'absolute', right: 0, padding: 20 }}  onPress={() => { setModalVisible(!modalVisible), Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium) }}>
                                 <Text style={{color: "gray", fontSize: 30}}>X</Text>
                             </Pressable>
 
@@ -163,9 +217,9 @@ export default function MapScreen() {
                         <ActivityIndicator size="large" color="#2c3e50"/>
                     </SafeAreaView>
 
-                    : loading && points.existe ?
+                    : loading  ?
 
-                        <MapView style={styles.map} region={{
+                        <MapView style={styles.map} mapType={"standard"} region={{
                             latitude: location.coords.latitude,
                             longitude: location.coords.longitude,
                             latitudeDelta: 0.0012,
@@ -179,7 +233,7 @@ export default function MapScreen() {
                                     <MapView.Marker
                                         key={pt.latitude}
                                         coordinate={{ latitude : pt.latitude , longitude :pt.longitude }}
-                                        onPress={() => {setModalVisible(true), setTirageSelection(pt)} /*markerClick(pt)*/}
+                                        onPress={() => {setModalVisible(true), setTirageSelection(pt), Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)} /*markerClick(pt)*/}
                                     >
                                         <ImageGemme image={pt.gemme.chemin_image} size="very-tiny"/>
                                     </MapView.Marker>
@@ -313,6 +367,20 @@ const stylesModal = StyleSheet.create({
         backgroundColor: "white",
         borderRadius: 20,
         padding: 35,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+
+    modalView2: {
+        marginHorizontal: 30,
+        backgroundColor: "white",
+        borderRadius: 20,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

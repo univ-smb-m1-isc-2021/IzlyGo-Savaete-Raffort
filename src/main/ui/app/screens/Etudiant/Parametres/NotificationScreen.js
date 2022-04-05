@@ -6,6 +6,8 @@ import TitleText from "../../../components/TitleText"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ImageGemme from "../../../components/ImageGemme";
 
+
+
 export default function NotificationScreen() {
     const [change, setChange] = useState(false);
     const [notifications, setNotifications] = useState([]);
@@ -14,8 +16,9 @@ export default function NotificationScreen() {
         try {
 
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+            const url = await AsyncStorage.getItem('@url')
 
-            const response = await fetch('http://localhost:8080/api/notifications/' + numero_etudiant);
+            const response = await fetch( url + '/api/notifications/' + numero_etudiant);
             const json = await response.json();
 
             setNotifications(json);

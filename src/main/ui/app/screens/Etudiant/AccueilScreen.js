@@ -6,6 +6,7 @@ import ConnexionScreen from "./ConnexionScreen";
 import {NavigationContainer} from "@react-navigation/native";
 import { Video, AVPlaybackStatus } from 'expo-av';
 import {AVPlaybackNativeSource} from "expo-av/build/Video";
+import * as Haptics from "expo-haptics";
 
 const Stack = createNativeStackNavigator()
 
@@ -27,6 +28,16 @@ export default function AccueilScreen() {
         };
     };
 
+    const styles = StyleSheet.create({
+        back: {
+            fontFamily: 'Dosis_700Bold',
+        },
+        title : {
+            fontFamily: 'Dosis_700Bold',
+            fontSize: 20
+        }
+    })
+
     return (
         <NavigationContainer>
             <Stack.Navigator>
@@ -36,7 +47,14 @@ export default function AccueilScreen() {
                         component={HomeScreen}
                         options={{ title: 'Accueil', headerShown: false }}
                     />
-                    <Stack.Screen name="Connexion" component={ConnexionScreen}/>
+                    <Stack.Screen name="Connexion" component={ConnexionScreen}  options={{
+                        headerBackTitle: 'Retour',
+                        headerBackTitleStyle: styles.back,
+                        headerTitleStyle: styles.title,
+
+
+
+                    }}/>
                     <Stack.Screen name="Inscription" component={InscriptionScreen} />
             </Stack.Navigator>
 
@@ -44,6 +62,9 @@ export default function AccueilScreen() {
 
        // <ConnexionScreen></ConnexionScreen>
     );
+
+
+
 }
 
 
@@ -65,13 +86,13 @@ const HomeScreen = ({ navigation }) => {
 
 
             <View>
-                <TouchableHighlight  onPress={() => navigation.navigate('Connexion')}  underlayColor="#EEEEEE">
+                <TouchableHighlight  onPress={() => {Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium), navigation.navigate('Connexion')}}  underlayColor="#EEEEEE">
                     <View style={styles.vue_bouton}>
                         <Text style={styles.texte_bouton}>Connexion</Text>
                     </View>
                 </TouchableHighlight>
 
-                <TouchableHighlight  onPress={() => navigation.navigate('Inscription' )} underlayColor="#EEEEEE">
+                <TouchableHighlight  onPress={() => {Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium), navigation.navigate('Inscription' )}} underlayColor="#EEEEEE">
                     <View style={styles.vue_bouton}>
                         <Text style={styles.texte_bouton}>Créer un compte</Text>
 

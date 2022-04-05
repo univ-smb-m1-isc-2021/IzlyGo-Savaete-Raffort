@@ -16,8 +16,12 @@ public class ReductionService {
         this.reductionRepository = reductionRepository;
     }
 
-    public List<Reduction> donneToutesLesReductions() {
-        return reductionRepository.findAll();
+    public List<Reduction> donneToutesLesReductions(boolean asc) {
+        if(asc){
+            return reductionRepository.orderByPointsASC();
+        }else {
+            return reductionRepository.orderByPointsDESC();
+        }
     }
 
 

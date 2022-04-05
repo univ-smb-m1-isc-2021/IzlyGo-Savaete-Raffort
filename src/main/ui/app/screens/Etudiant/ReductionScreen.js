@@ -21,6 +21,7 @@ export default function ReductionScreen() {
     const [reductions, setReductions] = useState([]);
     const [etudiant, setEtudiant] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [refresh, setRefresh] = useState(false);
 
     const [modalVisible, setModalVisible] = useState(false);
     const [reductionSelection, setReductionSelection] = useState(null);
@@ -43,24 +44,22 @@ export default function ReductionScreen() {
     }
 
     useEffect(() => {
-            donnesLesReductions();
+        donnesLesReductions();
+    }, [isLoading,refresh]);
 
-    }, [isLoading]);
+    function retirePoints(){
 
-    const alertUsePoints = (reduction, etudiant) => {
-        Alert.alert(
-            "" + reduction.entreprise.nom,
-            "Voulez vous utilisez " + reduction.points_requis + " points ?",
-            [
-                {
-                    text: "Annuler", style: "cancel"
-                },
-                {
-                    text: "Oui", style: "default", onPress: () => {
-                    }
-                }
-            ]
-        );
+        fetch('http://localhost:8080/api/utilise-reduction/' + etudiant.numero, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reductionSelection)
+        }).then(response => response.json())
+            .then(data => {
+                setRefresh(!refresh)
+            });
     }
 
 
@@ -80,15 +79,26 @@ export default function ReductionScreen() {
                 <View style={stylesModal.centeredView}>
                     <View style={stylesModal.modalView}>
 
+                        <Text style={stylesModal.title_modal}> {  reductionSelection != null ? reductionSelection.entreprise.nom : ''}</Text>
 
                         <Text style={stylesModal.modalText}>Voulez vous utilisez { reductionSelection != null ? reductionSelection.points_requis : '' } points ?</Text>
 
-                        <Pressable
-                            style={[stylesModal.button, stylesModal.buttonClose]}
-                            onPress={() => setModalVisible(!modalVisible)}
-                        >
-                            <Text style={stylesModal.textStyle}>Fermer</Text>
-                        </Pressable>
+                        <View style={{flexDirection: "row"}}>
+                            <Pressable
+                                style={[stylesModal.button, stylesModal.buttonClose]}
+                                onPress={() => setModalVisible(!modalVisible)}
+                            >
+                                <Text style={stylesModal.textStyle}>Fermer</Text>
+                            </Pressable>
+
+                            <Pressable
+                                style={[stylesModal.button, stylesModal.buttonClose]}
+                                onPress={() => {setModalVisible(!modalVisible), retirePoints()}}
+                            >
+                                <Text style={stylesModal.textStyle}>Utiliser</Text>
+                            </Pressable>
+                        </View>
+
                     </View>
                 </View>
             </Modal>
@@ -109,8 +119,8 @@ export default function ReductionScreen() {
                             {
                                 reductions.map((reduction, i) => {
                                     return (
-                                        <TouchableHighlight  key={i} onPress={() => {setReductionSelection(reduction), setModalVisible(true)}} underlayColor="white">
-                                            <View style={styles.view_reduction}>
+                                        <TouchableHighlight  key={i} onPress={() => reduction.accessible ? (setReductionSelection(reduction), setModalVisible(true)) : ''} underlayColor="white">
+                                            <View style={[styles.view_reduction, !reduction.accessible ? styles.non_accessible : '' ]}>
                                                 <View style={styles.row}>
                                                     <View style={[styles.view_point, styles.view_tag]}>
                                                         <Text style={styles.text_point}>{reduction.points_requis} points</Text>
@@ -255,6 +265,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         height: 15
     },
+
+    non_accessible: {
+        opacity: 0.7
+    }
 });
 
 
@@ -334,7 +348,16 @@ const stylesModal = StyleSheet.create({
     },
     modalText: {
         marginBottom: 15,
-        textAlign: "center"
+        textAlign: "center",
+        fontFamily: "Dosis_600SemiBold",
+        fontSize: 20
+    },
+
+    title_modal: {
+        textAlign: "center",
+        fontFamily: "Dosis_200ExtraLight",
+        fontSize: 25,
+        paddingBottom: 20
     }
 });
 

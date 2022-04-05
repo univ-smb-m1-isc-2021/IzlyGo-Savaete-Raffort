@@ -24,18 +24,35 @@ import React, {useEffect, useState} from "react";
 import ConnexionScreen from "./ConnexionScreen";
 import TabEtudiant from "./TabEtudiant";
 import ImagePersonnage from "../../components/ImagePersonnage";
+import * as Haptics from "expo-haptics";
+import {useNavigation} from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
 
-export default function SettingScreen() {
+export default function SettingScreen(props) {
+
+    const [badge, setBadge] = useState(false);
+
+    const resetBadge2 = () => {
+        props.resetBadge()
+    }
+
+    useEffect(() =>  {
+        console.log("YA UN BADGE DANS SETTING ?")
+        console.log(props.hasBadge)
+        setBadge(props.hasBadge)
+
+    }, [badge]);
     return (
 
         <Stack.Navigator>
             <Stack.Screen
                 name="Home"
-                component={HomeScreen}
                 options={{ title: 'Paramètres', headerShown: false }}
-            />
+            >
+                {props => <HomeScreen hasBadge={badge} resetBadge={resetBadge2}/> }
+
+            </Stack.Screen>
             <Stack.Screen name="Profil" component={ProfilScreen} />
             <Stack.Screen name="Succès" component={SuccesScreen} />
             <Stack.Screen name="Notifications" component={NotificationScreen} />
@@ -49,18 +66,45 @@ export default function SettingScreen() {
 
 
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({hasBadge, resetBadge}) => {
+
+    const navigation = useNavigation();
+
+
+    const [badge, setBagde] = useState(false);
+    const [liste_choix, setListe] = useState([]);
+
+
+    useEffect(() =>  {
+        console.log("YA UN BADGE DANS HHOME ?")
+        console.log(hasBadge)
+
+
+        setBagde(hasBadge)
+
+        setListe([
+            {icon : faUser, nom : "Profil", tag: false, operate: true},
+            {icon : faBell, nom : "Notifications", tag : false, operate: true},
+            {icon : faCircleCheck, nom : "Succès", tag: badge, operate: true},
+            {icon : faRankingStar, nom : "Classement", tag: false, operate: false},
+            {icon : faHandshakeSimple, nom : "Parrainage", tag: false, operate: true}
+        ])
+
+    }, [hasBadge]);
 
 
     const [numero, setNumero] = useState(null);
     const [etudiant, setEtudiant] = useState({});
 
+
     const donneEtudiant = async () => {
         try {
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+            const url = await AsyncStorage.getItem('@url')
+
             setNumero(numero_etudiant)
 
-            const response = await fetch('http://localhost:8080/api/profil/' + numero_etudiant);
+            const response = await fetch(url + '/api/profil/' + numero_etudiant);
             const json = await response.json();
 
             setEtudiant(json);
@@ -72,13 +116,25 @@ const HomeScreen = ({ navigation }) => {
     }
 
 
-    const liste_choix = [
-        {icon : faUser, nom : "Profil"},
-        {icon : faBell, nom : "Notifications"},
-        {icon : faCircleCheck, nom : "Succès"},
-        {icon : faRankingStar, nom : "Classement"},
-        {icon : faHandshakeSimple, nom : "Parrainage"}
-    ]
+    const retirerBagde = () => {
+        resetBadge()
+        setBagde(false)
+        call()
+    }
+
+
+    const call = async () => {
+        const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+
+        fetch('http://localhost:8080/api/retire-badge/' + numero_etudiant, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: {}
+        })
+    }
 
 
 
@@ -103,12 +159,21 @@ const HomeScreen = ({ navigation }) => {
             {
                 liste_choix.map((choix,i) => {
                     return(
-                        <View style={styles.un_parametre} key={i} >
+                        <View style={[styles.un_parametre, !choix.operate ? styles.no_operate : '' ]} key={i} >
                             <FontAwesomeIcon icon={choix.icon}  color={"black"} size={ 20 }/>
 
-                            <TouchableHighlight  onPress={() => navigation.navigate(choix.nom)} underlayColor="white">
+                            <TouchableHighlight  onPress={() => {
+                                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium),
+                                    choix.tag ? retirerBagde() : '' ,
+                                    choix.operate ? navigation.navigate(choix.nom) : ''
+                                }} underlayColor="white">
                                 <View style={styles.button}>
-                                    <Text style={styles.buttonText}>{choix.nom}</Text>
+                                    <Text style={styles.buttonText}>{choix.nom} {!choix.operate ? "(En travaux)" : ''}</Text>
+                                    { choix.tag && (
+                                        <View style={styles.tag_nouveau}>
+                                            <Text style={{color: "white", fontFamily: "Dosis_800ExtraBold"}}>NOUVEAU</Text>
+                                        </View>
+                                    )}
                                 </View>
                             </TouchableHighlight>
 
@@ -147,6 +212,9 @@ const HomeScreen = ({ navigation }) => {
 
 
 const AlertDeconnexion = () => {
+
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning)
+
     Alert.alert(
         "Déconnexion",
         "Êtes-vous sûr de vouloir vous déconnecter ?",
@@ -230,7 +298,7 @@ const styles = StyleSheet.create({
 
     buttonText : {
         marginLeft: 20,
-        fontSize: 20,
+        fontSize: 18,
         color: "#5D5C5D",
         fontFamily: "Dosis_400Regular"
     },
@@ -253,6 +321,24 @@ const styles = StyleSheet.create({
     nom : {
         color: "white",
         textAlign: "center"
+    },
+
+    tag_nouveau: {
+        backgroundColor: '#E76967',
+        color: 'white',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 10,
+        position: 'relative',
+        marginLeft: 20
+    },
+
+    button: {
+        flexDirection: "row"
+    },
+
+    no_operate: {
+        opacity: 0.5
     }
 })
 

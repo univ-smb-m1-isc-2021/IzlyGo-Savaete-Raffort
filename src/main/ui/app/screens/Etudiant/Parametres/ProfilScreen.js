@@ -1,93 +1,84 @@
-import {StyleSheet, Text, View, TextInput, Button, Image, NativeModules, ScrollView, TouchableHighlight} from 'react-native';
+import {StyleSheet, Text, View, TextInput, Button, Image, NativeModules, ScrollView, TouchableHighlight, Modal, Pressable, ActivityIndicator} from 'react-native';
 
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import {faFaceAngry, faFaceGrinBeam, faFaceFlushed, faGrinHearts, faGrinStars, faFaceGrinWide, faFaceGrinTongue, faFaceMeh, faFaceLaughWink, faFaceSmileBeam, faFaceSmile, faFaceSadTear} from '@fortawesome/free-solid-svg-icons'
 import React, {useState} from "react";
 import {color} from "react-native-elements/dist/helpers";
+import * as Haptics from "expo-haptics";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import ModalNouveauMDP from "../../../components/Modal/ModalNouveauMDP";
+import ModalNewIcon from "../../../components/Modal/ModalNewIcon";
 
 export default function ProfilScreen() {
 
-    let icons = [ faFaceSmile, faFaceSmileBeam, faFaceGrinBeam, faFaceFlushed, faGrinHearts, faGrinStars, faFaceGrinWide, faFaceGrinTongue, faFaceMeh, faFaceLaughWink, faFaceSadTear, faFaceAngry ]
-    let colors = [ "#E76967", "#82C5F1", "#63D7B9", "#B689E7", "#373F4A", "#EAAE7B", "#f1c40f"  ]
-
-    const [click_icon, setIcon] = useState(-1);
-    const [click_color, setColor] = useState(-1);
-
-    const [my_color, setMyColor] = useState('#f1c40f');
-
-
+    const [modalVisible, setModalVisible] = useState(false);
 
     return (
         <View>
-
-            <View style={styles.view1}>
-                <ScrollView horizontal={true} style={styles.scroll}>
-                    <View style={styles.view_scroll}>
-
-                        {
-                            icons.map((icon, i) => {
-                                return(
-                                    <TouchableHighlight underlayColor="white" onPress={() => {setIcon(i)}} >
-                                        <View style={[styles.view_icon, click_icon == i ? styles.view_border : '']}>
-                                            <FontAwesomeIcon icon={icon}  color={my_color} size={ 50 } />
-                                        </View>
-                                    </TouchableHighlight>
-                                )
-                            })
-                        }
-
-                    </View>
-                </ScrollView>
-
-                <ScrollView horizontal={true} style={styles.scroll}>
-                    <View style={styles.view_scroll}>
-
-                        {
-                            colors.map((color, i) => {
-                                return(
-                                    <TouchableHighlight underlayColor="white" onPress={() => {setColor(i), setMyColor(color)}} >
-                                        <View style={[styles.view_icon, click_color == i ? styles.view_border : '']}>
-                                            <View style={{width: 50, height: 50, borderRadius: 100, backgroundColor: color}}></View>
-                                        </View>
-                                    </TouchableHighlight>
-                                )
-                            })
-                        }
-
-                    </View>
-                </ScrollView>
-            </View>
-
+            <ModalNouveauMDP></ModalNouveauMDP>
+            <ModalNewIcon num={6}></ModalNewIcon>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    scroll: {
-        marginHorizontal: 20,
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
     },
-
-    view1: {
-        borderRadius: 10,
+    modalView: {
+        width: "80%",
         margin: 20,
-        backgroundColor: 'white'
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    button: {
+        borderRadius: 5,
+        padding: 10,
+        marginTop: 10,
+        width: "40%"
 
     },
-
-    view_scroll: {
-        flexDirection: "row",
-        padding: 20
+    buttonOpen: {
+        backgroundColor: "#F194FF",
+    },
+    buttonClose: {
+        backgroundColor: "black",
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    text_modal: {
+        fontFamily: "Dosis_300Light",
+        fontSize: 18,
     },
 
-    view_icon: {
-        paddingHorizontal: 10,
+    input_modal: {
+        backgroundColor: "#EEEEEE",
+        width: "100%",
+        padding: 5,
+        borderRadius: 5,
+        marginVertical: 10
     },
 
-    view_border: {
-        borderWidth: 1,
-        borderColor: "#373F4A",
+    text_probleme_mdp: {
+        fontFamily: "Dosis_300Light",
+        color: "red",
+        marginVertical: 10
     }
-})
-
+});
 

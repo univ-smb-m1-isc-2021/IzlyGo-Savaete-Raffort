@@ -16,8 +16,9 @@ export default function ParrainageScreen() {
         try {
 
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+            const url = await AsyncStorage.getItem('@url')
 
-            const response = await fetch('http://localhost:8080/api/filleuls/' + numero_etudiant);
+            const response = await fetch(url + '/api/filleuls/' + numero_etudiant);
             const json = await response.json();
 
             setFilleuls(json.filleuls);

@@ -363,18 +363,21 @@ const s = StyleSheet.create({
 
 
     bouton_continuer: {
-        backgroundColor: "#EAAE7B",
-        //width: "30%",
+        backgroundColor: "black",
+        width: "50%",
         borderRadius: 10,
         padding: 10,
         marginTop: 10,
-      //  position: "absolute",
+        position: "absolute",
         right: 0
     },
 
     text_bouton: {
         textAlign: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        fontFamily: 'Dosis_700Bold',
+        color: 'white',
+        fontSize: 18
     },
 
     vue_boutons: {

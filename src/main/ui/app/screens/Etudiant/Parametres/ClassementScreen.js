@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import ImagePersonnage from "../../../components/ImagePersonnage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export default function ClassementScreen() {
@@ -18,7 +19,10 @@ export default function ClassementScreen() {
 
     const donnesLeClassement = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/classement/10');
+
+            const url = await AsyncStorage.getItem('@url')
+
+            const response = await fetch(url + '/api/classement/10');
             const json = await response.json();
 
             setClassement(json);
