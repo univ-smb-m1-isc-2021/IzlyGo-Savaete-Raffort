@@ -72,11 +72,8 @@ public class TirageController {
 
                     Gemme gemme = gemmeService.trouveGemme(val);
 
-                    //double lat = getRandomNumber(45.63997, 45.64702);
-                    //double longg = getRandomNumber(5.86445, 5.87571);
-
-                    double lat = getRandomNumber(45.72854, 45.72915);
-                    double longg = getRandomNumber(6.41295, 6.41404);
+                    double lat = getRandomNumber(45.63997, 45.64702);
+                    double longg = getRandomNumber(5.86445, 5.87571);
 
                     int nombre_recup = 0;
 
