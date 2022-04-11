@@ -112,7 +112,10 @@ export default function ReductionScreen() {
                             <Text style={styles.points3}>Soit {etudiant.nombre_euros } €</Text>
                         </View>
 
-                        <Text style={styles.titre_page}>Les réductions</Text>
+                        <Pressable onPress={() => {setRefresh(!refresh)}}
+                        >
+                            <Text style={styles.titre_page}>Les réductions</Text>
+                        </Pressable>
 
                         <ScrollView>
  

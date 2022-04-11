@@ -126,7 +126,7 @@ export default function MapScreen({miam}) {
 
             let location = await Location.getCurrentPositionAsync({});
             setLocation(location);
-            console.log(location.coords.latitude)
+           // console.log(location.coords.latitude)
         })();
 
 
@@ -191,9 +191,10 @@ export default function MapScreen({miam}) {
                                 </View>
                             </View>
 
+
                             {
 
-                                (Math.abs(tirageSelection.latitude - location.coords.latitude) <= 0.0001 && Math.abs(tirageSelection.longitude - location.coords.longitude <= 0.0001)) ?
+                                (Math.abs(tirageSelection.latitude - location.coords.latitude) <= 0.002 && Math.abs(tirageSelection.longitude - location.coords.longitude <= 0.002)) ?
 
                                     <Pressable style={[stylesModal.button, stylesModal.buttonClose, {backgroundColor: '#' + tirageSelection.gemme.couleur }]} onPress={() => { setModalVisible(!modalVisible), recupereGemme(tirageSelection) }}>
                                         <Text style={stylesModal.textStyle}>Récupérer</Text>
@@ -217,7 +218,7 @@ export default function MapScreen({miam}) {
                         <ActivityIndicator size="large" color="#2c3e50"/>
                     </SafeAreaView>
 
-                    : loading  ?
+                    : loading  && location != null ?
 
                         <MapView style={styles.map} mapType={"standard"} region={{
                             latitude: location.coords.latitude,

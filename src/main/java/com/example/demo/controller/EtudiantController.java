@@ -65,6 +65,19 @@ public class EtudiantController {
     TirageService tirageService;
 
 
+    @GetMapping(path = "/triche/{numero}/{gemme}")
+    public ResponseEntity<?> triche(@PathVariable int numero, @PathVariable int gemme) {
+
+        inventaireService.triche(numero, gemme);
+
+        int point = gemme == 1 ? 100 : gemme == 2 ? 80 : 0;
+
+        etudiantService.augmenteNombrePoints(numero, point);
+
+        return ResponseEntity.ok("OK");
+    }
+
+
     @PostMapping(path = "/create/student")
     public ResponseEntity<?> ajouteEtudiantAPI(@RequestBody Etudiant etudiant) {
 
