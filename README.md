@@ -12,14 +12,13 @@ Adrien Raffort & Romain Savaetet
     
 ## Fonctionnalités :
         
-- Je suis un étudiant, je peux créer un compte (nom, prénom, mail, formation précise et numéro étudiant) ou avec Google ou Facebook.
+- Je suis un étudiant, je peux créer un compte (nom, prénom, mail, formation précise et numéro étudiant).
 - L'étudiant peut récupérer des gemmes (voir liste des points et de conversion) qui ont différentes valeurs en nombre de points, sur le campus à différents endroits et à différents moments. 
 - L'étudiant peut utiliser ses points dans les entreprises partenaires pour avoir des réductions.
 - En tant qu'entreprise je peux créer un compte pro (avec adresse mail, SIRET, Numéro TVA)
 - En tant qu'entreprise, je peux proposer 2 choses :
 => Des objets qui seront tirés dans une roue des objets spécifique ( Ex: une bière gratuite)
  => Des réductions avec un certain nombre de points ( Ex: 50% sur les pains aux chocolats pour 750 points)
- - Les étudiants qui iront chercher des gemmes pendant leur période de cours (récupération de leur emploi du temps en fonction de leur formation et de l'heure) auront des pénalités de points. (Pas encore défini) Car l'objectif n'est pas que les étudiants quittent leurs cours pour aller chercher des gemme.
 - Lorsqu'un étudiant se trouve dans la zone de récupération d’une gemme (5m de diamètre) via l'application, une petite publicité de 5s lui sera proposée (financement fictif dans notre cas) avant de récupérer le gemme.
     
 ## Règle :
@@ -31,5 +30,3 @@ Adrien Raffort & Romain Savaetet
 - En termes de conversion points-euros de notre crypto, nous partirons sur 100 points équivaut à 0,25 € soit 400 points pour 1 €.
 
 
-
-JE PEUX TE MODIFIER CHACAL
