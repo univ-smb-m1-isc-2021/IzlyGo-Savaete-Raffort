@@ -191,9 +191,10 @@ export default function MapScreen({miam}) {
                                 </View>
                             </View>
 
+
                             {
 
-                                (Math.abs(tirageSelection.latitude - location.coords.latitude) <= 0.0001 && Math.abs(tirageSelection.longitude - location.coords.longitude <= 0.0001)) ?
+                                (Math.abs(tirageSelection.latitude - location.coords.latitude) <= 0.002 && Math.abs(tirageSelection.longitude - location.coords.longitude <= 0.002)) ?
 
                                     <Pressable style={[stylesModal.button, stylesModal.buttonClose, {backgroundColor: '#' + tirageSelection.gemme.couleur }]} onPress={() => { setModalVisible(!modalVisible), recupereGemme(tirageSelection) }}>
                                         <Text style={stylesModal.textStyle}>Récupérer</Text>
