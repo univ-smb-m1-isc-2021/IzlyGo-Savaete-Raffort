@@ -27,7 +27,7 @@ export default function App(){
                 await setNumero(value)
             } catch(e) {
                 // error reading value
-            } 
+            }
         }
 
 

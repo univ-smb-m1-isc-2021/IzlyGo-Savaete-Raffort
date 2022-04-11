@@ -100,6 +100,12 @@ public class TirageController {
         tirageService.ajouteTirage(2003, jour, 15, 30, 1, 0, 45.64134,
                 5.86927, "GZYGAHJBHJGAZHHZHJHZA");
 
+        tirageService.ajouteTirage(2004, jour, 16, 0, 1, 0, 45.64134,
+                5.86927, "GZYGAHJBHJDDGAZHJGA");
+
+        tirageService.ajouteTirage(2005, jour, 16, 30, 1, 0, 45.64134,
+                5.86927, "GZYGAHJBHJGAZHHZHJHZA");
+
 
         return ResponseEntity.ok("OKAY");
     }

@@ -69,6 +69,11 @@ public class EtudiantController {
     public ResponseEntity<?> triche(@PathVariable int numero, @PathVariable int gemme) {
 
         inventaireService.triche(numero, gemme);
+
+        int point = gemme == 1 ? 100 : gemme == 2 ? 80 : 0;
+
+        etudiantService.augmenteNombrePoints(numero, point);
+
         return ResponseEntity.ok("OK");
     }
 
