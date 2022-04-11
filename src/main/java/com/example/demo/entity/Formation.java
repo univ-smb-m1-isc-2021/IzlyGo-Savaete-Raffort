@@ -31,4 +31,15 @@ public class Formation {
     public String getChemin() {
         return chemin;
     }
+
+
+    public Formation(){}
+
+
+    public Formation(long id, String libelle, String chemin){
+        this.id = id;
+        this.libelle = libelle;
+        this.chemin = chemin;
+    }
+
 }

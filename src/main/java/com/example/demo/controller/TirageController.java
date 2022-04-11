@@ -47,6 +47,8 @@ public class TirageController {
 
         tirageService.detruitTirage();
 
+
+
         int heureDebut = 7;
         int heureFin = 23;
 

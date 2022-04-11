@@ -27,7 +27,7 @@ export default function InscriptionScreen(){
     const [section, setSection] = useState(1)
 
 
-    const [numero, setNumero] = useState('0')
+    const [numero, setNumero] = useState(0)
     const [nom, setNom] = useState('')
     const [prenom, setPrenom] = useState('')
     const [mail, setMail] = useState('')
@@ -83,20 +83,13 @@ export default function InscriptionScreen(){
 
         function terminer(){
             const etudiant = {
-                numero: 24000,
+                numero: numero,
                 nom: nom,
                 prenom: prenom,
                 mail: mail,
                 formation: formations[formation],
                 password: password,
-                nombre_points : 0,
-                compte_actif: true,
                 code_parrain: parrainage,
-                date_inscription: '',
-                nom_icone: 'faFaceSmile',
-                couleur_icone: '#E76967',
-                nom_personnage: "personnage6"
-
             }
 
 

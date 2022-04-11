@@ -77,4 +77,7 @@ public class Tirage{
     public String getChaine() {
         return chaine;
     }
+
+
+    public Tirage(){}
 }

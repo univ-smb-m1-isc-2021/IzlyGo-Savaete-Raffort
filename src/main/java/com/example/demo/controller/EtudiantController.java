@@ -66,32 +66,28 @@ public class EtudiantController {
 
 
     @PostMapping(path = "/create/student")
-    public ResponseEntity<?> ajouteEtudiant(@RequestBody Etudiant etudiant) {
-
-        // Code parrainage
-        String part1 = etudiant.getNom().toUpperCase();
-        String part2 = etudiant.getPrenom().substring(0,2).toUpperCase();
-        String part3 = String.valueOf(getRandomNumberInt(10,99));
-        etudiant.setCodeParrainage(part1 + part2 + part3);
+    public ResponseEntity<?> ajouteEtudiantAPI(@RequestBody Etudiant etudiant) {
 
 
-        // Date d'inscription
-        LocalDateTime now = LocalDateTime.now();
-        String mois = now.getMonth().getDisplayName(TextStyle.FULL, Locale.FRANCE);
-        etudiant.setDateInscription(now.getDayOfMonth() + " " + mois + " " + now.getYear());
 
+
+        Etudiant etu = etudiant.ajouteEtudiant(
+                etudiant.getNumero() + 0,
+                etudiant.getNom() + "",
+                etudiant.getPrenom() + "",
+                etudiant.getPassword() + "",
+                etudiant.getMail() + "",
+                etudiant.getFormation(),
+                null
+        );
 
         // Gestion du parrain s'il y en a un
-        Etudiant parrain = etudiantService.checkCodeParrainage(etudiant.getCodeParrain());
-        if (parrain == null) { etudiant.setCode_parrain(null); }
-        Etudiant etu = etudiantService.saveEtudiant(etudiant);
+        Etudiant parrainpp = etudiantService.checkCodeParrainage(etu.getCodeParrain());
 
-        if (parrain != null) {
-            parrainageService.ajouteLigne(etu.getNumero(), parrain.getNumero());
-            inventaireService.ajouteQuantite(parrain.getNumero(), 3 /* Émeraude */, 3);
-            inventaireService.ajouteQuantite(etudiant.getNumero(), 2 /* Saphir */, 2); // TODO
+        etudiantService.saveEtudiant(etu);
 
-        }
+
+
 
         // Set la liste des gemmes dans l'inventaire
         List<Gemme> gemmes = gemmeService.donneListeGemmes();
@@ -124,7 +120,36 @@ public class EtudiantController {
 
 
         return ResponseEntity.ok(json.toMap());
+    }
 
+
+    public Etudiant ajouteEtudiant(Etudiant etudiant){
+        // Code parrainage
+        String part1 = etudiant.getNom().toUpperCase();
+        String part2 = etudiant.getPrenom().substring(0,2).toUpperCase();
+        String part3 = String.valueOf(getRandomNumberInt(10,99));
+        etudiant.setCodeParrainage(part1 + part2 + part3);
+
+
+        // Date d'inscription
+        LocalDateTime now = LocalDateTime.now();
+        String mois = now.getMonth().getDisplayName(TextStyle.FULL, Locale.FRANCE);
+        etudiant.setDateInscription(now.getDayOfMonth() + " " + mois + " " + now.getYear());
+
+
+        // Gestion du parrain s'il y en a un
+        Etudiant parrain = etudiantService.checkCodeParrainage(etudiant.getCodeParrain());
+        if (parrain == null) { etudiant.setCode_parrain(null); }
+
+        Etudiant etu = etudiantService.saveEtudiant(etudiant);
+
+        if (parrain != null) {
+            parrainageService.ajouteLigne(etu.getNumero(), parrain.getNumero());
+            inventaireService.ajouteQuantite(parrain.getNumero(), 3 /* Émeraude */, 3);
+            inventaireService.ajouteQuantite(etudiant.getNumero(), 2 /* Saphir */, 2); // TODO
+        }
+
+        return etu;
     }
 
 
