@@ -35,12 +35,14 @@ public class SuccesController {
 
         List<Succes> les_succes = succesService.donneMesSucces(numero);
 
-        int etoile = 0;
 
         JSONObject json = new JSONObject();
         JSONArray json_succes = new JSONArray();
 
         for (Succes succes : les_succes){
+
+            int etoile = 0;
+
 
             JSONObject info = new JSONObject();
 

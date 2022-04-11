@@ -4,6 +4,7 @@ import TabEtudiant from "./TabEtudiant";
 import React, {useEffect} from "react";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import InscriptionScreen from "./InscriptionScreen";
+import * as Haptics from "expo-haptics";
 
 
 
@@ -15,12 +16,12 @@ export default function ConnexionScreen() {
     const [mail, changeMail] = React.useState(null);
     const [password, changePassword] = React.useState(null);
 
-    const [error, setError] = React.useState('');
+    const [hasError, setHasError] = React.useState(false);
 
 
     const connexion = () => {
 
-        fetch('http://localhost:8080/api/connexion', {
+        fetch('https://izlygo.herokuapp.com/api/connexion', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -36,7 +37,8 @@ export default function ConnexionScreen() {
                     console.log("ok")
                     connect(data.numero)
                 }else {
-                    setError("Les informations entrées sont incorrectes ou inexistantes.")
+                    setHasError(true)
+                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
                 }
 
             });
@@ -56,47 +58,44 @@ export default function ConnexionScreen() {
         <View style={styles.o}>
 
 
-
-            <View style={styles.vue_uneLigne}>
+            <View style={[styles.vue_uneLigne]}>
                 <Text style={styles.nom_input}>Votre adresse mail</Text>
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, hasError ? styles.error : '']}
                     placeholder={"Ex: magalie.dupont@etu.univ-smb.fr"}
                     onChangeText={changeMail}
                     value={mail}
                     autoCapitalize='none'
                     autoComplete='off'
-                    autoCorrect='false'
                 />
             </View>
 
             <View style={styles.vue_uneLigne}>
                 <Text style={styles.nom_input}>Votre mot de passe</Text>
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, hasError ? styles.error : '']}
                     placeholder={"Mot de passe"}
-                    onChangeText={changePassword}
+                    onChangeText={ changePassword }
                     value={password}
                     autoCapitalize='none'
                     autoComplete='off'
-                    autoCorrect='false'
+                    secureTextEntry={true}
                 />
             </View>
 
-
-            <Text style={styles.text_requis}>{error}</Text>
-
-
-
+            {hasError && <Text style={styles.text_requis}>Les informations entrées sont incorrectes ou inexistantes.</Text> }
 
             <TouchableHighlight underlayColor="white" onPress={() => connexion()}>
                 <View style={styles.bouton_continuer}>
                     <Text style={styles.text_bouton}>Connexion</Text>
                 </View>
-            </TouchableHighlight>
+                </TouchableHighlight>
 
 
-            <Button title="Mot de passe oublié ?"/>
+
+
+
+
         </View>
     );
 
@@ -109,22 +108,24 @@ export default function ConnexionScreen() {
 
 const styles = StyleSheet.create({
     o : {
-        paddingTop: 100,
         paddingHorizontal: "10%",
         backgroundColor: "white",
         height: "100%",
-        width: "100%"
+        width: "100%",
+        paddingTop: "30%",
 
     },
+
+
 
     vue_uneLigne: {
         marginVertical: 10
     },
 
     nom_input: {
-        fontWeight: "bold",
-        fontSize: 15,
+        fontSize: 20,
         marginBottom: 10,
+        fontFamily: "Dosis_700Bold"
     },
 
     input: {
@@ -135,26 +136,36 @@ const styles = StyleSheet.create({
     },
 
     bouton_continuer: {
-        backgroundColor: "#EAAE7B",
-        //width: "30%",
+        backgroundColor: "black",
+        width: "50%",
         borderRadius: 10,
         padding: 10,
         marginTop: 10,
-        //  position: "absolute",
+        position: "absolute",
         right: 0
     },
 
     text_bouton: {
         textAlign: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        color: "white",
+        fontFamily: "Dosis_700Bold",
+        fontSize: 18
     },
 
 
     text_requis: {
-        fontSize: 10,
+        fontSize: 14,
+        marginBottom: 20,
         color: "red",
-        textAlign: "center"
+        textAlign: "center",
+        fontFamily: 'Dosis_400Regular'
     },
+
+    error: {
+        borderWidth: 2,
+        borderColor: 'red'
+    }
 })
 
 

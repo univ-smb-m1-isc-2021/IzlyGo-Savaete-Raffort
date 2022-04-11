@@ -8,8 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faStar as ETOILE_PLEINE } from '@fortawesome/free-solid-svg-icons'
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 import { faStar as ETOILE_VIDE } from '@fortawesome/free-regular-svg-icons'
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ImageGemme from "../../../components/ImageGemme";
 
 
 export default function SuccesScreen() {
@@ -21,8 +22,9 @@ export default function SuccesScreen() {
         try {
 
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+            const url = await AsyncStorage.getItem('@url')
 
-            const response = await fetch('http://localhost:8080/api/succes/' + numero_etudiant);
+            const response = await fetch(url + '/api/succes/' + numero_etudiant);
             const json = await response.json();
 
             setSucces(json.succes);
@@ -39,20 +41,6 @@ export default function SuccesScreen() {
     useEffect(() => {
         donnesLesSucces();
     }, [loading]);
-
-
-    const getImage = name => {
-        switch (name) {
-            case "rubis": return require("../../images/rubis.png")
-            case "saphir": return require("../../images/saphir.png")
-            case "emeraude": return require("../../images/emeraude.png")
-            case "amethyste": return require("../../images/amethyste.png")
-            case "tourmaline": return require("../../images/tourmaline.png")
-            case "ambre": return require("../../images/ambre.png")
-            default: return require("../../images/ambre.png")
-        }
-    }
-
 
     return (
         <View style={styles.view_globale}>
@@ -91,10 +79,9 @@ export default function SuccesScreen() {
                                 <>
                                     {suc.etoile < 3 ?   <View style={styles.view_recompense}>
                                         <Text style={styles.text_recompense}>{suc.quantite_recompense}</Text>
-                                        <Image
-                                            style={styles.tinyLogo}
-                                            source={getImage(suc.gemme.chemin_image)}
-                                        />
+
+                                        <ImageGemme image={suc.gemme.chemin_image} size="very-tiny"/>
+
                                     </View> : <FontAwesomeIcon icon={faCircleCheck}  color={"#EAAE7B"} size={ 40 } /> }
                                 </>
 

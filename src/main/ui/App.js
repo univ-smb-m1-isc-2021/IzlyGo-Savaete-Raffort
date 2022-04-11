@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import {StyleSheet, View} from 'react-native';
+import {NativeModules, StyleSheet, View} from 'react-native';
 
 import InscriptionScreen from "./app/screens/Etudiant/InscriptionScreen";
 import ConnexionScreen from "./app/screens/Etudiant/ConnexionScreen";
@@ -21,6 +21,8 @@ export default function App(){
 
         const FiltreScreen = async () => {
             try {
+                await AsyncStorage.setItem('@url', 'https://izlygo.herokuapp.com/')
+
                 const value = await AsyncStorage.getItem('@numero_etudiant')
                 await setNumero(value)
             } catch(e) {
@@ -46,16 +48,6 @@ export default function App(){
         return <AppLoading />;
     }
 
-
-       /* if(nombre ==1){
-            retour = <InscriptionScreen></InscriptionScreen>
-        }else if (nombre == 2) {
-            retour = <TabEtudiant></TabEtudiant>
-        }else if (nombre == 3){
-            retour = <TabEntreprise></TabEntreprise>
-        }else if (nombre == 4){
-            retour = <ConnexionScreen></ConnexionScreen>
-        }*/
 
         return (
             <View style={superStyle.view}>

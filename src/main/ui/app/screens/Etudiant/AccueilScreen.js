@@ -1,11 +1,13 @@
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import InscriptionScreen from "./InscriptionScreen";
-import {StyleSheet, Text, TouchableHighlight, View, ActivityIndicator} from "react-native";
+import {StyleSheet, Text, TouchableHighlight, View, ActivityIndicator, NativeModules} from "react-native";
 import React, {useEffect} from "react";
 import ConnexionScreen from "./ConnexionScreen";
 import {NavigationContainer} from "@react-navigation/native";
 import { Video, AVPlaybackStatus } from 'expo-av';
 import {AVPlaybackNativeSource} from "expo-av/build/Video";
+import * as Haptics from "expo-haptics";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator()
 
@@ -27,6 +29,16 @@ export default function AccueilScreen() {
         };
     };
 
+    const styles = StyleSheet.create({
+        back: {
+            fontFamily: 'Dosis_700Bold',
+        },
+        title : {
+            fontFamily: 'Dosis_700Bold',
+            fontSize: 20
+        }
+    })
+
     return (
         <NavigationContainer>
             <Stack.Navigator>
@@ -36,7 +48,14 @@ export default function AccueilScreen() {
                         component={HomeScreen}
                         options={{ title: 'Accueil', headerShown: false }}
                     />
-                    <Stack.Screen name="Connexion" component={ConnexionScreen}/>
+                    <Stack.Screen name="Connexion" component={ConnexionScreen}  options={{
+                        headerBackTitle: 'Retour',
+                        headerBackTitleStyle: styles.back,
+                        headerTitleStyle: styles.title,
+
+
+
+                    }}/>
                     <Stack.Screen name="Inscription" component={InscriptionScreen} />
             </Stack.Navigator>
 
@@ -44,6 +63,9 @@ export default function AccueilScreen() {
 
        // <ConnexionScreen></ConnexionScreen>
     );
+
+
+
 }
 
 
@@ -53,7 +75,14 @@ const HomeScreen = ({ navigation }) => {
     const [status, setStatus] = React.useState({});
     const [isLoad, setLoading] = React.useState(false);
 
-
+    const connect = async (numero) => {
+        try {
+            await AsyncStorage.setItem('@numero_etudiant', JSON.stringify(numero))
+            NativeModules.DevSettings.reload();
+        } catch (e) {
+            // error reading value
+        }
+    }
 
     useEffect(() => {
         //video.current.playAsync()
@@ -65,13 +94,29 @@ const HomeScreen = ({ navigation }) => {
 
 
             <View>
-                <TouchableHighlight  onPress={() => navigation.navigate('Connexion')}  underlayColor="#EEEEEE">
+
+                <View style={{flexDirection: 'row', justifyContent: "space-around"}}>
+                    <TouchableHighlight style={{width: '50%'}}  onPress={() => {Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium), connect(123)}} underlayColor="#EEEEEE">
+                        <View style={styles.vue_bouton}>
+                            <Text style={styles.texte_bouton}>Adrien RAFFORT</Text>
+                        </View>
+                    </TouchableHighlight>
+
+
+                    <TouchableHighlight style={{width: '50%'}}  onPress={() => {Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium), connect(456)}} underlayColor="#EEEEEE">
+                        <View style={styles.vue_bouton}>
+                            <Text style={styles.texte_bouton}>Romain SAVAETE</Text>
+                        </View>
+                    </TouchableHighlight>
+                </View>
+
+                <TouchableHighlight  onPress={() => {Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium), navigation.navigate('Connexion')}}  underlayColor="#EEEEEE">
                     <View style={styles.vue_bouton}>
                         <Text style={styles.texte_bouton}>Connexion</Text>
                     </View>
                 </TouchableHighlight>
 
-                <TouchableHighlight  onPress={() => navigation.navigate('Inscription' )} underlayColor="#EEEEEE">
+                <TouchableHighlight  onPress={() => {Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium), navigation.navigate('Inscription' )}} underlayColor="#EEEEEE">
                     <View style={styles.vue_bouton}>
                         <Text style={styles.texte_bouton}>Créer un compte</Text>
 

@@ -5,6 +5,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppLoading from "expo-app-loading";
 import {useFonts} from "expo-font";
+import ImageGemme from "../../components/ImageGemme";
 
 export default function ListeScreen() {
 
@@ -18,9 +19,11 @@ export default function ListeScreen() {
         try {
 
             const numero_etudiant = await AsyncStorage.getItem('@numero_etudiant')
+            const url = await AsyncStorage.getItem('@url')
+
             setNumero(numero_etudiant)
 
-            const response = await fetch('http://localhost:8080/api/inventaire/' + numero_etudiant);
+            const response = await fetch(url + '/api/inventaire/' + numero_etudiant);
             const json = await response.json();
 
             setGemmes(json);
@@ -30,20 +33,6 @@ export default function ListeScreen() {
             console.error(error);
         }
     }
-
-    const getImage = name => {
-        switch (name) {
-            case "rubis": return require("../images/rubis.png")
-            case "saphir": return require("../images/saphir.png")
-            case "emeraude": return require("../images/emeraude.png")
-            case "amethyste": return require("../images/amethyste.png")
-            case "tourmaline": return require("../images/tourmaline.png")
-            case "ambre": return require("../images/ambre.png")
-            default: return require("../images/ambre.png")
-        }
-    }
-
-
 
 
     useEffect(() => {
@@ -67,7 +56,7 @@ export default function ListeScreen() {
                             <Text style={styles.points3}>Soit {gemmes.etudiant.nombre_euros} €</Text>
                         </View>
 
-                        <ScrollView style={styles.scroll_view}>
+                        <ScrollView style={{ marginBottom: 150}}>
 
                             <View>
                                 <Text style={styles.titleGemme}>Mes gemmes</Text>
@@ -95,10 +84,8 @@ export default function ListeScreen() {
                                                                         <View style={[styles.row, styles.secondPart]}>
                                                                             <View>
 
-                                                                                <Image
-                                                                                    style={styles.tinyLogo}
-                                                                                    source={getImage(app.chemin_image)}
-                                                                                />
+                                                                                <ImageGemme image={app.chemin_image} size="tiny"/>
+
                                                                             </View>
                                                                             <View style={styles.number}>
                                                                                 <Text

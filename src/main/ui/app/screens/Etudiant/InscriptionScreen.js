@@ -46,7 +46,7 @@ export default function InscriptionScreen(){
 
     const donneFormation = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/formations');
+            const response = await fetch('https://izlygo.herokuapp.com/api/formations');
             const json = await response.json();
             setFormations(json);
         } catch (error) {
@@ -89,13 +89,11 @@ export default function InscriptionScreen(){
                 mail: mail,
                 formation: formations[formation],
                 password: password,
-                nombre_points : 0,
-                compte_actif: true,
-                code_parrain: parrainage
+                code_parrain: parrainage,
             }
 
 
-            fetch('http://localhost:8080/api/create/student', {
+            fetch('https://izlygo.herokuapp.com/api/create/student', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -104,6 +102,8 @@ export default function InscriptionScreen(){
                 body: JSON.stringify(etudiant)
             }).then(response => response.json())
                 .then(data => {
+                    console.log("datadata")
+                    console.log(data)
                     if(data.succes){
                         connect(data.etudiant.numero)
                     }
@@ -124,81 +124,6 @@ export default function InscriptionScreen(){
     }
 
     return (
-           /* <ScrollView>
-                <View style={styles.view}>
-                    <View style={styles.viewTitle}>
-                        <Text style={styles.bigTitle}>Créer un compte étudiant</Text>
-                    </View>
-
-
-                    <View style={styles.social}>
-                        <SocialIcon
-                            type="facebook"
-                            onPress={() => {
-                                alert('facebook');
-                            }}
-                        />
-
-                        <SocialIcon
-                            type="google"
-                            onPress={() => {
-                                alert('facebook');
-                            }}
-                        />
-                        <SocialIcon
-                            type="linkedin"
-                            onPress={() => {
-                                alert('facebook');
-                            }}
-                        />
-                    </View>
-
-                    <View style={styles.viewOption}>
-                        <Text style={styles.option}>Ou utiliser votre adresse mail pour vous inscrire</Text>
-                    </View>
-
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nom"
-                            onChangeText={newText => etudiant.nom = newText}
-                            onChangeText={newText => etudiant.nom = newText}
-                        />
-
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Prénom"
-                            onChangeText={newText => etudiant.prenom = newText}
-                        />
-
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Adresse mail"
-                            onChangeText={newText => etudiant.mail = newText}
-                        />
-
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Numéro étudiant"
-                            keyboardType="numeric"
-                            onChangeText={newText => etudiant.numero = newText}
-                        />
-
-                        <Picker>
-                            {serviceItems}
-                        </Picker>
-
-                        <But donnees={etudiant}/>
-
-                        <Button
-                            title="J'ai déjà un compte. Me connecter"
-
-                        >
-                        </Button>
-                    </View>
-                </View>
-            </ScrollView>*/
-
         <View style={{ height: '100%', backgroundColor: "white"}}>
             <ScrollView >
                 <View style={s.vue_globale}>
@@ -431,18 +356,21 @@ const s = StyleSheet.create({
 
 
     bouton_continuer: {
-        backgroundColor: "#EAAE7B",
-        //width: "30%",
+        backgroundColor: "black",
+        width: "50%",
         borderRadius: 10,
         padding: 10,
         marginTop: 10,
-      //  position: "absolute",
+        position: "absolute",
         right: 0
     },
 
     text_bouton: {
         textAlign: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        fontFamily: 'Dosis_700Bold',
+        color: 'white',
+        fontSize: 18
     },
 
     vue_boutons: {

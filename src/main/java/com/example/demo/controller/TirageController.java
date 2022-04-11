@@ -2,10 +2,13 @@ package com.example.demo.controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.demo.entity.Gemme;
+import com.example.demo.entity.Obtention;
 import com.example.demo.service.GemmeService;
+import com.example.demo.service.ObtentionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,13 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 import com.example.demo.entity.Tirage;
 import com.example.demo.service.TirageService;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,14 +38,19 @@ public class TirageController {
     @Autowired
     GemmeService gemmeService;
 
+    @Autowired
+    ObtentionService obtentionService;
+
 
     @GetMapping(path = "/remplir")
     public ResponseEntity<?> initialiseTirageDuJour() {
 
         tirageService.detruitTirage();
 
+
+
         int heureDebut = 7;
-        int heureFin = 18;
+        int heureFin = 23;
 
         int minute = 30;
         int id = 0;
@@ -100,8 +109,8 @@ public class TirageController {
         }
 
 
-    @GetMapping(path = "/tirage")
-    public ResponseEntity<?> donneTirage() {
+    @GetMapping(path = "/tirage/{numero}")
+    public ResponseEntity<?> donneTirage(@PathVariable int numero) {
 
         DateTimeFormatter jourFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter heureFormat = DateTimeFormatter.ofPattern("HH");
@@ -114,7 +123,24 @@ public class TirageController {
         int min = Integer.parseInt(minFormat.format(now));
         min = min < 30 ? 0 : 30;
 
-        List<Tirage> tirages = tirageService.donneTirageActuel(jour, heure, min);
+
+        List<Obtention> liste_obtenue = obtentionService.donneLignes(numero);
+
+        List<String> chaines = new ArrayList<String>();
+        for(Obtention obtention : liste_obtenue){
+            chaines.add(obtention.getChaine());
+        }
+
+
+        List<Tirage> tout_tirages = tirageService.donneTirageActuel(jour, heure, min);
+        List<Tirage> tirages = new ArrayList<Tirage>();
+
+        for(Tirage tirage : tout_tirages){
+            String chaine = tirage.getChaine();
+            if(!chaines.contains(chaine)) {
+                tirages.add(tirage);
+            }
+        }
 
         JSONObject json = new JSONObject();
         JSONArray un_tirage = new JSONArray();
@@ -127,11 +153,13 @@ public class TirageController {
             info.put("recupere", t.getNombre_recupere());
             info.put("chaine", t.getChaine());
             info.put("gemme", t.getGemme());
+            info.put("recuperable", t.getNombre_recupere() < t.getGemme().getPersonne_max() ? true : false);
 
             un_tirage.put(info);
         }
 
         json.put("liste", un_tirage);
+        json.put("existe", now.getHour() >= 7 && now.getHour() <= 18 ? true : false);
 
         return ResponseEntity.ok(json.toMap());
 
