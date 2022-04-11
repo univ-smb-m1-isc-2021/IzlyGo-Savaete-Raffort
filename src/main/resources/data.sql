@@ -223,28 +223,28 @@ INSERT INTO reduction(id, points_requis, id_entreprise, libelle) VALUES
 
 INSERT INTO challenge(ID, LIBELLE, ID_CHALLENGE_PRECEDENT, ID_GEMME, QUANTITE, TEMPS, ID_GEMME_RECOMPENSE, QUANTITE_RECOMPENSE) VALUES
 (1, 'Récupérer 1 rubis', NULL, 1, 1, 10000, 1, 1),
-(2, 'Récupérer 10 rubis', 1, 1, 10, 10000, 3, 3),
-(3, 'Récupérer 30 rubis', 2, 1, 30, 10000, 2, 3),
+(2, 'Récupérer 10 rubis', 1, 1, 10, 10000, 1, 2),
+(3, 'Récupérer 30 rubis', 2, 1, 30, 10000, 1, 3),
 
-(4, 'Récupérer 5 saphirs', NULL, 2, 5, 10000, 3, 1),
-(5, 'Récupérer 25 saphirs', 4, 2, 25, 10000, 1, 1),
-(6, 'Récupérer 50 saphirs', 5, 2, 50, 10000, 1, 2),
+(4, 'Récupérer 5 saphirs', NULL, 2, 5, 10000, 2, 1),
+(5, 'Récupérer 25 saphirs', 4, 2, 25, 10000, 2, 2),
+(6, 'Récupérer 50 saphirs', 5, 2, 50, 10000, 2, 3),
 
 (7, 'Récupérer 10 émeraudes', NULL, 3, 10, 10000, 3, 1),
-(8, 'Récupérer 30 émeraudes', 7, 3, 30, 10000, 1, 1),
-(9, 'Récupérer 50 émeraudes', 8, 3, 50, 10000, 1, 2),
+(8, 'Récupérer 30 émeraudes', 7, 3, 30, 10000, 3, 2),
+(9, 'Récupérer 50 émeraudes', 8, 3, 50, 10000, 3, 3),
 
-(10, 'Récupérer 15 améthystes', NULL, 4, 15, 10000, 3, 1),
-(11, 'Récupérer 40 améthystes', 10, 4, 40, 10000, 1, 1),
-(12, 'Récupérer 75 améthystes', 11, 4, 75, 10000, 1, 2),
+(10, 'Récupérer 15 améthystes', NULL, 4, 15, 10000, 4, 1),
+(11, 'Récupérer 40 améthystes', 10, 4, 40, 10000, 4, 2),
+(12, 'Récupérer 75 améthystes', 11, 4, 75, 10000, 4, 3),
 
-(13, 'Récupérer 20 tourmalines', NULL, 5, 20, 10000, 3, 1),
-(14, 'Récupérer 50 tourmalines', 13, 5, 50, 10000, 1, 1),
-(15, 'Récupérer 100 tourmalines', 14, 5, 100, 10000, 1, 2),
+(13, 'Récupérer 20 tourmalines', NULL, 5, 20, 10000, 5, 1),
+(14, 'Récupérer 50 tourmalines', 13, 5, 50, 10000, 5, 2),
+(15, 'Récupérer 100 tourmalines', 14, 5, 100, 10000, 5, 3),
 
-(16, 'Récupérer 25 ambres', NULL, 6, 25, 10000, 3, 1),
-(17, 'Récupérer 100 ambres', 16, 6, 100, 10000, 1, 1),
-(18, 'Récupérer 200 améthystes', 17, 6, 200, 10000, 1, 2);
+(16, 'Récupérer 25 ambres', NULL, 6, 25, 10000, 6, 1),
+(17, 'Récupérer 100 ambres', 16, 6, 100, 10000, 6, 2),
+(18, 'Récupérer 200 améthystes', 17, 6, 200, 10000, 6, 3);
 
 INSERT INTO succes (ID_ETUDIANT, ID_CHALLENGE, ETAT, AVANCEMENT) VALUES
 (123, 1, 'EN_COURS',0),

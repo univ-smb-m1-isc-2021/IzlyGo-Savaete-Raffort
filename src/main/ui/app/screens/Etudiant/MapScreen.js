@@ -126,7 +126,7 @@ export default function MapScreen({miam}) {
 
             let location = await Location.getCurrentPositionAsync({});
             setLocation(location);
-            console.log(location.coords.latitude)
+           // console.log(location.coords.latitude)
         })();
 
 
@@ -217,7 +217,7 @@ export default function MapScreen({miam}) {
                         <ActivityIndicator size="large" color="#2c3e50"/>
                     </SafeAreaView>
 
-                    : loading  ?
+                    : loading  && location != null ?
 
                         <MapView style={styles.map} mapType={"standard"} region={{
                             latitude: location.coords.latitude,

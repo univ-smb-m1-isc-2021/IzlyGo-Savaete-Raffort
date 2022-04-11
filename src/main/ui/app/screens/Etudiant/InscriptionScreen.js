@@ -90,7 +90,7 @@ export default function InscriptionScreen(){
                 formation: formations[formation],
                 password: password,
                 code_parrain: parrainage,
-            }
+            } 
 
 
             fetch('https://izlygo.herokuapp.com/api/create/student', {

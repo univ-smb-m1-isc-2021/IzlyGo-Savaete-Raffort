@@ -30,4 +30,8 @@ public class InventaireService {
     public void ajouteQuantite(long etudiant, long gemme, int quantite) {
         inventaireRepository.ajouteQuantite(etudiant, gemme, quantite);
     }
+
+    public void triche(int etudiant, int gemme){
+        inventaireRepository.triche(etudiant, gemme);
+    }
 }
